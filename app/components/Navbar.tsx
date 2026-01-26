@@ -5,7 +5,7 @@ import BlueButton from "./BlueButton";
 
 const Navbar = () => {
   return (
-    <div className="p-8 w-full flex items-center justify-evenly">
+    <div className="p-6 w-full flex items-center justify-evenly">
       <img src="logo.png" alt="logo" />
 
       <div className="w-2/6 flex items-center justify-center gap-4">
