@@ -6,7 +6,7 @@ const Footer = () => {
     <div className="w-full p-10 bg-[#111827] flex flex-col items-center justify-center gap-10">
       <div className="grid grid-cols-4 place-items-center w-full">
         <div className="flex flex-col items-start justify-center">
-          <img src="logo.png" alt="logo" />
+          <img src="logo_dark.png" width={200} alt="logo" />
           <p className="text-[#6B7280] text-lg text-justify mt-4 mb-8">
             The ultimate IELTS writing practice platform with real exam
             simulation and AI-powered feedback
