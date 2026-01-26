@@ -56,7 +56,7 @@ const Features = () => {
       </div>
       <div className="grid grid-cols-3 place-items-center gap-8">
         {featureLists.map((feature, index) => (
-          <div className="p-4 w-100 h-72 bg-white flex flex-col items-start justify-evenly rounded-2xl">
+          <div key={index} className="p-4 w-100 h-72 bg-white flex flex-col items-start justify-evenly rounded-2xl">
             <img src={feature.icon} width={80} alt="" />
             <h2 className="text-2xl font-bold text-[#1F2937]">
               {feature.title}
