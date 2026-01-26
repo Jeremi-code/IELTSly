@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Stat from './components/Stat';
 import Features from './components/Features';
+import Steps from './components/Steps';
 
 const HomePage = () => {
   return (
@@ -11,6 +12,7 @@ const HomePage = () => {
       <Hero />
       <Stat />
       <Features />
+      <Steps />
     </div>
   )
 }
