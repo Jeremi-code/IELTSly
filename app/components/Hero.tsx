@@ -1,4 +1,4 @@
-import BlueButton from "./BlueButton";
+import { Button } from "@/components/ui/button";
 import IELTSWritingInterface from "./IELTSWritingInterface";
 
 const Hero = () => {
@@ -14,7 +14,9 @@ const Hero = () => {
           feedback based on official IELTS standards.
         </p>
 
-        <BlueButton buttonName="Start Practice" />
+        <Button variant="blue" size="lg" className="rounded-xl px-8 font-bold">
+          Start Practice
+        </Button>
       </div>
       <div className="w-full lg:w-7/12 flex justify-center lg:justify-end items-center px-4 scale-90 lg:scale-100">
         <IELTSWritingInterface />
@@ -22,6 +24,7 @@ const Hero = () => {
     </div>
   );
 };
+
 
 
 
