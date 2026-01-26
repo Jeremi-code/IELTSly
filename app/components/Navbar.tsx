@@ -1,7 +1,9 @@
-import React from "react";
+"use client";
+
 import NavButton from "./NavButton";
 import SignInButton from "./SignInButton";
 import BlueButton from "./BlueButton";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
   return (
@@ -16,6 +18,7 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center justify-center gap-4">
+        <ThemeToggle />
         <SignInButton />
         <BlueButton buttonName="Get Started" />
       </div>
@@ -24,3 +27,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
