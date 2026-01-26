@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import Stat from './components/Stat';
 import Features from './components/Features';
 import Steps from './components/Steps';
+import Footer from './components/Footer';
 
 const HomePage = () => {
   return (
@@ -13,6 +14,7 @@ const HomePage = () => {
       <Stat />
       <Features />
       <Steps />
+      <Footer />
     </div>
   )
 }
