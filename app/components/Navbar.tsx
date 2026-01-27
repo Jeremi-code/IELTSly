@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import Logo from "./Logo";
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Sheet,
   SheetContent,
@@ -14,6 +16,7 @@ import {
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,7 +57,9 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Logo className="w-16 h-16 lg:w-18 lg:h-18 transition-transform duration-300 hover:scale-110 cursor-pointer" />
+          <Link href="/" className="group flex items-center gap-2">
+            <Logo className="w-16 h-16 lg:w-18 lg:h-18 transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.3)] dark:group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] cursor-pointer" />
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
@@ -62,10 +67,10 @@ const Navbar = () => {
               <button
                 key={item}
                 onClick={() => scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))}
-                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 relative group cursor-pointer bg-transparent border-none p-0"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 relative group cursor-pointer bg-transparent border-none p-0 flex flex-col items-center"
               >
                 {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-500 group-hover:w-full" />
               </button>
             ))}
           </div>
@@ -75,13 +80,15 @@ const Navbar = () => {
             <ThemeToggle />
             <Button
               variant="ghost"
-              className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 rounded-full px-5"
+              onClick={() => router.push('/signin')}
             >
               Sign In
             </Button>
             <Button 
               variant="blue" 
               className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
+              onClick={() => router.push('/signin?mode=signup')}
             >
               Get Started
             </Button>
@@ -120,14 +127,20 @@ const Navbar = () => {
                     <Button
                       variant="ghost"
                       className="w-full justify-center text-base font-semibold"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        router.push('/signin');
+                      }}
                     >
                       Sign In
                     </Button>
                     <Button
                       variant="blue"
                       className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-blue-500/25"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        router.push('/signin?mode=signup');
+                      }}
                     >
                       Get Started
                     </Button>

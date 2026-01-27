@@ -3,8 +3,10 @@
 import { Button } from "@/components/ui/button";
 import IELTSWritingInterface from "./IELTSWritingInterface";
 import InteractiveGridBackground from "./InteractiveGridBackground";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
+  const router = useRouter();
   return (
     <div className="relative flex flex-col lg:flex-row items-center justify-center bg-linear-to-br from-[#E4EEFF] via-[#FFFFFF] to-[#E4EEFF] dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900 min-h-screen overflow-hidden px-10 lg:px-20">
       {/* Interactive Grid Background */}
@@ -28,6 +30,7 @@ const Hero = () => {
             variant="blue" 
             size="lg" 
             className="w-full sm:w-auto rounded-full px-8 h-12 font-bold text-base shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-105"
+            onClick={() => router.push('/signin?mode=signup')}
           >
             Start Practice
           </Button>
@@ -36,6 +39,7 @@ const Hero = () => {
             variant="outline" 
             size="lg" 
             className="w-full sm:w-auto rounded-full px-8 h-12 font-semibold text-base border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition-all hover:scale-105 backdrop-blur-sm bg-white/50 dark:bg-zinc-900/50"
+            onClick={() => router.push('/signin')}
           >
             Continue
           </Button>
