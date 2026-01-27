@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Logo from "../components/Logo";
@@ -9,14 +9,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Github } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-const SignInPage = () => {
+const SignInContent = () => {
+  const searchParams = useSearchParams();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("signin");
+
+  useEffect(() => {
+    const mode = searchParams.get("mode");
+    if (mode === "signup") {
+      setActiveTab("signup");
+    } else {
+      setActiveTab("signin");
+    }
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-zinc-950 relative overflow-hidden">
@@ -81,7 +92,10 @@ const SignInPage = () => {
                       </button>
                     </div>
                   </div>
-                  <Button className="w-full h-10 font-bold text-sm bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 shadow-lg dark:shadow-zinc-50/10 transition-all hover:scale-[1.02] active:scale-[0.98] mt-1">
+                  <Button 
+                    variant="blue"
+                    className="w-full h-11 rounded-full font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5 mt-1"
+                  >
                     Sign In <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </TabsContent>
@@ -141,7 +155,10 @@ const SignInPage = () => {
                       </button>
                     </div>
                   </div>
-                  <Button className="w-full h-10 font-bold text-sm bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 shadow-lg dark:shadow-zinc-50/10 transition-all hover:scale-[1.02] active:scale-[0.98] mt-1">
+                  <Button 
+                    variant="blue"
+                    className="w-full h-11 rounded-full font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5 mt-1"
+                  >
                     Create Account <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </TabsContent>
@@ -159,9 +176,12 @@ const SignInPage = () => {
               </div>
 
               <div className="grid grid-cols-1">
-                <Button variant="outline" className="h-9 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 bg-white dark:bg-zinc-950/50 backdrop-blur-sm text-xs shadow-sm">
-                  <img src="/google.png" alt="Google" className="h-4 w-4 mr-2" />
-                  Google
+                <Button 
+                  variant="outline" 
+                  className="w-full h-11 rounded-full border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 bg-white dark:bg-zinc-950/50 backdrop-blur-sm text-sm font-semibold shadow-sm transition-all duration-300 hover:shadow-md flex items-center justify-center gap-2"
+                >
+                  <img src="/google.png" alt="Google" className="h-4 w-4" />
+                  Continue with Google
                 </Button>
               </div>
             </CardContent>
@@ -175,6 +195,21 @@ const SignInPage = () => {
       </main>
       <Footer />
     </div>
+  );
+};
+
+const SignInPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+        <div className="animate-pulse flex flex-col items-center gap-4">
+          <div className="w-16 h-16 bg-zinc-200 dark:bg-zinc-800 rounded-2xl" />
+          <div className="h-4 w-24 bg-zinc-200 dark:bg-zinc-800 rounded" />
+        </div>
+      </div>
+    }>
+      <SignInContent />
+    </Suspense>
   );
 };
 
