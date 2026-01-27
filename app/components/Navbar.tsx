@@ -24,6 +24,23 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToSection = (id: string) => {
+    setIsMobileMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80; // Navbar height
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
   const navItems = ["Features", "How It Works", "Pricing", "FAQ"];
 
   return (
@@ -42,14 +59,14 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
             {navItems.map((item) => (
-              <a
+              <button
                 key={item}
-                href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
-                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 relative group"
+                onClick={() => scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))}
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 relative group cursor-pointer bg-transparent border-none p-0"
               >
                 {item}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300 group-hover:w-full" />
-              </a>
+              </button>
             ))}
           </div>
 
@@ -90,14 +107,13 @@ const Navbar = () => {
                 <div className="flex flex-col gap-8 mt-12">
                   {/* Mobile Nav */}
                   {navItems.map((item) => (
-                    <a
+                    <button
                       key={item}
-                      href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-2xl font-semibold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                      onClick={() => scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))}
+                      className="text-2xl font-semibold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-left bg-transparent border-none p-0"
                     >
                       {item}
-                    </a>
+                    </button>
                   ))}
                   
                   <div className="flex flex-col gap-4 mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">

@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Monitor, Cpu, Map, LineChart, Database, Clock } from "lucide-react";
+import { motion } from "framer-motion";
 
 const featureLists = [
   {
@@ -55,10 +58,16 @@ const featureLists = [
 
 const Features = () => {
   return (
-    <div className="w-full min-h-screen py-10 px-6 lg:px-20 bg-slate-50 dark:bg-zinc-950 flex flex-col items-center justify-center gap-12 lg:gap-16 transition-colors duration-500">
+    <div id="features" className="w-full min-h-screen py-10 px-6 lg:px-20 bg-slate-50 dark:bg-zinc-950 flex flex-col items-center justify-center gap-12 lg:gap-16 transition-colors duration-500 scroll-mt-24">
 
-      <div className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto space-y-4">
-        <div className="px-4 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold rounded-full text-sm uppercase tracking-wider">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto space-y-4"
+      >
+        <div className="px-4 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold rounded-full text-sm uppercase tracking-wider shadow-sm">
           Features
         </div>
         <h2 className="text-3xl lg:text-5xl font-extrabold text-slate-900 dark:text-zinc-50 tracking-tight">
@@ -68,9 +77,15 @@ const Features = () => {
           Authentic exam simulation meets powerful AI feedback to help you
           achieve your target band score
         </p>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl mx-auto">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl mx-auto"
+      >
         {featureLists.map((feature, index) => (
           <Card 
             key={index} 
@@ -89,7 +104,7 @@ const Features = () => {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };

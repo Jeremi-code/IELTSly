@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Key, FileSearch, PenTool } from "lucide-react";
+import { motion } from "framer-motion";
 
 const stepLists = [
   {
@@ -31,9 +34,15 @@ const stepLists = [
 
 const Steps = () => {
   return (
-    <div className="py-24 px-6 lg:px-20 bg-white dark:bg-zinc-900 transition-colors duration-500">
-      <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-4 mb-16">
-        <div className="px-4 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-bold rounded-full text-sm uppercase tracking-wider">
+    <div id="how-it-works" className="py-24 px-6 lg:px-20 bg-white dark:bg-zinc-900 transition-colors duration-500 scroll-mt-24">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-4 mb-16"
+      >
+        <div className="px-4 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-bold rounded-full text-sm uppercase tracking-wider shadow-sm">
           How It Works
         </div>
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-zinc-50 tracking-tight leading-[1.1]">
@@ -43,10 +52,16 @@ const Steps = () => {
           Get started with IELTSly in minutes and begin your journey to a higher
           band score
         </p>
-      </div>
+      </motion.div>
 
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-7xl mx-auto items-start">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+        className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-7xl mx-auto items-start"
+      >
         {stepLists.map((step, index) => (
           <div key={index} className="relative group">
             <Card className="relative z-10 border-none shadow-none bg-transparent text-center flex flex-col items-center">
@@ -71,7 +86,7 @@ const Steps = () => {
 
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };
