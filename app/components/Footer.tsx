@@ -1,57 +1,91 @@
 import React from "react";
-import { Twitter, Facebook, Linkedin, Instagram } from "lucide-react";
+import { Twitter, Facebook, Linkedin, Instagram, Github } from "lucide-react";
+import Link from "next/link";
 
 const Footer = () => {
   return (
-    <div className="w-full p-10 bg-[#111827] flex flex-col items-center justify-center gap-10">
-      <div className="grid grid-cols-4 place-items-center w-full">
-        <div className="flex flex-col items-start justify-center">
-          <img src="logo_dark.png" width={200} alt="logo" />
-          <p className="text-[#6B7280] text-lg text-justify mt-4 mb-8">
-            The ultimate IELTS writing practice platform with real exam
-            simulation and AI-powered feedback
-          </p>
-          <div className="flex items-center justify-center gap-4">
-            <Twitter color="#6B7280" size={25} />
-            <Facebook color="#6B7280" size={25} />
-            <Linkedin color="#6B7280" size={25} />
-            <Instagram color="#6B7280" size={25} />
+    <footer className="w-full bg-slate-50 dark:bg-zinc-950 border-t border-slate-200 dark:border-zinc-900 transition-colors duration-500">
+      <div className="max-w-7xl mx-auto px-6 py-12 lg:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          {/* Logo & Description */}
+          <div className="flex flex-col space-y-6">
+            <div className="flex items-center space-x-2">
+              <img src="/logo.png" width={150} alt="IELTSly Logo" className="dark:hidden" />
+              <img src="/logo_dark.png" width={150} alt="IELTSly Logo" className="hidden dark:block" />
+            </div>
+            <p className="text-slate-500 dark:text-zinc-400 text-sm leading-relaxed max-w-xs">
+              The ultimate IELTS writing practice platform with real exam
+              simulation and AI-powered feedback. Achieve your target band score with precision.
+            </p>
+            <div className="flex items-center space-x-4">
+              <Link href="#" className="p-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:shadow-md">
+                <Twitter size={18} />
+              </Link>
+              <Link href="#" className="p-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:shadow-md">
+                <Github size={18} />
+              </Link>
+              <Link href="#" className="p-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:shadow-md">
+                <Linkedin size={18} />
+              </Link>
+              <Link href="#" className="p-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:shadow-md">
+                <Instagram size={18} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Product Links */}
+          <div>
+            <h3 className="text-slate-900 dark:text-zinc-100 font-bold mb-6">Products</h3>
+            <ul className="space-y-4">
+              {["Features", "Pricing", "API Documentation", "Changelog"].map((item) => (
+                <li key={item}>
+                  <Link href="#" className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm font-medium">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Resources Links */}
+          <div>
+            <h3 className="text-slate-900 dark:text-zinc-100 font-bold mb-6">Resources</h3>
+            <ul className="space-y-4">
+              {["Blog", "IELTS Tips", "Sample Essays", "FAQ"].map((item) => (
+                <li key={item}>
+                  <Link href="#" className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm font-medium">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h3 className="text-slate-900 dark:text-zinc-100 font-bold mb-6">Company</h3>
+            <ul className="space-y-4">
+              {["About Us", "Contact", "Privacy Policy", "Terms of Service"].map((item) => (
+                <li key={item}>
+                  <Link href="#" className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm font-medium">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div>
-          <h3 className="text-white text-2xl font-bold mb-4">Products</h3>
-          <ul className="text-[#6B7280] text-lg space-y-2">
-            <li>Features</li>
-            <li>Pricing</li>
-            <li>API Documentation</li>
-            <li>Changelog</li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="text-white text-2xl font-bold mb-4">Resources</h3>
-          <ul className="text-[#6B7280] text-lg space-y-2">
-            <li>Blog</li>
-            <li>IELTS Tips</li>
-            <li>Sample Essays</li>
-            <li>FAQ</li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="text-white text-2xl font-bold mb-4">Company</h3>
-          <ul className="text-[#6B7280] text-lg space-y-2">
-            <li>About Us</li>
-            <li>Contact</li>
-            <li>Privacy Policy</li>
-            <li>Terms of Service</li>
-          </ul>
+        <div className="mt-12 lg:mt-16 pt-8 border-t border-slate-200 dark:border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium text-center md:text-left">
+            © 2024 <span className="text-slate-900 dark:text-zinc-200">IELTSly</span>. All rights reserved.
+          </p>
+          <p className="text-slate-400 dark:text-zinc-600 text-xs font-bold uppercase tracking-widest whitespace-nowrap">
+            Ultimate Practice Platform
+          </p>
         </div>
       </div>
-      <div className="w-full h-0.5 bg-[#6B7280] "></div>
-      <div className="text-[#6B7280] font-bold">© 2024 IELTSly. All rights reserved.</div>
-    </div>
+    </footer>
   );
 };
 
