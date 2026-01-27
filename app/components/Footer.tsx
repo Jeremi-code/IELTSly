@@ -1,6 +1,7 @@
 import React from "react";
 import { Twitter, Facebook, Linkedin, Instagram, Github } from "lucide-react";
 import Link from "next/link";
+import Logo from "./Logo";
 
 const Footer = () => {
   return (
@@ -9,10 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Logo & Description */}
           <div className="flex flex-col space-y-6">
-            <div className="flex items-center space-x-2">
-              <img src="/logo.png" width={150} alt="IELTSly Logo" className="dark:hidden" />
-              <img src="/logo_dark.png" width={150} alt="IELTSly Logo" className="hidden dark:block" />
-            </div>
+            <Logo className="w-20 h-20 lg:w-24 lg:h-24" />
             <p className="text-slate-500 dark:text-zinc-400 text-sm leading-relaxed max-w-xs">
               The ultimate IELTS writing practice platform with real exam
               simulation and AI-powered feedback. Achieve your target band score with precision.
