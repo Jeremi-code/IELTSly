@@ -33,8 +33,11 @@ export function ThemeToggle() {
       return;
     }
 
+    // Get click position for radial animation origin
     const x = event.clientX;
     const y = event.clientY;
+    
+    // Calculate the maximum distance to any corner for full coverage
     const endRadius = Math.hypot(
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y)
@@ -45,18 +48,31 @@ export function ThemeToggle() {
     });
 
     transition.ready.then(() => {
-      const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`,
-      ];
-      document.documentElement.animate(
+      // Modern radial expansion with ink-drop effect
+      const newThemeAnimation = document.documentElement.animate(
         {
-          clipPath: theme === "dark" ? [...clipPath].reverse() : clipPath,
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
         },
         {
-          duration: 500,
-          easing: "ease-in-out",
-          pseudoElement: theme === "dark" ? "::view-transition-old(root)" : "::view-transition-new(root)",
+          duration: 700,
+          easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          pseudoElement: '::view-transition-new(root)',
+        }
+      );
+
+      // Add subtle scale and fade effect to old theme
+      document.documentElement.animate(
+        {
+          transform: ['scale(1)', 'scale(1.05)'],
+          opacity: [1, 0],
+        },
+        {
+          duration: 350,
+          easing: 'cubic-bezier(0.4, 0, 1, 1)',
+          pseudoElement: '::view-transition-old(root)',
         }
       );
     });

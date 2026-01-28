@@ -1,88 +1,94 @@
+"use client";
+
 import React from "react";
-import { Twitter, Facebook, Linkedin, Instagram, Github } from "lucide-react";
+import { Twitter, Facebook, Linkedin, Instagram, Github, Heart } from "lucide-react";
 import Link from "next/link";
+import Logo from "./Logo";
+import { Button } from "@/components/ui/button";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
+  const socialLinks = [
+    { icon: Twitter, href: "#" },
+    { icon: Github, href: "#" },
+    { icon: Linkedin, href: "#" },
+    { icon: Instagram, href: "#" },
+  ];
+
+  const footerGroups = [
+    {
+      title: "Product",
+      links: ["Features", "Pricing", "Testimonials", "Changelog"],
+    },
+    {
+      title: "Resources",
+      links: ["Blog", "IELTS Tips", "Sample Essays", "FAQ"],
+    },
+    {
+      title: "Company",
+      links: ["About Us", "Careers", "Contact", "Privacy Policy"],
+    },
+    {
+      title: "Legal",
+      links: ["Terms of Service", "Cookie Policy", "Data Processing"],
+    },
+  ];
+
   return (
-    <footer className="w-full bg-slate-50 dark:bg-zinc-950 border-t border-slate-200 dark:border-zinc-900 transition-colors duration-500">
-      <div className="max-w-7xl mx-auto px-6 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-          {/* Logo & Description */}
-          <div className="flex flex-col space-y-6">
-            <div className="flex items-center space-x-2">
-              <img src="/logo.png" width={150} alt="IELTSly Logo" className="dark:hidden" />
-              <img src="/logo_dark.png" width={150} alt="IELTSly Logo" className="hidden dark:block" />
-            </div>
-            <p className="text-slate-500 dark:text-zinc-400 text-sm leading-relaxed max-w-xs">
-              The ultimate IELTS writing practice platform with real exam
-              simulation and AI-powered feedback. Achieve your target band score with precision.
+    <footer className="w-full bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-900 transition-colors duration-500">
+      <div className="max-w-7xl mx-auto px-6 py-16 lg:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 lg:gap-8 mb-16">
+          {/* Brand Column */}
+          <div className="lg:col-span-2 flex flex-col space-y-6">
+            <Logo className="w-24 h-24" />
+            <p className="text-zinc-500 dark:text-zinc-400 text-base leading-relaxed max-w-sm">
+              The ultimate IELTS writing practice platform with real exam simulation and AI-powered feedback. Achieve your target band score with precision.
             </p>
-            <div className="flex items-center space-x-4">
-              <Link href="#" className="p-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:shadow-md">
-                <Twitter size={18} />
-              </Link>
-              <Link href="#" className="p-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:shadow-md">
-                <Github size={18} />
-              </Link>
-              <Link href="#" className="p-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:shadow-md">
-                <Linkedin size={18} />
-              </Link>
-              <Link href="#" className="p-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:shadow-md">
-                <Instagram size={18} />
-              </Link>
+            <div className="flex items-center gap-3 pt-2">
+              {socialLinks.map((social, index) => (
+                <Link 
+                  key={index} 
+                  href={social.href}
+                  className="p-2.5 rounded-full bg-zinc-50 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all duration-300"
+                >
+                  <social.icon size={18} />
+                </Link>
+              ))}
             </div>
           </div>
 
-          {/* Product Links */}
-          <div>
-            <h3 className="text-slate-900 dark:text-zinc-100 font-bold mb-6">Products</h3>
-            <ul className="space-y-4">
-              {["Features", "Pricing", "API Documentation", "Changelog"].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm font-medium">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources Links */}
-          <div>
-            <h3 className="text-slate-900 dark:text-zinc-100 font-bold mb-6">Resources</h3>
-            <ul className="space-y-4">
-              {["Blog", "IELTS Tips", "Sample Essays", "FAQ"].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm font-medium">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company Links */}
-          <div>
-            <h3 className="text-slate-900 dark:text-zinc-100 font-bold mb-6">Company</h3>
-            <ul className="space-y-4">
-              {["About Us", "Contact", "Privacy Policy", "Terms of Service"].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm font-medium">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Links Columns */}
+          {footerGroups.map((group) => (
+            <div key={group.title} className="flex flex-col space-y-6">
+              <h4 className="text-zinc-900 dark:text-zinc-100 font-bold text-lg">{group.title}</h4>
+              <ul className="space-y-4">
+                {group.links.map((link) => (
+                  <li key={link}>
+                    <Link 
+                      href="#" 
+                      className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-sm font-medium block hover:translate-x-1 transform"
+                    >
+                      {link}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-12 lg:mt-16 pt-8 border-t border-slate-200 dark:border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium text-center md:text-left">
-            © 2024 <span className="text-slate-900 dark:text-zinc-200">IELTSly</span>. All rights reserved.
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-zinc-200 dark:border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-zinc-500 dark:text-zinc-500 text-sm font-medium">
+            © {currentYear} <span className="text-zinc-900 dark:text-zinc-200 font-bold">IELTSly</span>. All rights reserved.
           </p>
-          <p className="text-slate-400 dark:text-zinc-600 text-xs font-bold uppercase tracking-widest whitespace-nowrap">
-            Ultimate Practice Platform
-          </p>
+          
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-1.5 text-zinc-400 dark:text-zinc-600 text-sm font-medium group cursor-default">
+              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" /> for students
+            </span>
+          </div>
         </div>
       </div>
     </footer>
