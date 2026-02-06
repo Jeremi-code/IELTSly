@@ -126,11 +126,6 @@
 
   body {
     @apply bg-background text-foreground transition-colors duration-500;
-    cursor: auto !important;
-  }
-
-  *, *::before, *::after {
-    cursor: auto !important;
   }
 }
 
