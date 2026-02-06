@@ -18,7 +18,7 @@ const Hero = () => {
         </div>
         
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-zinc-900 dark:text-zinc-50 tracking-tight leading-[1.15] mb-6">
-          Master IELTS Writing with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">Real Simulation</span>
+          Master IELTS Writing with <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">Real Simulation</span>
         </h1>
         
         <p className="text-zinc-600 dark:text-zinc-400 text-lg sm:text-xl mb-8 max-w-lg leading-relaxed">
