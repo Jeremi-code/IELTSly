@@ -13,7 +13,7 @@ import Link from "next/link";
 
 const DashboardNav = () => {
   return (
-    <div className="fixed top-0 left-0 w-3/20 h-screen p-2 bg-[#FAFAFA] flex flex-col items-start justify-between">
+    <div className="full h-screen p-2 bg-[#FAFAFA] flex flex-col items-start justify-between">
       <div className=" w-full flex flex-col justify-center">
         <Logo className="w-16 h-16 lg:w-18 lg:h-18 transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.3)] dark:group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] cursor-pointer" />
 
