@@ -116,7 +116,7 @@ const page = () => {
             Ready to start your IELTS writing practice journey?
           </p>
           <button className="w-1/4 m-auto p-3 bg-[#204CC0] hover:bg-[#365EC6] cursor-pointer rounded-xl text-white font-bold">
-            Start Practice
+            Write Your First Essay
           </button>
         </div>
       </div>
