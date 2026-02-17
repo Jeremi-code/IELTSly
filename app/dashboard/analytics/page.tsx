@@ -1,3 +1,5 @@
+"use client"
+
 import DashboardNav from '@/app/components/DashboardNav'
 import React from 'react'
 import { cn } from '@/lib/utils'
