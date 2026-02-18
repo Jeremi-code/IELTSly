@@ -8,7 +8,7 @@ const AnalyticsPage = () => {
   const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   return (
-    <div className="w-full flex min-h-screen bg-linear-to-br from-[#E4EEFF] via-[#FFFFFF] to-[#E4EEFF] dark:from-zinc-950 dark:to-zinc-900 text-foreground transition-colors duration-500">
+    <div className="w-full flex min-h-screen bg-linear-to-br from-[#E4EEFF] via-[#FFFFFF] to-[#E4EEFF] dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-900 text-foreground transition-colors duration-500">
       <DashboardNav collapsed={isCollapsed} onToggle={setIsCollapsed} />
       <main className={cn(
         "w-8/10 mx-auto transition-all duration-300 p-10",
