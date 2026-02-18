@@ -100,7 +100,7 @@ const DashboardNav = ({
                     collapsed ? "justify-center" : "gap-3 px-3",
                     isActive
                       ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                      : "text-muted-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-50"
+                      : "text-muted-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-50 cursor-pointer"
                   )}
                 >
                   <item.icon className={cn(
