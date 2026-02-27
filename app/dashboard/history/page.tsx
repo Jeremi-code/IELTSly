@@ -53,7 +53,12 @@ const HistoryPage = () => {
                    <p className="font-bold">No essays found</p>
                    <p className="text-sm text-muted-foreground">Start practicing to see your writing history and AI feedback here.</p>
                 </div>
-                <Button>Start Your First Essay</Button>
+                <Button 
+                  variant="blue" 
+                  className="rounded-full px-8 h-12 font-bold transition-all hover:scale-105 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
+                >
+                  Start Your First Essay
+                </Button>
               </div>
             </CardContent>
           </Card>

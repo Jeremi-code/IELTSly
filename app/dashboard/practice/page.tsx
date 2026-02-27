@@ -145,7 +145,10 @@ const PracticePage = () => {
                       ))}
                     </div>
 
-                    <Button className="w-full h-14 text-lg font-bold rounded-2xl shadow-lg transition-all duration-300 hover:scale-[1.02] bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900">
+                    <Button 
+                      variant="blue"
+                      className="w-full h-14 text-lg font-bold rounded-2xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.02]"
+                    >
                       {mode.buttonText}
                       <ChevronRight className="ml-2 h-5 w-5" />
                     </Button>
