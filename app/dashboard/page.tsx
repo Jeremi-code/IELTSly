@@ -218,7 +218,7 @@ const DashboardPage = () => {
                         {recentEssays.map((essay) => (
                           <div key={essay.id} className="p-4 flex items-center justify-between hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30 transition-colors group">
                             <div className="flex gap-4 items-center">
-                              <div className="h-10 w-10 rounded-xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center font-bold text-lg text-primary">
+                              <div className="h-10 w-10 rounded-xl bg-[#2563EB] flex items-center justify-center font-bold text-lg text-white">
                                 {essay.score}
                               </div>
                               <div className="space-y-1">
@@ -263,7 +263,7 @@ const DashboardPage = () => {
                 </div>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Target className="h-5 w-5 text-primary" />
+                    <Target className="h-5 w-5 text-[#2563EB]" />
                     Weekly Progress
                   </CardTitle>
                   <CardDescription>Target: 10 Essays / Week</CardDescription>
