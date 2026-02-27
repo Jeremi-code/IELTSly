@@ -133,7 +133,7 @@ const DashboardPage = () => {
                animate={{ scale: 1, opacity: 1 }}
                className="flex items-center gap-3"
             >
-              <Button size="lg" className="rounded-full px-8 shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+              <Button variant="blue" size="lg" className="rounded-full px-8 shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
                 <Zap className="mr-2 h-4 w-4 fill-current" />
                 Start New Practice
               </Button>

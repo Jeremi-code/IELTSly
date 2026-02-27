@@ -99,13 +99,13 @@ const DashboardNav = ({
                     "group flex items-center rounded-xl p-2.5 text-sm font-medium transition-all duration-200",
                     collapsed ? "justify-center" : "gap-3 px-3",
                     isActive
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                      ? "bg-[#2563EB] text-primary-foreground dark:text-white shadow-lg shadow-primary/20"
                       : "text-muted-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-50 cursor-pointer"
                   )}
                 >
                   <item.icon className={cn(
                     "h-5 w-5 transition-transform duration-200 group-hover:scale-110",
-                    isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-zinc-900 dark:group-hover:text-zinc-50"
+                    isActive ? "text-primary-foreground dark:text-white" : "text-muted-foreground group-hover:text-zinc-900 dark:group-hover:text-zinc-50"
                   )} />
                   {!collapsed && (
                     <motion.span
