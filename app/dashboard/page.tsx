@@ -146,7 +146,7 @@ const DashboardPage = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl overflow-hidden relative shadow-sm">
+            <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-600/40 backdrop-blur-xl overflow-hidden relative shadow-sm">
               <div className="absolute top-0 right-0 p-1 bg-destructive/20 rounded-bl-xl">
                  <Sparkles className="h-4 w-4 text-destructive animate-pulse" />
               </div>
@@ -176,17 +176,17 @@ const DashboardPage = () => {
           >
             {dashboardStat.map((stat, index) => (
               <motion.div key={stat.title} variants={item}>
-                <Card className="group relative overflow-hidden border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/50 backdrop-blur-xl shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
+                <Card className="group relative overflow-hidden border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-[#2563EB] backdrop-blur-xl shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
                   <div className={`absolute top-0 right-0 -mr-4 -mt-4 h-24 w-24 rounded-full ${stat.bg} mix-blend-multiply filter blur-2xl opacity-50 group-hover:scale-150 transition-transform duration-500`} />
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
+                    <CardTitle className="text-sm font-medium text-muted-foreground dark:text-white">{stat.title}</CardTitle>
                     <div className={`rounded-xl ${stat.bg} p-2`}>
                       <stat.icon className={`h-4 w-4 ${stat.color}`} />
                     </div>
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{stat.value}</div>
-                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                    <p className="text-xs text-muted-foreground dark:text-white mt-1 flex items-center gap-1">
                       {stat.change}
                     </p>
                   </CardContent>
@@ -206,7 +206,7 @@ const DashboardPage = () => {
                     <TabsTrigger value="activity">Recent Activity</TabsTrigger>
                     <TabsTrigger value="performance">Performance</TabsTrigger>
                   </TabsList>
-                  <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
+                  <Button variant="blue" size="sm" className="hover:text-primary/80">
                     View All <ChevronRight className="ml-1 h-3 w-3" />
                   </Button>
                 </div>
@@ -218,7 +218,7 @@ const DashboardPage = () => {
                         {recentEssays.map((essay) => (
                           <div key={essay.id} className="p-4 flex items-center justify-between hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30 transition-colors group">
                             <div className="flex gap-4 items-center">
-                              <div className="h-10 w-10 rounded-xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center font-bold text-lg text-primary">
+                              <div className="h-10 w-10 rounded-xl bg-[#2563EB] flex items-center justify-center font-bold text-lg text-white">
                                 {essay.score}
                               </div>
                               <div className="space-y-1">
@@ -263,7 +263,7 @@ const DashboardPage = () => {
                 </div>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Target className="h-5 w-5 text-primary" />
+                    <Target className="h-5 w-5 text-[#2563EB]" />
                     Weekly Progress
                   </CardTitle>
                   <CardDescription>Target: 10 Essays / Week</CardDescription>

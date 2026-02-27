@@ -141,7 +141,7 @@ const SettingsPage = () => {
               ].map((item, idx) => (
                 <Button
                   key={idx}
-                  variant={idx === activeButton ? "default" : "ghost"}
+                  variant={idx === activeButton ? "blue" : "ghost"}
                   className={`w-full ${idx === activeButton ? "" : "hover:bg-zinc-300/50 "} cursor-pointer justify-start gap-3`}
                   onClick={() => clickHandler(idx)}
                 >
@@ -171,7 +171,7 @@ const SettingsPage = () => {
                         className="bg-white/50 dark:bg-zinc-900/50"
                       />
                     </div>
-                    <Button className="w-full md:w-auto cursor-pointer">
+                    <Button variant="blue" className="w-full md:w-auto cursor-pointer">
                       Save Connection
                     </Button>
                     <Separator />
@@ -223,7 +223,7 @@ const SettingsPage = () => {
                       className="bg-white/50 dark:bg-zinc-900/50"
                     />
                   </div>
-                  <Button className="w-full md:w-auto cursor-pointer">
+                  <Button variant="blue" className="w-full md:w-auto cursor-pointer">
                     Save Connection
                   </Button>
                   <Separator />
