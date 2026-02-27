@@ -75,12 +75,12 @@ const DashboardNav = ({
           "mb-8 flex items-center transition-all duration-300",
           collapsed ? "justify-center" : "gap-3 px-2"
         )}>
-          <Logo className="h-10 w-10 flex-shrink-0" />
+          <Logo className="h-15 w-15 shrink-0" />
           {!collapsed && (
             <motion.span 
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              className="text-xl font-bold tracking-tight whitespace-nowrap"
+              className="text-xl font-bold tracking-tight whitespace-nowrap relative bottom-1"
             >
               IELTSly
             </motion.span>
