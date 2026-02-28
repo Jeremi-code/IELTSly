@@ -55,7 +55,7 @@ const HistoryPage = () => {
                 </div>
                 <Button 
                   variant="blue" 
-                  className="rounded-full px-8 h-12 font-bold transition-all hover:scale-105 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
+                  className="rounded-full px-8 h-12 font-bold transition-all hover:scale-105 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 cursor-pointer"
                 >
                   Start Your First Essay
                 </Button>
