@@ -23,9 +23,9 @@ const featureLists = [
     bgColor: "bg-purple-50 dark:bg-purple-900/20",
   },
   {
-    title: "Personalized Study Plans",
+    title: "Different Training Modes",
     description:
-      "Get customized study plans based on your performance to help you focus on areas that need improvement.",
+      "Choose from practice mode for focused skill-building or exam mode for a full simulation experience with time limits and no feedback until the end.",
     icon: Map,
     color: "text-emerald-500",
     bgColor: "bg-emerald-50 dark:bg-emerald-900/20",
