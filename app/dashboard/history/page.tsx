@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import DashboardNav from "@/app/components/DashboardNav";
+import React from "react";
+import DashboardShell from "../../components/DashboardShell";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { NotepadText, Search, Filter } from "lucide-react";
@@ -9,17 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const HistoryPage = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
   return (
-    <div className="flex min-h-screen bg-linear-to-br from-[#E4EEFF] via-[#FFFFFF] to-[#E4EEFF] dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-900 text-foreground relative transition-colors duration-500">
-      <DashboardNav collapsed={isCollapsed} onToggle={setIsCollapsed} />
-      
-      <main className={cn(
-        "flex-1 transition-all duration-300 p-6 lg:p-10",
-        isCollapsed ? "pl-20" : "pl-64"
-      )}>
-        <div className="max-w-6xl mx-auto space-y-8">
+    <DashboardShell className="max-w-6xl space-y-8">
           <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Essay History</h1>
@@ -62,9 +53,7 @@ const HistoryPage = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
-      </main>
-    </div>
+    </DashboardShell>
   );
 };
 

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import DashboardNav from "../components/DashboardNav";
 import {
   Award,
   BookOpen,
@@ -27,6 +26,7 @@ import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import DashboardShell from "../components/DashboardShell";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -108,22 +108,8 @@ const item = {
 };
 
 const DashboardPage = () => {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(false);
-
   return (
-    <div className="flex min-h-screen bg-linear-to-br from-[#E4EEFF] via-[#FFFFFF] to-[#E4EEFF] dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-900 text-foreground relative overflow-hidden transition-colors duration-500">
-      <DashboardNav
-        collapsed={isSidebarCollapsed}
-        onToggle={setIsSidebarCollapsed}
-      />
-
-      <main
-        className={cn(
-          "flex-1 transition-all duration-300 relative z-10",
-          isSidebarCollapsed ? "pl-20" : "pl-64",
-        )}
-      >
-        <div className="max-w-[1400px] mx-auto p-6 lg:p-10 space-y-10">
+    <DashboardShell className="max-w-[1400px] p-6 lg:p-10 space-y-10">
           {/* Header Section */}
           <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <motion.div
@@ -394,9 +380,7 @@ const DashboardPage = () => {
               "The only way to write better is to write more."
             </p>
           </motion.footer>
-        </div>
-      </main>
-    </div>
+    </DashboardShell>
   );
 };
 

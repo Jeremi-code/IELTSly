@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import DashboardNav from "@/app/components/DashboardNav";
+import React from "react";
+import DashboardShell from "../../components/DashboardShell";
 import {
   Zap,
   ShieldCheck,
@@ -86,22 +86,8 @@ const item = {
 };
 
 const PracticePage = () => {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-
   return (
-    <div className="flex min-h-screen bg-linear-to-br from-[#E4EEFF] via-[#FFFFFF] to-[#E4EEFF] dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-900 text-foreground relative overflow-hidden transition-colors duration-500">
-      <DashboardNav
-        collapsed={isSidebarCollapsed}
-        onToggle={setIsSidebarCollapsed}
-      />
-
-      <main
-        className={cn(
-          "flex-1 transition-all duration-300 relative z-10",
-          isSidebarCollapsed ? "pl-20" : "pl-64",
-        )}
-      >
-        <div className="max-w-[1200px] mx-auto p-6 lg:p-12 space-y-12">
+    <DashboardShell className="max-w-[1200px] p-6 lg:p-12 space-y-12">
           {/* Header Section */}
           <header className="space-y-4 text-center">
             <motion.h1
@@ -239,9 +225,7 @@ const PracticePage = () => {
               </div>
             </div>
           </motion.div>
-        </div>
-      </main>
-    </div>
+    </DashboardShell>
   );
 };
 

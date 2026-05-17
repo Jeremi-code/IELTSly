@@ -1,7 +1,7 @@
 "use client";
 
 import React, { MouseEvent, useState } from "react";
-import DashboardNav from "@/app/components/DashboardNav";
+import DashboardShell from "../../components/DashboardShell";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -101,23 +101,13 @@ const achievements = [
 ];
 
 const SettingsPage = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeButton, setActiveButton] = useState(0);
   const clickHandler = (index: number) => {
     setActiveButton(index);
   };
 
   return (
-    <div className="flex min-h-screen bg-linear-to-br from-[#E4EEFF] via-[#FFFFFF] to-[#E4EEFF] dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-900 text-foreground relative transition-colors duration-500">
-      <DashboardNav collapsed={isCollapsed} onToggle={setIsCollapsed} />
-
-      <main
-        className={cn(
-          "flex-1 transition-all duration-300 p-6 lg:p-10",
-          isCollapsed ? "pl-20" : "pl-64",
-        )}
-      >
-        <div className="max-w-4xl mx-auto space-y-8">
+    <DashboardShell className="max-w-4xl space-y-8">
           <header>
             <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
             <p className="text-muted-foreground">
@@ -272,9 +262,7 @@ const SettingsPage = () => {
               <div>This is the settings page</div>
             )}
           </div>
-        </div>
-      </main>
-    </div>
+    </DashboardShell>
   );
 };
 
