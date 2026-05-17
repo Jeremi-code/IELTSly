@@ -6,7 +6,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import Logo from "./Logo";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   Sheet,
   SheetContent,
@@ -17,6 +17,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,22 +30,28 @@ const Navbar = () => {
 
   const scrollToSection = (id: string) => {
     setIsMobileMenuOpen(false);
-    const element = document.getElementById(id);
+    const targetId = id.toLowerCase().replace(/\s+/g, "-");
+
+    if (pathname !== "/") {
+      router.push(`/#${targetId}`);
+      return;
+    }
+
+    const element = document.getElementById(targetId);
     if (element) {
       const offset = 80; // Navbar height
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset - offset;
 
       window.scrollTo({
-        top: offsetPosition,
+        top: elementPosition,
         behavior: "smooth"
       });
+    } else {
+      router.push(`/#${targetId}`);
     }
   };
 
-  const navItems = ["Features", "How It Works", "Pricing", "FAQ"];
+  const navItems = ["Features", "How It Works"]; //pricing and FAQ page are needed.
 
   return (
     <nav

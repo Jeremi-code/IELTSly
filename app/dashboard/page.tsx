@@ -2,19 +2,25 @@
 
 import React from "react";
 import DashboardNav from "../components/DashboardNav";
-import { 
-  Award, 
-  BookOpen, 
-  CircleAlert, 
-  TrendingUp, 
-  Clock, 
+import {
+  Award,
+  BookOpen,
+  CircleAlert,
+  TrendingUp,
+  Clock,
   ChevronRight,
   Target,
   Zap,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -22,6 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const dashboardStat = [
   {
@@ -105,38 +112,50 @@ const DashboardPage = () => {
 
   return (
     <div className="flex min-h-screen bg-linear-to-br from-[#E4EEFF] via-[#FFFFFF] to-[#E4EEFF] dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-900 text-foreground relative overflow-hidden transition-colors duration-500">
-      <DashboardNav collapsed={isSidebarCollapsed} onToggle={setIsSidebarCollapsed} />
-      
-      <main className={cn(
-        "flex-1 transition-all duration-300 relative z-10",
-        isSidebarCollapsed ? "pl-20" : "pl-64"
-      )}>
+      <DashboardNav
+        collapsed={isSidebarCollapsed}
+        onToggle={setIsSidebarCollapsed}
+      />
+
+      <main
+        className={cn(
+          "flex-1 transition-all duration-300 relative z-10",
+          isSidebarCollapsed ? "pl-20" : "pl-64",
+        )}
+      >
         <div className="max-w-[1400px] mx-auto p-6 lg:p-10 space-y-10">
-          
           {/* Header Section */}
           <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <motion.div 
+            <motion.div
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               className="space-y-1"
             >
               <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-                Ready to <span className="text-primary italic">Conquer</span> IELTS?
+                Ready to <span className="text-primary italic">Conquer</span>{" "}
+                IELTS?
               </h1>
               <p className="text-muted-foreground text-lg">
-                Welcome back, Jeremi. Your writing is improving faster than 85% of peers.
+                Welcome back, Jeremi. Your writing is improving faster than 85%
+                of peers.
               </p>
             </motion.div>
-            
-            <motion.div 
-               initial={{ scale: 0.9, opacity: 0 }}
-               animate={{ scale: 1, opacity: 1 }}
-               className="flex items-center gap-3"
+
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="flex items-center gap-3"
             >
-              <Button variant="blue" size="lg" className="rounded-full px-8 shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
-                <Zap className="mr-2 h-4 w-4 fill-current" />
-                Start New Practice
-              </Button>
+              <Link href="/dashboard/practice">
+                <Button
+                  variant="blue"
+                  size="lg"
+                  className="rounded-full px-8 shadow-lg shadow-primary/20 hover:scale-105 transition-transform cursor-pointer"
+                >
+                  <Zap className="mr-2 h-4 w-4 fill-current" />
+                  Start New Practice
+                </Button>
+              </Link>
             </motion.div>
           </header>
 
@@ -148,27 +167,35 @@ const DashboardPage = () => {
           >
             <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-600/40 backdrop-blur-xl overflow-hidden relative shadow-sm">
               <div className="absolute top-0 right-0 p-1 bg-destructive/20 rounded-bl-xl">
-                 <Sparkles className="h-4 w-4 text-destructive animate-pulse" />
+                <Sparkles className="h-4 w-4 text-destructive animate-pulse" />
               </div>
               <CardContent className="p-6 flex flex-col md:flex-row items-center gap-6">
                 <div className="h-14 w-14 rounded-2xl bg-destructive/20 flex items-center justify-center flex-shrink-0">
                   <CircleAlert className="h-8 w-8 text-destructive" />
                 </div>
                 <div className="flex-1 space-y-1 text-center md:text-left">
-                  <h3 className="text-lg font-bold text-destructive">Gemini Intelligence is Offline</h3>
+                  <h3 className="text-lg font-bold text-destructive">
+                    Gemini Intelligence is Offline
+                  </h3>
                   <p className="text-sm text-muted-foreground">
-                    Connect your Gemini API key to unlock instant, deep-dive feedback and personalized writing improvements.
+                    Connect your Gemini API key to unlock instant, deep-dive
+                    feedback and personalized writing improvements.
                   </p>
                 </div>
-                <Button variant="outline" className="border-destructive/30 hover:bg-destructive hover:text-white transition-colors">
-                  Setup API Key
-                </Button>
+                <Link href="dashboard/settings">
+                  <Button
+                    variant="outline"
+                    className="border-destructive/30 hover:bg-destructive hover:text-white transition-colors cursor-pointer"
+                  >
+                    Setup API Key
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </motion.div>
 
           {/* Stats Grid */}
-          <motion.div 
+          <motion.div
             variants={container}
             initial="hidden"
             animate="show"
@@ -177,9 +204,13 @@ const DashboardPage = () => {
             {dashboardStat.map((stat, index) => (
               <motion.div key={stat.title} variants={item}>
                 <Card className="group relative overflow-hidden border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-[#2563EB] backdrop-blur-xl shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
-                  <div className={`absolute top-0 right-0 -mr-4 -mt-4 h-24 w-24 rounded-full ${stat.bg} mix-blend-multiply filter blur-2xl opacity-50 group-hover:scale-150 transition-transform duration-500`} />
+                  <div
+                    className={`absolute top-0 right-0 -mr-4 -mt-4 h-24 w-24 rounded-full ${stat.bg} mix-blend-multiply filter blur-2xl opacity-50 group-hover:scale-150 transition-transform duration-500`}
+                  />
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground dark:text-white">{stat.title}</CardTitle>
+                    <CardTitle className="text-sm font-medium text-muted-foreground dark:text-white">
+                      {stat.title}
+                    </CardTitle>
                     <div className={`rounded-xl ${stat.bg} p-2`}>
                       <stat.icon className={`h-4 w-4 ${stat.color}`} />
                     </div>
@@ -197,7 +228,6 @@ const DashboardPage = () => {
 
           {/* Main Content Area */}
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-            
             {/* Left Column: Activity & Performance */}
             <div className="xl:col-span-2 space-y-8">
               <Tabs defaultValue="activity" className="w-full">
@@ -206,32 +236,51 @@ const DashboardPage = () => {
                     <TabsTrigger value="activity">Recent Activity</TabsTrigger>
                     <TabsTrigger value="performance">Performance</TabsTrigger>
                   </TabsList>
-                  <Button variant="blue" size="sm" className="hover:text-primary/80">
+                  <Button
+                    variant="blue"
+                    size="sm"
+                    className="cursor-pointer"
+                  >
                     View All <ChevronRight className="ml-1 h-3 w-3" />
                   </Button>
                 </div>
-                
+
                 <TabsContent value="activity">
                   <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl shadow-sm">
                     <CardContent className="p-0">
                       <div className="divide-y divide-border/30 dark:divide-zinc-800/50">
                         {recentEssays.map((essay) => (
-                          <div key={essay.id} className="p-4 flex items-center justify-between hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30 transition-colors group">
+                          <div
+                            key={essay.id}
+                            className="p-4 flex items-center justify-between hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30 transition-colors group"
+                          >
                             <div className="flex gap-4 items-center">
                               <div className="h-10 w-10 rounded-xl bg-[#2563EB] flex items-center justify-center font-bold text-lg text-white">
                                 {essay.score}
                               </div>
                               <div className="space-y-1">
-                                <h4 className="text-sm font-semibold group-hover:text-primary transition-colors cursor-pointer">{essay.title}</h4>
+                                <h4 className="text-sm font-semibold group-hover:text-primary transition-colors cursor-pointer">
+                                  {essay.title}
+                                </h4>
                                 <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
-                                  <Badge variant="outline" className="text-[10px] h-4 leading-none py-0">{essay.type}</Badge>
+                                  <Badge
+                                    variant="outline"
+                                    className="text-[10px] h-4 leading-none py-0"
+                                  >
+                                    {essay.type}
+                                  </Badge>
                                   <span className="flex items-center">
-                                    <Clock className="mr-1 h-3 w-3" /> {essay.date}
+                                    <Clock className="mr-1 h-3 w-3" />{" "}
+                                    {essay.date}
                                   </span>
                                 </div>
                               </div>
                             </div>
-                            <Button variant="ghost" size="icon" className="rounded-full">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="rounded-full"
+                            >
                               <ChevronRight className="h-4 w-4" />
                             </Button>
                           </div>
@@ -240,14 +289,15 @@ const DashboardPage = () => {
                     </CardContent>
                   </Card>
                 </TabsContent>
-                
+
                 <TabsContent value="performance">
                   <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl shadow-sm h-[300px] flex items-center justify-center">
                     <div className="text-center space-y-4">
-                       <TrendingUp className="h-12 w-12 text-primary/40 mx-auto" />
-                       <p className="text-muted-foreground text-sm max-w-xs">
-                         Insights will appear here once you complete 5 more essays. Keep up the momentum!
-                       </p>
+                      <TrendingUp className="h-12 w-12 text-primary/40 mx-auto" />
+                      <p className="text-muted-foreground text-sm max-w-xs">
+                        Insights will appear here once you complete 5 more
+                        essays. Keep up the momentum!
+                      </p>
                     </div>
                   </Card>
                 </TabsContent>
@@ -259,7 +309,7 @@ const DashboardPage = () => {
               {/* Weekly Goal Card */}
               <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-1 opacity-20">
-                   <Target className="h-20 w-20 -mr-6 -mt-6" />
+                  <Target className="h-20 w-20 -mr-6 -mt-6" />
                 </div>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
@@ -277,10 +327,16 @@ const DashboardPage = () => {
                     <Progress value={70} className="h-2" />
                   </div>
                   <div className="p-4 rounded-xl bg-background/50 border border-border/50 dark:border-zinc-800/50 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300 space-y-2">
-                    <p className="text-xs text-muted-foreground">Next Milestone</p>
+                    <p className="text-xs text-muted-foreground">
+                      Next Milestone
+                    </p>
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-sm">Consistent Writer</span>
-                      <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/30">+50 XP</Badge>
+                      <span className="font-bold text-sm">
+                        Consistent Writer
+                      </span>
+                      <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/30">
+                        +50 XP
+                      </Badge>
                     </div>
                   </div>
                 </CardContent>
@@ -297,39 +353,47 @@ const DashboardPage = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm font-medium leading-relaxed italic">
-                    "Use more cohesive devices like 'Furthermore' or 'Consequently' to improve your Coherence and Cohesion score."
+                    "Use more cohesive devices like 'Furthermore' or
+                    'Consequently' to improve your Coherence and Cohesion
+                    score."
                   </p>
-                  <Button variant="link" className="px-0 mt-2 text-primary h-auto p-0 text-xs">
+                  <Button
+                    variant="link"
+                    className="px-0 mt-2 text-primary h-auto p-0 text-xs"
+                  >
                     Learn more about Band 7 strategies
                   </Button>
                 </CardContent>
               </Card>
             </div>
-
           </div>
 
           {/* Call to Action Footer */}
-          <motion.footer 
+          <motion.footer
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
             className="pt-10 border-t border-accent/10 text-center space-y-4"
           >
-             <div className="inline-flex items-center justify-center p-2 rounded-full bg-accent/20 px-6 space-x-2">
-               <span className="text-xs text-muted-foreground">Join 1,200+ students practicing today</span>
-               <div className="flex -space-x-2">
-                 {[1,2,3].map(i => (
-                   <Avatar key={i} className="h-6 w-6 border-2 border-background">
-                     <AvatarFallback className="text-[8px]">U{i}</AvatarFallback>
-                   </Avatar>
-                 ))}
-               </div>
-             </div>
-             <p className="text-sm text-muted-foreground italic">
-               "The only way to write better is to write more."
-             </p>
+            <div className="inline-flex items-center justify-center p-2 rounded-full bg-accent/20 px-6 space-x-2">
+              <span className="text-xs text-muted-foreground">
+                Join 1,200+ students practicing today
+              </span>
+              <div className="flex -space-x-2">
+                {[1, 2, 3].map((i) => (
+                  <Avatar
+                    key={i}
+                    className="h-6 w-6 border-2 border-background"
+                  >
+                    <AvatarFallback className="text-[8px]">U{i}</AvatarFallback>
+                  </Avatar>
+                ))}
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground italic">
+              "The only way to write better is to write more."
+            </p>
           </motion.footer>
-
         </div>
       </main>
     </div>
