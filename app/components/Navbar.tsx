@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import Logo from "./Logo";
-import { Menu, X } from "lucide-react";
+import { Menu, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -12,12 +12,16 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useSession } from "@/lib/auth-client";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const { data: session, isPending } = useSession();
+
+  const isAuthenticated = !!session?.user;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,20 +89,35 @@ const Navbar = () => {
           {/* Actions */}
           <div className="hidden lg:flex items-center gap-4">
             <ThemeToggle />
-            <Button
-              variant="ghost"
-              className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 rounded-full px-5"
-              onClick={() => router.push('/signin')}
-            >
-              Sign In
-            </Button>
-            <Button 
-              variant="blue" 
-              className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
-              onClick={() => router.push('/signin?mode=signup')}
-            >
-              Get Started
-            </Button>
+            {isPending ? (
+              <div className="w-24 h-9 rounded-full bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
+            ) : isAuthenticated ? (
+              <Button 
+                variant="blue" 
+                className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
+                onClick={() => router.push('/dashboard')}
+              >
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                Dashboard
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 rounded-full px-5"
+                  onClick={() => router.push('/signin')}
+                >
+                  Sign In
+                </Button>
+                <Button 
+                  variant="blue" 
+                  className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
+                  onClick={() => router.push('/signin?mode=signup')}
+                >
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu */}
@@ -131,26 +150,42 @@ const Navbar = () => {
                   ))}
                   
                   <div className="flex flex-col gap-4 mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-center text-base font-semibold"
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        router.push('/signin');
-                      }}
-                    >
-                      Sign In
-                    </Button>
-                    <Button
-                      variant="blue"
-                      className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-blue-500/25"
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        router.push('/signin?mode=signup');
-                      }}
-                    >
-                      Get Started
-                    </Button>
+                    {isAuthenticated ? (
+                      <Button
+                        variant="blue"
+                        className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-blue-500/25"
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          router.push('/dashboard');
+                        }}
+                      >
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Button>
+                    ) : (
+                      <>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-center text-base font-semibold"
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            router.push('/signin');
+                          }}
+                        >
+                          Sign In
+                        </Button>
+                        <Button
+                          variant="blue"
+                          className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-blue-500/25"
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            router.push('/signin?mode=signup');
+                          }}
+                        >
+                          Get Started
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </SheetContent>
