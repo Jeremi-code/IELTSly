@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Logo from "./Logo";
 import {
   ChartColumn,
@@ -11,14 +11,15 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  User,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./ModeToggle";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useSession, signOut } from "@/lib/auth-client";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: House },
@@ -36,7 +37,10 @@ const DashboardNav = ({
   onToggle?: (val: boolean) => void 
 }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { data: session } = useSession();
 
   // Sync with external state if provided, otherwise manage internally
   const collapsed = externalCollapsed !== undefined ? externalCollapsed : isCollapsed;
@@ -49,6 +53,28 @@ const DashboardNav = ({
       setIsCollapsed(newVal);
     }
   };
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await signOut();
+      router.push("/signin");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
+  // Derive user display info from session
+  const user = session?.user;
+  const displayName = user?.name || user?.email?.split("@")[0] || "User";
+  const initials = displayName
+    .split(" ")
+    .map((n: string) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 
   return (
     <motion.aside 
@@ -129,8 +155,19 @@ const DashboardNav = ({
             collapsed ? "flex-col gap-4" : "px-2"
           )}>
              <ModeToggle />
-             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full h-9 w-9">
-               <LogOut className="h-4 w-4" />
+             <Button
+               variant="ghost"
+               size="icon"
+               onClick={handleLogout}
+               disabled={isLoggingOut}
+               title="Sign out"
+               className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full h-9 w-9"
+             >
+               {isLoggingOut ? (
+                 <Loader2 className="h-4 w-4 animate-spin" />
+               ) : (
+                 <LogOut className="h-4 w-4" />
+               )}
              </Button>
           </div>
           
@@ -139,9 +176,17 @@ const DashboardNav = ({
             collapsed ? "justify-center p-1" : "gap-3 bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/50 p-3"
           )}>
             <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 p-[2px] flex-shrink-0">
-              <div className="h-full w-full rounded-full bg-background flex items-center justify-center font-bold text-sm">
-                JD
-              </div>
+              {user?.image ? (
+                <img
+                  src={user.image}
+                  alt={displayName}
+                  className="h-full w-full rounded-full object-cover"
+                />
+              ) : (
+                <div className="h-full w-full rounded-full bg-background flex items-center justify-center font-bold text-sm">
+                  {initials}
+                </div>
+              )}
             </div>
             {!collapsed && (
               <motion.div 
@@ -149,8 +194,12 @@ const DashboardNav = ({
                 animate={{ opacity: 1 }}
                 className="flex flex-col min-w-0"
               >
-                <span className="text-xs font-semibold truncate uppercase tracking-widest text-zinc-900 dark:text-zinc-200">Jeremi Doe</span>
-                <span className="text-[10px] text-muted-foreground">Premium Plan</span>
+                <span className="text-xs font-semibold truncate uppercase tracking-widest text-zinc-900 dark:text-zinc-200">
+                  {displayName}
+                </span>
+                <span className="text-[10px] text-muted-foreground truncate">
+                  {user?.email || ""}
+                </span>
               </motion.div>
             )}
           </div>
