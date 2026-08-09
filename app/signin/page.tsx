@@ -110,7 +110,7 @@ const SignInContent = () => {
     try {
       await signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: `${window.location.origin}/dashboard`,
       });
     } catch (err: any) {
       setError(err.message || "Google sign-in failed");
