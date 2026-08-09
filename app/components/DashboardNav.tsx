@@ -80,37 +80,36 @@ const DashboardNav = ({
     <motion.aside 
       initial={false}
       animate={{ width: collapsed ? 80 : 256 }}
-      className={cn(
-        "fixed left-0 top-0 z-40 h-screen border-r border-zinc-200/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl transition-all duration-300",
-        collapsed ? "w-20" : "w-64"
-      )}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="fixed left-0 top-0 z-40 h-screen border-r border-zinc-200/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl"
     >
-      <div className="flex h-full flex-col p-4 relative">
-        {/* Toggle Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleSidebar}
-          className="absolute -right-3 top-10 h-6 w-6 rounded-full border border-zinc-200 bg-background shadow-md dark:border-zinc-800 dark:bg-zinc-950 z-50 hover:bg-accent"
-        >
-          {collapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
-        </Button>
+      {/* Toggle Button placed outside the overflow-clipped container */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={toggleSidebar}
+        className="absolute -right-3 top-10 h-6 w-6 rounded-full border border-zinc-200 bg-background shadow-md dark:border-zinc-800 dark:bg-zinc-950 z-50 hover:bg-accent"
+      >
+        {collapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
+      </Button>
 
+      {/* Inner content wrapper with overflow clipping */}
+      <div className="flex h-full flex-col p-4 relative w-full overflow-x-hidden">
         {/* Logo Section */}
-        <div className={cn(
-          "mb-8 flex items-center transition-all duration-300",
-          collapsed ? "justify-center" : "gap-3 px-2"
-        )}>
-          <Logo className="h-15 w-15 shrink-0" />
-          {!collapsed && (
-            <motion.span 
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-xl font-bold tracking-tight whitespace-nowrap relative bottom-1"
-            >
-              IELTSly
-            </motion.span>
-          )}
+        <div className="h-16 mb-8 flex items-center px-2">
+          <Logo className="h-12 w-12 shrink-0" />
+          <motion.span 
+            initial={false}
+            animate={{ 
+              opacity: collapsed ? 0 : 1,
+              width: collapsed ? 0 : "auto",
+              marginLeft: collapsed ? 0 : 12,
+            }}
+            transition={{ duration: 0.15 }}
+            className="text-xl font-bold tracking-tight whitespace-nowrap relative bottom-1 overflow-hidden"
+          >
+            IELTSly
+          </motion.span>
         </div>
 
         {/* Navigation Items */}
@@ -122,26 +121,28 @@ const DashboardNav = ({
                 <div
                   title={collapsed ? item.name : ""}
                   className={cn(
-                    "group flex items-center rounded-xl p-2.5 text-sm font-medium transition-all duration-200",
-                    collapsed ? "justify-center" : "gap-3 px-3",
+                    "group flex items-center rounded-xl p-2.5 text-sm font-medium transition-all duration-200 px-3",
                     isActive
                       ? "bg-[#2563EB] text-primary-foreground dark:text-white shadow-lg shadow-primary/20"
                       : "text-muted-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-50 cursor-pointer"
                   )}
                 >
                   <item.icon className={cn(
-                    "h-5 w-5 transition-transform duration-200 group-hover:scale-110",
+                    "h-5 w-5 transition-transform duration-200 group-hover:scale-110 shrink-0",
                     isActive ? "text-primary-foreground dark:text-white" : "text-muted-foreground group-hover:text-zinc-900 dark:group-hover:text-zinc-50"
                   )} />
-                  {!collapsed && (
-                    <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="whitespace-nowrap"
-                    >
-                      {item.name}
-                    </motion.span>
-                  )}
+                  <motion.span
+                    initial={false}
+                    animate={{
+                      opacity: collapsed ? 0 : 1,
+                      width: collapsed ? 0 : "auto",
+                      marginLeft: collapsed ? 0 : 12,
+                    }}
+                    transition={{ duration: 0.15 }}
+                    className="whitespace-nowrap overflow-hidden"
+                  >
+                    {item.name}
+                  </motion.span>
                 </div>
               </Link>
             );
@@ -172,8 +173,8 @@ const DashboardNav = ({
           </div>
           
           <div className={cn(
-            "flex items-center rounded-2xl transition-all duration-300",
-            collapsed ? "justify-center p-1" : "gap-3 bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/50 p-3"
+            "flex items-center rounded-2xl transition-all duration-300 overflow-hidden",
+            collapsed ? "justify-center p-1 bg-transparent border-transparent" : "bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/50 p-3"
           )}>
             <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 p-[2px] flex-shrink-0">
               {user?.image ? (
@@ -188,20 +189,23 @@ const DashboardNav = ({
                 </div>
               )}
             </div>
-            {!collapsed && (
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col min-w-0"
-              >
-                <span className="text-xs font-semibold truncate uppercase tracking-widest text-zinc-900 dark:text-zinc-200">
-                  {displayName}
-                </span>
-                <span className="text-[10px] text-muted-foreground truncate">
-                  {user?.email || ""}
-                </span>
-              </motion.div>
-            )}
+            <motion.div 
+              initial={false}
+              animate={{ 
+                opacity: collapsed ? 0 : 1,
+                width: collapsed ? 0 : "auto",
+                marginLeft: collapsed ? 0 : 12,
+              }}
+              transition={{ duration: 0.15 }}
+              className="flex flex-col min-w-0 overflow-hidden"
+            >
+              <span className="text-xs font-semibold truncate uppercase tracking-widest text-zinc-900 dark:text-zinc-200">
+                {displayName}
+              </span>
+              <span className="text-[10px] text-muted-foreground truncate">
+                {user?.email || ""}
+              </span>
+            </motion.div>
           </div>
         </div>
       </div>
