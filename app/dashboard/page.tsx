@@ -29,6 +29,7 @@ import { Separator } from "@/components/ui/separator";
 import DashboardShell from "../components/DashboardShell";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useSession } from "@/lib/auth-client";
 
 const dashboardStat = [
   {
@@ -108,6 +109,10 @@ const item = {
 };
 
 const DashboardPage = () => {
+  const { data: session } = useSession();
+  const user = session?.user;
+  const displayName = user?.name || user?.email?.split("@")[0] || "Student";
+
   return (
     <DashboardShell className="max-w-[1400px] p-6 lg:p-10 space-y-10">
           {/* Header Section */}
@@ -122,7 +127,7 @@ const DashboardPage = () => {
                 IELTS?
               </h1>
               <p className="text-muted-foreground text-lg">
-                Welcome back, Jeremi. Your writing is improving faster than 85%
+                Welcome back, {displayName}. Your writing is improving faster than 85%
                 of peers.
               </p>
             </motion.div>
@@ -189,12 +194,12 @@ const DashboardPage = () => {
           >
             {dashboardStat.map((stat, index) => (
               <motion.div key={stat.title} variants={item}>
-                <Card className="group relative overflow-hidden border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-[#2563EB] backdrop-blur-xl shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
+                <Card className="group relative overflow-hidden border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
                   <div
                     className={`absolute top-0 right-0 -mr-4 -mt-4 h-24 w-24 rounded-full ${stat.bg} mix-blend-multiply filter blur-2xl opacity-50 group-hover:scale-150 transition-transform duration-500`}
                   />
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground dark:text-white">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">
                       {stat.title}
                     </CardTitle>
                     <div className={`rounded-xl ${stat.bg} p-2`}>
@@ -203,7 +208,7 @@ const DashboardPage = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{stat.value}</div>
-                    <p className="text-xs text-muted-foreground dark:text-white mt-1 flex items-center gap-1">
+                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                       {stat.change}
                     </p>
                   </CardContent>
