@@ -4,7 +4,6 @@ import React, { useState, useEffect, Suspense, FormEvent } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Logo from "../components/Logo";
-import InteractiveGridBackground from "../components/InteractiveGridBackground";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -122,9 +121,6 @@ const SignInContent = () => {
     <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-zinc-950 relative overflow-hidden">
       <Navbar />
       
-      {/* Background Pattern */}
-      <InteractiveGridBackground />
-
       <main className="flex-1 flex items-center justify-center p-4 relative z-10 pt-20">
         <div className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500">
           <div className="text-center mb-4 space-y-1">
