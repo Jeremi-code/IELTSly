@@ -3,7 +3,6 @@
 import React from 'react'
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Stat from './components/Stat';
 import Features from './components/Features';
 import Steps from './components/Steps';
 import Footer from './components/Footer';
@@ -13,7 +12,6 @@ const HomePage = () => {
     <div>
       <Navbar />
       <Hero />
-      <Stat />
       <Features />
       <Steps />
       <Footer />
