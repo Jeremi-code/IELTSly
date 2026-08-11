@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import DashboardShell from "../../components/DashboardShell";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,72 +22,62 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { getEssays, formatDate, type Essay } from "@/lib/api";
 
-// Mock completed essays list
-const initialEssays = [
-  {
-    id: "ess-104",
-    title: "The impact of social media on youth development and communication",
-    type: "Task 2",
-    date: "Aug 09, 2026",
-    score: "7.5",
-    criteria: { ta: 7.5, cc: 7.5, lr: 7.0, gra: 8.0 },
-    status: "Evaluated",
-    duration: "38 mins",
-    words: "284 words",
-    aiFeedback: "Strong vocabulary usage and structural layout. Minor errors in punctuation."
-  },
-  {
-    id: "ess-103",
-    title: "Climate change global policy and individual responsibility",
-    type: "Task 2",
-    date: "Aug 07, 2026",
-    score: "6.5",
-    criteria: { ta: 6.5, cc: 6.0, lr: 7.0, gra: 6.5 },
-    status: "Evaluated",
-    duration: "40 mins",
-    words: "260 words",
-    aiFeedback: "Good arguments, but Coherence and Cohesion fell short due to weak transitionals."
-  },
-  {
-    id: "ess-102",
-    title: "Line graph: Population trends in major Asian cities (1990-2020)",
-    type: "Task 1",
-    date: "Aug 06, 2026",
-    score: "7.0",
-    criteria: { ta: 7.0, cc: 7.0, lr: 7.0, gra: 7.0 },
-    status: "Evaluated",
-    duration: "18 mins",
-    words: "172 words",
-    aiFeedback: "Data trends were accurately summarized. Lexical resource was precise."
-  },
-  {
-    id: "ess-101",
-    title: "Bar chart: Energy consumption patterns in five European countries",
-    type: "Task 1",
-    date: "Aug 02, 2026",
-    score: "6.0",
-    criteria: { ta: 6.0, cc: 6.0, lr: 6.0, gra: 6.0 },
-    status: "Evaluated",
-    duration: "20 mins",
-    words: "155 words",
-    aiFeedback: "Summarized the major categories, but missed key comparative data points."
-  }
-];
+type HistoryEssay = {
+  id: string;
+  title: string;
+  type: string;
+  date: string;
+  score: string;
+  criteria: { ta: number; cc: number; lr: number; gra: number };
+  status: string;
+  duration: string;
+  words: string;
+  aiFeedback: string;
+};
+
+function mapEssay(essay: Essay): HistoryEssay {
+  return {
+    id: `ess-${essay._id.slice(-4)}`,
+    title: essay.question.text,
+    type: essay.type === "task1" ? "Task 1" : "Task 2",
+    date: formatDate(essay.createdAt),
+    score: essay.evaluation ? essay.evaluation.overallBand.toFixed(1) : "—",
+    criteria: essay.evaluation?.criteria ?? { ta: 0, cc: 0, lr: 0, gra: 0 },
+    status: essay.status,
+    duration:
+      essay.durationSec >= 60
+        ? `${Math.round(essay.durationSec / 60)} mins`
+        : `${essay.durationSec}s`,
+    words: `${essay.wordCount} words`,
+    aiFeedback: essay.evaluation?.feedback ?? "Awaiting evaluation.",
+  };
+}
 
 const HistoryPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"All" | "Task 1" | "Task 2">("All");
+  const [essays, setEssays] = useState<Essay[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getEssays({ limit: 100 })
+      .then((res) => setEssays(res.essays))
+      .catch(() => setLoadError("Could not load your essays. Is the API running?"))
+      .finally(() => setLoading(false));
+  }, []);
 
   // Filtering logic
   const filteredEssays = useMemo(() => {
-    return initialEssays.filter((essay) => {
+    return essays.map(mapEssay).filter((essay) => {
       const matchesSearch = essay.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                             essay.id.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesTab = activeTab === "All" || essay.type === activeTab;
       return matchesSearch && matchesTab;
     });
-  }, [searchQuery, activeTab]);
+  }, [essays, searchQuery, activeTab]);
 
   return (
     <DashboardShell className="max-w-[1400px] p-6 lg:p-10 space-y-8">
@@ -121,7 +111,7 @@ const HistoryPage = () => {
               className={cn(
                 "px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer flex-1 sm:flex-none whitespace-nowrap",
                 activeTab === tab
-                  ? "bg-[#2563EB] text-white shadow-sm"
+                  ? "bg-primary text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -144,7 +134,28 @@ const HistoryPage = () => {
 
       {/* Essay Cards list */}
       <div className="space-y-4">
-        {filteredEssays.length > 0 ? (
+        {loading ? (
+          <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl">
+            <CardContent className="py-20 text-center space-y-4">
+              <div className="h-20 w-20 rounded-full bg-primary/5 flex items-center justify-center text-primary/40 mx-auto animate-pulse">
+                <FileText className="h-10 w-10" />
+              </div>
+              <p className="font-bold text-lg">Loading your essays...</p>
+            </CardContent>
+          </Card>
+        ) : loadError ? (
+          <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl">
+            <CardContent className="py-20 text-center space-y-4">
+              <div className="h-20 w-20 rounded-full bg-red-500/5 flex items-center justify-center text-red-500/50 mx-auto">
+                <HelpCircle className="h-10 w-10" />
+              </div>
+              <div className="max-w-xs space-y-2 mx-auto">
+                <p className="font-bold text-lg">Connection error</p>
+                <p className="text-sm text-muted-foreground">{loadError}</p>
+              </div>
+            </CardContent>
+          </Card>
+        ) : filteredEssays.length > 0 ? (
           filteredEssays.map((essay) => (
             <motion.div
               key={essay.id}
@@ -199,7 +210,7 @@ const HistoryPage = () => {
 
                       {/* AI Summary snippet */}
                       <div className="p-3 rounded-xl bg-blue-500/5 border border-blue-500/10 flex items-start gap-2">
-                        <Sparkles className="h-4 w-4 text-[#2563EB] shrink-0 mt-0.5" />
+                        <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                         <p className="text-xs text-muted-foreground font-medium italic line-clamp-1">
                           "{essay.aiFeedback}"
                         </p>
@@ -237,16 +248,18 @@ const HistoryPage = () => {
                 <NotepadText className="h-10 w-10" />
               </div>
               <div className="max-w-xs space-y-2 mx-auto">
-                <p className="font-bold text-lg">No essays match your search</p>
-                <p className="text-sm text-muted-foreground">Try modifying your query or filter keywords.</p>
+                <p className="font-bold text-lg">No essays found</p>
+                <p className="text-sm text-muted-foreground">{searchQuery || activeTab !== "All" ? "Try modifying your query or filter keywords." : "Write your first essay to see it here."}</p>
               </div>
-              <Button 
-                variant="outline"
-                onClick={() => { setSearchQuery(""); setActiveTab("All"); }}
-                className="rounded-full cursor-pointer"
-              >
-                Clear Filters
-              </Button>
+              {(searchQuery || activeTab !== "All") && (
+                <Button 
+                  variant="outline"
+                  onClick={() => { setSearchQuery(""); setActiveTab("All"); }}
+                  className="rounded-full cursor-pointer"
+                >
+                  Clear Filters
+                </Button>
+              )}
             </CardContent>
           </Card>
         )}

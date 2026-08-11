@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Award,
   BookOpen,
@@ -11,6 +11,7 @@ import {
   Target,
   Zap,
   Sparkles,
+  CheckCircle2,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -30,68 +31,7 @@ import DashboardShell from "../components/DashboardShell";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
-
-const dashboardStat = [
-  {
-    title: "Total Essays",
-    value: "14",
-    change: "+3 this week",
-    icon: BookOpen,
-    color: "text-blue-500",
-    bg: "bg-blue-500/10",
-  },
-  {
-    title: "Average Band",
-    value: "7.0",
-    change: "+0.5 from last week",
-    icon: TrendingUp,
-    color: "text-green-500",
-    bg: "bg-green-500/10",
-  },
-  {
-    title: "Task 1 Avg",
-    value: "6.5",
-    change: "Target: 7.0",
-    icon: Target,
-    color: "text-purple-500",
-    bg: "bg-purple-500/10",
-  },
-  {
-    title: "Task 2 Avg",
-    value: "7.5",
-    change: "Target: 8.0",
-    icon: Award,
-    color: "text-orange-500",
-    bg: "bg-orange-500/10",
-  },
-];
-
-const recentEssays = [
-  {
-    id: 1,
-    title: "The impact of social media on youth",
-    type: "Task 2",
-    date: "2 hours ago",
-    score: "7.5",
-    status: "evaluated",
-  },
-  {
-    id: 2,
-    title: "Climate change and global policy",
-    type: "Task 2",
-    date: "Yesturday",
-    score: "6.5",
-    status: "feedback-given",
-  },
-  {
-    id: 3,
-    title: "Line graph: Population trends in Asia",
-    type: "Task 1",
-    date: "2 days ago",
-    score: "7.0",
-    status: "evaluated",
-  },
-];
+import { getAnalytics, getEssays, getStoredAIKey, getStoredAIProvider, timeAgo, type Essay } from "@/lib/api";
 
 const container = {
   hidden: { opacity: 0 },
@@ -112,6 +52,80 @@ const DashboardPage = () => {
   const { data: session } = useSession();
   const user = session?.user;
   const displayName = user?.name || user?.email?.split("@")[0] || "Student";
+
+  const [stats, setStats] = useState<{
+    totalAttempts: number;
+    evaluatedCount: number;
+    averageBand: number;
+    bestBand: number;
+    task1Average: number;
+    task2Average: number;
+    inProgressCount: number;
+  } | null>(null);
+  const [recent, setRecent] = useState<Essay[]>([]);
+
+  useEffect(() => {
+    getAnalytics()
+      .then((res) => setStats(res.stats))
+      .catch(() => setStats(null));
+    getEssays({ limit: 5 })
+      .then((res) => setRecent(res.essays))
+      .catch(() => setRecent([]));
+  }, []);
+
+  const hasAIKey = Boolean(getStoredAIKey());
+  const providerLabel = getStoredAIProvider() === "gemini" ? "Gemini" : "OpenAI";
+
+  const dashboardStat = useMemo(
+    () => [
+      {
+        title: "Total Essays",
+        value: stats ? String(stats.totalAttempts) : "—",
+        change: stats ? `${stats.evaluatedCount} evaluated` : "loading...",
+        icon: BookOpen,
+        color: "text-blue-500",
+        bg: "bg-blue-500/10",
+      },
+      {
+        title: "Average Band",
+        value: stats?.averageBand ? stats.averageBand.toFixed(1) : "—",
+        change: stats ? `Best: ${stats.bestBand.toFixed(1)}` : "loading...",
+        icon: TrendingUp,
+        color: "text-green-500",
+        bg: "bg-green-500/10",
+      },
+      {
+        title: "Task 1 Avg",
+        value: stats?.task1Average ? stats.task1Average.toFixed(1) : "—",
+        change: stats ? `Target: 8.0` : "loading...",
+        icon: Target,
+        color: "text-purple-500",
+        bg: "bg-purple-500/10",
+      },
+      {
+        title: "Task 2 Avg",
+        value: stats?.task2Average ? stats.task2Average.toFixed(1) : "—",
+        change: stats ? `Target: 8.0` : "loading...",
+        icon: Award,
+        color: "text-orange-500",
+        bg: "bg-orange-500/10",
+      },
+    ],
+    [stats]
+  );
+
+  const recentEssays = useMemo(
+    () =>
+      recent.map((essay) => ({
+        id: essay._id,
+        title: essay.question.text,
+        type: essay.type === "task1" ? "Task 1" : "Task 2",
+        date: timeAgo(essay.createdAt),
+        score: essay.evaluation ? essay.evaluation.overallBand.toFixed(1) : "—",
+        status: essay.status,
+      })),
+    [recent]
+  );
 
   return (
     <DashboardShell className="max-w-[1400px] p-6 lg:p-10 space-y-10">
@@ -156,33 +170,59 @@ const DashboardPage = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-600/40 backdrop-blur-xl overflow-hidden relative shadow-sm">
-              <div className="absolute top-0 right-0 p-1 bg-destructive/20 rounded-bl-xl">
-                <Sparkles className="h-4 w-4 text-destructive animate-pulse" />
-              </div>
-              <CardContent className="p-6 flex flex-col md:flex-row items-center gap-6">
-                <div className="h-14 w-14 rounded-2xl bg-destructive/20 flex items-center justify-center flex-shrink-0">
-                  <CircleAlert className="h-8 w-8 text-destructive" />
+            {!hasAIKey ? (
+              <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-600/40 backdrop-blur-xl overflow-hidden relative shadow-sm">
+                <div className="absolute top-0 right-0 p-1 bg-destructive/20 rounded-bl-xl">
+                  <Sparkles className="h-4 w-4 text-destructive animate-pulse" />
                 </div>
-                <div className="flex-1 space-y-1 text-center md:text-left">
-                  <h3 className="text-lg font-bold text-destructive">
-                    Gemini Intelligence is Offline
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Connect your Gemini API key to unlock instant, deep-dive
-                    feedback and personalized writing improvements.
-                  </p>
+                <CardContent className="p-6 flex flex-col md:flex-row items-center gap-6">
+                  <div className="h-14 w-14 rounded-2xl bg-destructive/20 flex items-center justify-center flex-shrink-0">
+                    <CircleAlert className="h-8 w-8 text-destructive" />
+                  </div>
+                  <div className="flex-1 space-y-1 text-center md:text-left">
+                    <h3 className="text-lg font-bold text-destructive">
+                      AI Evaluation is Offline
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Connect your Gemini or OpenAI API key to unlock instant, deep-dive
+                      feedback and personalized writing improvements.
+                    </p>
+                  </div>
+                  <Link href="dashboard/settings">
+                    <Button
+                      variant="outline"
+                      className="border-destructive/30 hover:bg-destructive hover:text-white transition-colors cursor-pointer"
+                    >
+                      Setup API Key
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-600/40 backdrop-blur-xl overflow-hidden relative shadow-sm">
+                <div className="absolute top-0 right-0 p-1 bg-emerald-500/20 rounded-bl-xl">
+                  <Sparkles className="h-4 w-4 text-emerald-500" />
                 </div>
-                <Link href="dashboard/settings">
-                  <Button
-                    variant="outline"
-                    className="border-destructive/30 hover:bg-destructive hover:text-white transition-colors cursor-pointer"
-                  >
-                    Setup API Key
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                <CardContent className="p-6 flex flex-col md:flex-row items-center gap-6">
+                  <div className="h-14 w-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+                  </div>
+                  <div className="flex-1 space-y-1 text-center md:text-left">
+                    <h3 className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                      {providerLabel} Connected
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Your AI key is active. Evaluations will use your personal {providerLabel} account.
+                    </p>
+                  </div>
+                  <Link href="dashboard/settings">
+                    <Button variant="outline" className="cursor-pointer">
+                      Manage Key
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )}
           </motion.div>
 
           {/* Stats Grid */}
@@ -246,7 +286,7 @@ const DashboardPage = () => {
                             className="p-4 flex items-center justify-between hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30 transition-colors group"
                           >
                             <div className="flex gap-4 items-center">
-                              <div className="h-10 w-10 rounded-xl bg-[#2563EB] flex items-center justify-center font-bold text-lg text-white">
+                              <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center font-bold text-lg text-primary-foreground">
                                 {essay.score}
                               </div>
                               <div className="space-y-1">
@@ -304,7 +344,7 @@ const DashboardPage = () => {
                 </div>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Target className="h-5 w-5 text-[#2563EB]" />
+                    <Target className="h-5 w-5 text-primary" />
                     Weekly Progress
                   </CardTitle>
                   <CardDescription>Target: 10 Essays / Week</CardDescription>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import DashboardShell from "../../components/DashboardShell";
 import { motion } from "framer-motion";
 import {
@@ -15,19 +15,19 @@ import {
   ArrowUpRight,
   ThumbsUp,
   Brain,
-  ListRestart
+  ListRestart,
+  MessageSquareQuote,
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { getAnalytics, type AnalyticsPayload } from "@/lib/api";
 
-// Mock IELTS criteria scores
-const criteriaScores = [
+const criteriaMeta = [
   {
     name: "Task Achievement",
-    score: 6.5,
-    target: 7.5,
+    target: 8.0,
     description: "Addresses all parts of the task, though some points could be more fully developed.",
     tip: "Provide 2-3 specific supporting details for each main argument to raise this score.",
     color: "from-blue-500 to-indigo-500",
@@ -35,7 +35,6 @@ const criteriaScores = [
   },
   {
     name: "Coherence & Cohesion",
-    score: 7.0,
     target: 8.0,
     description: "Information and ideas are logically organized with clear overall progression.",
     tip: "Use a wider range of cohesive devices and ensure clear paragraphing structure.",
@@ -44,7 +43,6 @@ const criteriaScores = [
   },
   {
     name: "Lexical Resource",
-    score: 7.0,
     target: 7.5,
     description: "Uses a sufficient range of vocabulary to allow some flexibility and precision.",
     tip: "Integrate more academic collocations and avoid repeating basic synonyms.",
@@ -53,7 +51,6 @@ const criteriaScores = [
   },
   {
     name: "Grammatical Range & Accuracy",
-    score: 7.5,
     target: 8.0,
     description: "Uses a wide mix of structures with frequent error-free sentences.",
     tip: "Maintain tense consistency when switching between hypothetical and factual clauses.",
@@ -102,9 +99,6 @@ const commonMistakes = [
   },
 ];
 
-// Mock historical scores for SVG line chart
-const chartData = [5.5, 5.5, 6.0, 6.0, 6.5, 6.5, 7.0, 6.5, 7.0, 7.5];
-
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -120,6 +114,28 @@ const itemVariants = {
 
 const AnalyticsPage = () => {
   const [selectedCriteria, setSelectedCriteria] = useState(0);
+  const [data, setData] = useState<AnalyticsPayload | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAnalytics()
+      .then(setData)
+      .catch(() => setData(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const criteriaScores = useMemo(
+    () =>
+      criteriaMeta.map((meta, idx) => ({
+        ...meta,
+        score: data?.criteriaAverages
+          ? [data.criteriaAverages.ta, data.criteriaAverages.cc, data.criteriaAverages.lr, data.criteriaAverages.gra][idx] ?? 0
+          : 0,
+      })),
+    [data]
+  );
+
+  const chartData = useMemo(() => data?.trend.map((t) => t.band) ?? [], [data]);
 
   // SVG Chart path calculation
   const chartHeight = 120;
@@ -128,11 +144,11 @@ const AnalyticsPage = () => {
   const maxScore = 9;
   const minScore = 4;
   
-  const points = chartData.map((val, i) => {
+  const points = chartData.length >= 2 ? chartData.map((val, i) => {
     const x = padding + (i * (chartWidth - padding * 2)) / (chartData.length - 1);
     const y = chartHeight - padding - ((val - minScore) / (maxScore - minScore)) * (chartHeight - padding * 2);
     return `${x},${y}`;
-  }).join(" ");
+  }).join(" ") : "";
 
   return (
     <DashboardShell className="max-w-[1400px] p-6 lg:p-10 space-y-8">
@@ -188,6 +204,11 @@ const AnalyticsPage = () => {
                 <CardDescription>Visualizing your scores over the last 10 attempts.</CardDescription>
               </CardHeader>
               <CardContent className="pt-4">
+                {loading ? (
+                  <div className="w-full h-[160px] flex items-center justify-center text-sm text-muted-foreground">
+                    Loading your score progression...
+                  </div>
+                ) : chartData.length >= 2 ? (
                 <div className="w-full relative h-[160px] flex items-end">
                   <svg className="w-full h-full overflow-visible" viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
                     {/* SVG Gradients */}
@@ -218,7 +239,7 @@ const AnalyticsPage = () => {
                     {/* Line Chart */}
                     <polyline
                       fill="none"
-                      stroke="#2563EB"
+                      stroke="var(--primary)"
                       strokeWidth="3.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -242,6 +263,11 @@ const AnalyticsPage = () => {
                     })}
                   </svg>
                 </div>
+                ) : (
+                  <div className="w-full h-[160px] flex items-center justify-center text-sm text-muted-foreground">
+                    Complete at least two evaluated essays to see your progression.
+                  </div>
+                )}
                 <div className="flex justify-between text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60 mt-4 px-4">
                   <span>First Attempt</span>
                   <span>Latest Attempt</span>
@@ -306,6 +332,60 @@ const AnalyticsPage = () => {
         {/* Right column: Selected Criteria Detail & Common Mistakes */}
         <div className="space-y-8">
           
+          {/* Daily Coach Comment */}
+          <motion.div variants={itemVariants}>
+            <Card className="border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-sm overflow-hidden group">
+              <div className="h-1 bg-gradient-to-r from-primary to-blue-500" />
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <MessageSquareQuote className="h-5 w-5 text-primary" />
+                    Coach&apos;s Comment
+                  </CardTitle>
+                  {data?.dailyComment && (
+                    <Badge
+                      className={
+                        data.dailyComment.tone === "positive"
+                          ? "bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20"
+                          : data.dailyComment.tone === "push"
+                          ? "bg-amber-500/10 text-amber-500 hover:bg-amber-500/20"
+                          : "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20"
+                      }
+                    >
+                      {data.dailyComment.tone === "positive" ? "Improving" : data.dailyComment.tone === "push" ? "Keep Pushing" : "Steady"}
+                    </Badge>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {loading ? (
+                  <p className="text-sm text-muted-foreground">Generating today&apos;s comment...</p>
+                ) : data?.dailyComment ? (
+                  <>
+                    <p className="text-sm font-medium leading-relaxed italic">{`\u201C${data.dailyComment.text}\u201D`}</p>
+                    {data.improvements.length > 0 && (
+                      <div className="p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10 space-y-1.5">
+                        <h4 className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
+                          Rework Wins
+                        </h4>
+                        {data.improvements.map((imp, i) => (
+                          <p key={i} className="text-xs text-muted-foreground font-semibold">
+                            {imp.fromBand.toFixed(1)} → {imp.toBand.toFixed(1)} on a reworked essay
+                            <span className="text-emerald-500 font-bold ml-1">(+{imp.delta.toFixed(1)})</span>
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Submit an essay to get your first coach comment.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+
           {/* Selected Criteria Deep Dive */}
           <motion.div variants={itemVariants}>
             <Card className="border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-sm relative overflow-hidden">
@@ -333,7 +413,7 @@ const AnalyticsPage = () => {
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 space-y-2">
-                  <h4 className="text-xs font-black uppercase tracking-widest text-[#2563EB] flex items-center gap-1.5">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-primary flex items-center gap-1.5">
                     <Sparkles className="h-3.5 w-3.5 fill-current" />
                     AI Action Tip
                   </h4>
