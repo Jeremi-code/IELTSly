@@ -83,8 +83,8 @@ const DashboardPage = () => {
         value: stats ? String(stats.totalAttempts) : "—",
         change: stats ? `${stats.evaluatedCount} evaluated` : "loading...",
         icon: BookOpen,
-        color: "text-blue-500",
-        bg: "bg-blue-500/10",
+        color: "text-primary",
+        bg: "bg-primary/10",
       },
       {
         title: "Average Band",
@@ -375,7 +375,7 @@ const DashboardPage = () => {
 
               {/* Quick AI Tip */}
               <Card className="border-border/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl shadow-sm overflow-hidden group">
-                <div className="h-1 bg-gradient-to-r from-primary to-blue-500" />
+                <div className="h-1 bg-gradient-to-r from-primary to-emerald-500" />
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm flex items-center gap-2 text-muted-foreground">
                     <Zap className="h-4 w-4 text-yellow-500" />

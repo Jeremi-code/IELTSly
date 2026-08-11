@@ -94,7 +94,7 @@ export function ThemeToggle() {
             exit={{ y: -20, opacity: 0, rotate: -40 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <Moon className="h-5 w-5 text-blue-400" />
+            <Moon className="h-5 w-5 text-primary" />
           </motion.div>
         ) : (
           <motion.div

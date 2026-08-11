@@ -116,20 +116,20 @@ export default function InteractiveGridBackground() {
           const row = parseInt(parts[1]);
           const col = parseInt(parts[2]);
           
-          ctx.fillStyle = `rgba(59, 130, 246, ${opacity * 0.15})`; // blue-500
+          ctx.fillStyle = `rgba(16, 185, 129, ${opacity * 0.15})`; // emerald-500
           ctx.fillRect(col * gridSize, row * gridSize, gridSize, gridSize);
         } else if (type === "col") {
           const col = parseInt(parts[1]);
           const row = parseInt(parts[2]);
           
-          ctx.fillStyle = `rgba(59, 130, 246, ${opacity * 0.15})`; // blue-500
+          ctx.fillStyle = `rgba(16, 185, 129, ${opacity * 0.15})`; // emerald-500
           ctx.fillRect(col * gridSize, row * gridSize, gridSize, gridSize);
         }
       });
 
       // Draw highlight borders for current row and column
       if (currentRow >= 0 && currentCol >= 0) {
-        ctx.strokeStyle = "rgba(59, 130, 246, 0.4)"; // blue-500
+        ctx.strokeStyle = "rgba(16, 185, 129, 0.4)"; // emerald-500
         ctx.lineWidth = 2;
         
         // Highlight current row

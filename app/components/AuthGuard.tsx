@@ -25,9 +25,9 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col items-center gap-4 animate-in fade-in duration-500">
           <Logo className="w-16 h-16 animate-pulse" />
           <div className="flex items-center gap-2">
-            <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-bounce [animation-delay:0ms]" />
-            <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-bounce [animation-delay:150ms]" />
-            <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-bounce [animation-delay:300ms]" />
+            <div className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0ms]" />
+            <div className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:150ms]" />
+            <div className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:300ms]" />
           </div>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">
             Verifying your session...

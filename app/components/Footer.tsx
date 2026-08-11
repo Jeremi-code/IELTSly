@@ -50,7 +50,7 @@ const Footer = () => {
                 <Link 
                   key={index} 
                   href={social.href}
-                  className="p-2.5 rounded-full bg-zinc-50 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all duration-300"
+                  className="p-2.5 rounded-full bg-zinc-50 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 hover:text-primary dark:hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all duration-300"
                 >
                   <social.icon size={18} />
                 </Link>
@@ -67,7 +67,7 @@ const Footer = () => {
                   <li key={link}>
                     <Link 
                       href="#" 
-                      className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-sm font-medium block hover:translate-x-1 transform"
+                      className="text-zinc-500 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-medium block hover:translate-x-1 transform"
                     >
                       {link}
                     </Link>

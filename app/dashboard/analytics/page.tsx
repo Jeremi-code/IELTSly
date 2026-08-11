@@ -30,8 +30,8 @@ const criteriaMeta = [
     target: 8.0,
     description: "Addresses all parts of the task, though some points could be more fully developed.",
     tip: "Provide 2-3 specific supporting details for each main argument to raise this score.",
-    color: "from-blue-500 to-indigo-500",
-    bg: "bg-blue-500/10",
+    color: "from-emerald-500 to-teal-500",
+    bg: "bg-emerald-500/10",
   },
   {
     name: "Coherence & Cohesion",
@@ -335,7 +335,7 @@ const AnalyticsPage = () => {
           {/* Daily Coach Comment */}
           <motion.div variants={itemVariants}>
             <Card className="border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-sm overflow-hidden group">
-              <div className="h-1 bg-gradient-to-r from-primary to-blue-500" />
+              <div className="h-1 bg-gradient-to-r from-primary to-emerald-500" />
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
@@ -349,7 +349,7 @@ const AnalyticsPage = () => {
                           ? "bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20"
                           : data.dailyComment.tone === "push"
                           ? "bg-amber-500/10 text-amber-500 hover:bg-amber-500/20"
-                          : "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20"
+                          : "bg-primary/10 text-primary hover:bg-primary/20"
                       }
                     >
                       {data.dailyComment.tone === "positive" ? "Improving" : data.dailyComment.tone === "push" ? "Keep Pushing" : "Steady"}
@@ -412,7 +412,7 @@ const AnalyticsPage = () => {
                     "{criteriaScores[selectedCriteria].description}"
                   </p>
                 </div>
-                <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 space-y-2">
+                <div className="p-4 rounded-xl bg-primary/5 border border-primary/10 space-y-2">
                   <h4 className="text-xs font-black uppercase tracking-widest text-primary flex items-center gap-1.5">
                     <Sparkles className="h-3.5 w-3.5 fill-current" />
                     AI Action Tip
@@ -452,7 +452,7 @@ const AnalyticsPage = () => {
                               ? "bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/20" 
                               : mistake.severity === "Medium"
                               ? "bg-amber-500/10 text-amber-500 border-amber-500/20 hover:bg-amber-500/20"
-                              : "bg-blue-500/10 text-blue-500 border-blue-500/20 hover:bg-blue-500/20"
+                              : "bg-primary/10 text-primary border-primary/20 hover:bg-primary/20"
                           }
                         >
                           {mistake.frequency}x Flagged

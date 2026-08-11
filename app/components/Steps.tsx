@@ -11,16 +11,16 @@ const stepLists = [
     description:
       "Simply enter your Gemini API key in your account settings. It's secure, private, and gives you unlimited access.",
     icon: Key,
-    color: "text-blue-500",
-    bgColor: "bg-blue-100 dark:bg-blue-900/30",
+    color: "text-emerald-500",
+    bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
   },
   {
     title: "Choose a Question",
     description:
       "Select from our extensive bank of authentic IELTS questions. Filter by task type, topic, or difficulty level. ",
     icon: FileSearch,
-    color: "text-indigo-500",
-    bgColor: "bg-indigo-100 dark:bg-indigo-900/30",
+    color: "text-teal-500",
+    bgColor: "bg-teal-100 dark:bg-teal-900/30",
   },
   {
     title: "Write & Get Feedback",

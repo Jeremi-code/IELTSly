@@ -18,7 +18,7 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
             initial={{ height: 0 }}
             animate={{ height: `${height}%` }}
             transition={{ duration: 1, delay: i * 0.1, ease: "easeOut" }}
-            className="flex-1 bg-blue-500/80 dark:bg-blue-400/80 rounded-t-sm min-w-[12px]"
+            className="flex-1 bg-emerald-500/80 dark:bg-emerald-400/80 rounded-t-sm min-w-[12px]"
           />
         ))}
       </div>
@@ -36,7 +36,7 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
             fill="none"
             stroke="currentColor"
             strokeWidth="3"
-            className="text-blue-500 dark:text-blue-400"
+            className="text-emerald-500 dark:text-emerald-400"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{ duration: 2, ease: "easeInOut" }}
@@ -47,7 +47,7 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
               cx={x}
               cy={[80, 60, 70, 30, 50, 10][i]}
               r="4"
-              className="fill-white stroke-blue-500 dark:stroke-blue-400 stroke-2"
+              className="fill-white stroke-emerald-500 dark:stroke-emerald-400 stroke-2"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1 + i * 0.2 }}
@@ -70,7 +70,7 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
             stroke="currentColor"
             strokeWidth="20"
             fill="transparent"
-            className="text-blue-100 dark:text-blue-900/30"
+            className="text-primary/40 dark:text-primary/10"
           />
           <motion.circle
             cx="50"
@@ -80,7 +80,7 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
             strokeWidth="20"
             fill="transparent"
             strokeDasharray="251.2"
-            className="text-blue-500 dark:text-blue-400"
+            className="text-emerald-500 dark:text-emerald-400"
             initial={{ strokeDashoffset: 251.2 }}
             animate={{ strokeDashoffset: 251.2 * 0.4 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
@@ -93,7 +93,7 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
             strokeWidth="20"
             fill="transparent"
             strokeDasharray="251.2"
-            className="text-indigo-500 dark:text-indigo-400"
+            className="text-teal-500 dark:text-teal-400"
             initial={{ strokeDashoffset: 251.2 }}
             animate={{ strokeDashoffset: 251.2 * 0.7 }}
             style={{ rotate: "108deg", transformOrigin: "50% 50%" }}
@@ -147,17 +147,17 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
             Village 1995 (Farmland)
           </motion.div>
         </div>
-        <div className="relative bg-sky-50 dark:bg-zinc-900 flex items-center justify-center overflow-hidden p-2">
+        <div className="relative bg-emerald-50/50 dark:bg-zinc-900 flex items-center justify-center overflow-hidden p-2">
           <div className="absolute inset-0 opacity-10 flex flex-col items-center justify-center gap-1">
-             <div className="w-24 h-4 bg-sky-500 rounded" />
-             <div className="w-24 h-4 bg-sky-500 rounded" />
-             <div className="w-24 h-4 bg-sky-500 rounded" />
+             <div className="w-24 h-4 bg-emerald-500 rounded" />
+             <div className="w-24 h-4 bg-emerald-500 rounded" />
+             <div className="w-24 h-4 bg-emerald-500 rounded" />
           </div>
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="text-[8px] font-bold text-sky-600 dark:text-sky-400 bg-sky-100 dark:bg-sky-900/50 px-2 py-1 rounded border border-sky-200 dark:border-sky-800 z-10"
+            className="text-[8px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/50 px-2 py-1 rounded border border-emerald-200 dark:border-emerald-800 z-10"
           >
             Village 2015 (Residential)
           </motion.div>

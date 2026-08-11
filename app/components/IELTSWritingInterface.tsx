@@ -135,7 +135,7 @@ const IELTSWritingInterface = () => {
               </motion.h3>
             </AnimatePresence>
             <div className="flex items-center space-x-3 shrink-0">
-              <Badge className="bg-blue-100 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 border-none px-2 py-0.5 text-[10px] lg:text-xs font-black uppercase tracking-wider">
+              <Badge className="bg-primary/10 text-primary hover:bg-primary/10 dark:bg-primary/10 dark:text-primary border-none px-2 py-0.5 text-[10px] lg:text-xs font-black uppercase tracking-wider">
                 ACTIVE
               </Badge>
               <div className="flex items-center text-zinc-600 dark:text-zinc-300 text-xs lg:text-sm font-bold">
@@ -183,7 +183,7 @@ const IELTSWritingInterface = () => {
                 <motion.span
                   animate={{ opacity: [1, 0] }}
                   transition={{ duration: 0.8, repeat: Infinity }}
-                  className="inline-block w-2 h-5 bg-blue-500 ml-1.5 align-middle"
+                  className="inline-block w-2 h-5 bg-primary ml-1.5 align-middle"
                 />
               )}
             </div>
@@ -192,8 +192,8 @@ const IELTSWritingInterface = () => {
           {/* Footer */}
           <div className="flex items-center justify-between pt-3 shrink-0">
             <div className="text-zinc-600 dark:text-zinc-300 text-xs lg:text-sm font-black border-t w-full pt-4 dark:border-zinc-800 flex justify-between uppercase tracking-tighter">
-              <span>Word count: <span className="text-blue-600 dark:text-blue-400">{wordCount} / {currentData.task === 1 ? '150' : '250'}</span></span>
-              <span className="opacity-60 text-[10px] tracking-widest font-black uppercase text-blue-500 dark:text-blue-400">AI Feedback Loop</span>
+              <span>Word count: <span className="text-primary dark:text-primary">{wordCount} / {currentData.task === 1 ? '150' : '250'}</span></span>
+              <span className="opacity-60 text-[10px] tracking-widest font-black uppercase text-primary dark:text-primary">AI Feedback Loop</span>
             </div>
           </div>
         </CardContent>
@@ -209,7 +209,7 @@ const IELTSWritingInterface = () => {
       >
         <Card className="shadow-2xl bg-white dark:bg-zinc-950 border-none p-4 lg:p-5 min-w-[170px] lg:min-w-[190px] ring-1 ring-zinc-200 dark:ring-zinc-800">
           <div className="flex items-center space-x-4">
-            <div className="bg-blue-600 dark:bg-blue-600 p-3 rounded-2xl text-white shadow-lg shadow-blue-500/20">
+            <div className="bg-primary dark:bg-primary p-3 rounded-2xl text-white shadow-lg shadow-primary/20">
               <TrendingUp className="w-6 h-6" />
             </div>
             <div>

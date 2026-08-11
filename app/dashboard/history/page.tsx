@@ -209,7 +209,7 @@ const HistoryPage = () => {
                       </div>
 
                       {/* AI Summary snippet */}
-                      <div className="p-3 rounded-xl bg-blue-500/5 border border-blue-500/10 flex items-start gap-2">
+                      <div className="p-3 rounded-xl bg-primary/5 border border-primary/10 flex items-start gap-2">
                         <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                         <p className="text-xs text-muted-foreground font-medium italic line-clamp-1">
                           "{essay.aiFeedback}"
@@ -220,7 +220,7 @@ const HistoryPage = () => {
                     {/* Score Circle & Action Column */}
                     <div className="flex flex-row lg:flex-col items-center justify-between lg:justify-center gap-4 lg:pl-6 lg:border-l border-border/20 dark:border-zinc-800/50">
                       <div className="text-center lg:space-y-1">
-                        <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-primary to-blue-400 p-[3px] flex items-center justify-center shadow-md">
+                        <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-primary to-emerald-400 p-[3px] flex items-center justify-center shadow-md">
                           <div className="h-full w-full rounded-full bg-white dark:bg-zinc-950 flex flex-col items-center justify-center">
                             <span className="text-xl font-black leading-none">{essay.score}</span>
                             <span className="text-[8px] text-muted-foreground font-black uppercase tracking-widest mt-0.5">Band</span>

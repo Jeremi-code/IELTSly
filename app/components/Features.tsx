@@ -11,8 +11,8 @@ const featureLists = [
     description:
       "Practice in a distraction-free environment that mirrors the actual IELTS exam. No autocorrect, no spell-check—just like the real test",
     icon: Monitor,
-    color: "text-blue-500",
-    bgColor: "bg-blue-50 dark:bg-blue-900/20",
+    color: "text-primary",
+    bgColor: "bg-primary/5 dark:bg-primary/10",
   },
   {
     title: "AI-Powered Feedback",
@@ -43,8 +43,8 @@ const featureLists = [
     description:
       "Access a vast library of practice questions covering all IELTS writing task types and topics.",
     icon: Database,
-    color: "text-cyan-500",
-    bgColor: "bg-cyan-50 dark:bg-cyan-900/20",
+    color: "text-emerald-500",
+    bgColor: "bg-emerald-50 dark:bg-emerald-900/20",
   },
   {
     title: "24/7 Accessibility",
@@ -67,7 +67,7 @@ const Features = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto space-y-4"
       >
-        <div className="px-4 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold rounded-full text-sm uppercase tracking-wider shadow-sm">
+        <div className="px-4 py-1 bg-primary/10 dark:bg-primary/10 text-primary dark:text-primary font-bold rounded-full text-sm uppercase tracking-wider shadow-sm">
           Features
         </div>
         <h2 className="text-3xl lg:text-5xl font-extrabold text-slate-900 dark:text-zinc-50 tracking-tight">
@@ -95,7 +95,7 @@ const Features = () => {
               <div className={`w-14 h-14 rounded-2xl ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                 <feature.icon className={`w-7 h-7 ${feature.color}`} />
               </div>
-              <CardTitle className="text-xl font-bold text-slate-900 dark:text-zinc-50 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <CardTitle className="text-xl font-bold text-slate-900 dark:text-zinc-50 group-hover:text-primary dark:group-hover:text-primary transition-colors">
                 {feature.title}
               </CardTitle>
             </CardHeader>

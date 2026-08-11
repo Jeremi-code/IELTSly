@@ -108,7 +108,7 @@ const WritingBox = () => {
                   </motion.h3>
                 </AnimatePresence>
                 <div className="flex items-center space-x-3 shrink-0">
-                  <Badge className="bg-blue-100 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 border-none px-2 py-0.5 text-[10px] lg:text-xs font-black uppercase tracking-wider">
+                  <Badge className="bg-primary/10 text-primary hover:bg-primary/10 dark:bg-primary/10 dark:text-primary border-none px-2 py-0.5 text-[10px] lg:text-xs font-black uppercase tracking-wider">
                     {getStoredAIKey() ? `${providerLabel.toUpperCase()} READY` : "NO AI KEY"}
                   </Badge>
                   <div className="flex items-center text-zinc-600 dark:text-zinc-300 text-xs lg:text-sm font-bold">
@@ -149,13 +149,13 @@ const WritingBox = () => {
                 <div className="text-zinc-600 dark:text-zinc-300 text-xs lg:text-sm font-black border-t w-full pt-4 dark:border-zinc-800 flex justify-between uppercase tracking-tighter">
                   <span>
                     Word count:{" "}
-                    <span className="text-blue-600 dark:text-blue-400">{wordCount}</span>
+                    <span className="text-primary dark:text-primary">{wordCount}</span>
                   </span>
                   <Button
                     variant="blue"
                     onClick={handleSubmit}
                     disabled={submitting}
-                    className="rounded-full px-4 h-8 font-bold text-xs shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-105 cursor-pointer"
+                    className="rounded-full px-4 h-8 font-bold text-xs shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all hover:scale-105 cursor-pointer"
                   >
                     {submitting ? (
                       <>
@@ -194,7 +194,7 @@ const WritingBox = () => {
                 className="mt-4 p-6 rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-primary/20 backdrop-blur-xl shadow-lg"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-primary to-blue-400 p-[3px] flex items-center justify-center shadow-md shrink-0">
+                  <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-primary to-emerald-400 p-[3px] flex items-center justify-center shadow-md shrink-0">
                     <div className="h-full w-full rounded-full bg-white dark:bg-zinc-950 flex flex-col items-center justify-center">
                       <span className="text-xl font-black leading-none">{result.overallBand.toFixed(1)}</span>
                       <span className="text-[8px] text-muted-foreground font-black uppercase tracking-widest mt-0.5">Band</span>

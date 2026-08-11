@@ -176,7 +176,7 @@ const DashboardNav = ({
             "flex items-center rounded-2xl transition-all duration-300 overflow-hidden",
             collapsed ? "justify-center p-1 bg-transparent border-transparent" : "bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/50 p-3"
           )}>
-            <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 p-[2px] flex-shrink-0">
+            <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-emerald-400 p-[2px] flex-shrink-0">
               {user?.image ? (
                 <img
                   src={user.image}

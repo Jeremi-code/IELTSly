@@ -78,10 +78,10 @@ const Navbar = () => {
               <button
                 key={item}
                 onClick={() => scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))}
-                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 relative group cursor-pointer bg-transparent border-none p-0 flex flex-col items-center"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-all duration-300 relative group cursor-pointer bg-transparent border-none p-0 flex flex-col items-center"
               >
                 {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-500 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary dark:bg-primary transition-all duration-500 group-hover:w-full" />
               </button>
             ))}
           </div>
@@ -94,7 +94,7 @@ const Navbar = () => {
             ) : isAuthenticated ? (
               <Button 
                 variant="blue" 
-                className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
+                className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5"
                 onClick={() => router.push('/dashboard')}
               >
                 <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -104,14 +104,14 @@ const Navbar = () => {
               <>
                 <Button
                   variant="ghost"
-                  className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 rounded-full px-5"
+                  className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-primary dark:hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all duration-300 rounded-full px-5"
                   onClick={() => router.push('/signin')}
                 >
                   Sign In
                 </Button>
                 <Button 
                   variant="blue" 
-                  className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
+                  className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5"
                   onClick={() => router.push('/signin?mode=signup')}
                 >
                   Get Started
@@ -143,7 +143,7 @@ const Navbar = () => {
                     <button
                       key={item}
                       onClick={() => scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))}
-                      className="text-2xl font-semibold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 text-left bg-transparent border-none p-0"
+                      className="text-2xl font-semibold text-zinc-700 dark:text-zinc-300 hover:text-primary dark:hover:text-primary transition-colors duration-200 text-left bg-transparent border-none p-0"
                     >
                       {item}
                     </button>
@@ -153,7 +153,7 @@ const Navbar = () => {
                     {isAuthenticated ? (
                       <Button
                         variant="blue"
-                        className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-blue-500/25"
+                        className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-primary/25"
                         onClick={() => {
                           setIsMobileMenuOpen(false);
                           router.push('/dashboard');
@@ -176,7 +176,7 @@ const Navbar = () => {
                         </Button>
                         <Button
                           variant="blue"
-                          className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-blue-500/25"
+                          className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-primary/25"
                           onClick={() => {
                             setIsMobileMenuOpen(false);
                             router.push('/signin?mode=signup');

@@ -53,10 +53,10 @@ const modes = [
     title: "Exam Mode",
     description: "Authentic, high-pressure full exam experience under exam conditions.",
     icon: ShieldCheck,
-    color: "text-blue-500",
-    glow: "group-hover:shadow-blue-500/10",
-    bg: "bg-blue-500/10",
-    borderColor: "group-hover:border-blue-500/30",
+    color: "text-primary",
+    glow: "group-hover:shadow-primary/10",
+    bg: "bg-primary/10",
+    borderColor: "group-hover:border-primary/30",
     features: [
       { icon: Lock, text: "Strict Anti-Cheat Environment" },
       { icon: Globe, text: "Public Fullscreen Mode" },
@@ -69,7 +69,7 @@ const modes = [
 ];
 
 const progressStats = [
-  { label: "Essays Written", value: "12", icon: BookOpen, color: "text-blue-500", bg: "bg-blue-500/10" },
+  { label: "Essays Written", value: "12", icon: BookOpen, color: "text-primary", bg: "bg-primary/10" },
   { label: "Average Band", value: "6.5", icon: TrendingUp, color: "text-emerald-500", bg: "bg-emerald-500/10" },
   { label: "Weekly Streak", value: "5 Days", icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10" },
   { label: "Total Words", value: "5,240", icon: PenTool, color: "text-purple-500", bg: "bg-purple-500/10" },

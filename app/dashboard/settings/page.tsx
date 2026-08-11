@@ -192,7 +192,7 @@ const SettingsPage = () => {
                 
                 {/* Avatar Display */}
                 <div className="flex items-center gap-4 p-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-border/10">
-                  <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-primary to-blue-400 p-[2.5px]">
+                  <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-primary to-emerald-400 p-[2.5px]">
                     {user?.image ? (
                       <img src={user.image} alt={displayName} className="h-full w-full rounded-full object-cover" />
                     ) : (
@@ -306,7 +306,7 @@ const SettingsPage = () => {
                 </Button>
 
                 <Separator />
-                <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 flex items-start gap-3">
+                <div className="p-4 rounded-xl bg-primary/5 border border-primary/10 flex items-start gap-3">
                   <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     Don't have an API key? Get a free one from{" "}
@@ -353,7 +353,7 @@ const SettingsPage = () => {
                             <span className={cn(
                               "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border",
                               item.status === "success" && "bg-green-500/10 text-green-500 border-green-500/20",
-                              item.status === "info" && "bg-blue-500/10 text-blue-500 border-blue-500/20",
+                              item.status === "info" && "bg-primary/10 text-primary border-primary/20",
                               item.status === "warning" && "bg-amber-500/10 text-amber-500 border-amber-500/20",
                               item.status === "error" && "bg-red-500/10 text-red-500 border-red-500/20",
                               item.status === "neutral" && "bg-zinc-500/10 text-zinc-500 border-zinc-500/20"

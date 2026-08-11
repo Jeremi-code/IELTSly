@@ -161,7 +161,7 @@ const SignInContent = () => {
                     <div className="space-y-1.5">
                       <Label htmlFor="email" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Email</Label>
                       <div className="relative group">
-                        <Mail className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
+                        <Mail className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
                         <Input
                           id="email"
                           type="email"
@@ -170,19 +170,19 @@ const SignInContent = () => {
                           onChange={(e) => setSignInEmail(e.target.value)}
                           required
                           disabled={isLoading}
-                          className="pl-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
+                          className="pl-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
                         />
                       </div>
                     </div>
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
                         <Label htmlFor="password" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Password</Label>
-                        <Link href="#" className="text-[10px] font-semibold text-blue-600 hover:text-blue-500 transition-colors">
+                        <Link href="#" className="text-[10px] font-semibold text-primary hover:text-primary transition-colors">
                           Forgot password?
                         </Link>
                       </div>
                       <div className="relative group">
-                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
+                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
                         <Input 
                           id="password" 
                           type={isPasswordVisible ? "text" : "password"} 
@@ -190,7 +190,7 @@ const SignInContent = () => {
                           onChange={(e) => setSignInPassword(e.target.value)}
                           required
                           disabled={isLoading}
-                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm" 
+                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" 
                           placeholder="••••••••"
                         />
                         <button
@@ -206,7 +206,7 @@ const SignInContent = () => {
                       type="submit"
                       variant="blue"
                       disabled={isLoading}
-                      className="w-full h-11 rounded-full font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5 mt-1"
+                      className="w-full h-11 rounded-full font-bold text-sm shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5 mt-1"
                     >
                       {isLoading ? (
                         <>
@@ -228,7 +228,7 @@ const SignInContent = () => {
                       <div className="space-y-1.5">
                         <Label htmlFor="signup-name" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Full Name</Label>
                         <div className="relative group">
-                          <User className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
+                          <User className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
                           <Input
                             id="signup-name"
                             type="text"
@@ -237,14 +237,14 @@ const SignInContent = () => {
                             onChange={(e) => setSignUpName(e.target.value)}
                             required
                             disabled={isLoading}
-                            className="pl-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
+                            className="pl-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
                           />
                         </div>
                       </div>
                       <div className="space-y-1.5">
                         <Label htmlFor="signup-email" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Email</Label>
                         <div className="relative group">
-                          <Mail className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
+                          <Mail className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
                           <Input
                             id="signup-email"
                             type="email"
@@ -253,7 +253,7 @@ const SignInContent = () => {
                             onChange={(e) => setSignUpEmail(e.target.value)}
                             required
                             disabled={isLoading}
-                            className="pl-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
+                            className="pl-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
                           />
                         </div>
                       </div>
@@ -261,7 +261,7 @@ const SignInContent = () => {
                     <div className="space-y-1.5">
                       <Label htmlFor="signup-password" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Password</Label>
                       <div className="relative group">
-                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
+                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
                         <Input 
                           id="signup-password" 
                           type={isPasswordVisible ? "text" : "password"} 
@@ -269,7 +269,7 @@ const SignInContent = () => {
                           onChange={(e) => setSignUpPassword(e.target.value)}
                           required
                           disabled={isLoading}
-                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm" 
+                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" 
                           placeholder="Create a password"
                         />
                         <button
@@ -284,7 +284,7 @@ const SignInContent = () => {
                     <div className="space-y-1.5">
                       <Label htmlFor="signup-confirm" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Confirm Password</Label>
                       <div className="relative group">
-                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
+                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
                         <Input 
                           id="signup-confirm" 
                           type={isConfirmPasswordVisible ? "text" : "password"} 
@@ -292,7 +292,7 @@ const SignInContent = () => {
                           onChange={(e) => setSignUpConfirmPassword(e.target.value)}
                           required
                           disabled={isLoading}
-                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm" 
+                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" 
                           placeholder="Confirm password"
                         />
                         <button
@@ -308,7 +308,7 @@ const SignInContent = () => {
                       type="submit"
                       variant="blue"
                       disabled={isLoading}
-                      className="w-full h-11 rounded-full font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5 mt-1"
+                      className="w-full h-11 rounded-full font-bold text-sm shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5 mt-1"
                     >
                       {isLoading ? (
                         <>
@@ -350,7 +350,7 @@ const SignInContent = () => {
             </CardContent>
             <CardFooter className="px-8 pb-3 pt-1 bg-zinc-50/50 dark:bg-zinc-900/50 border-t border-zinc-200/50 dark:border-zinc-800/50 flex justify-center">
               <p className="text-xs text-center text-zinc-500 max-w-xs leading-relaxed">
-                By clicking &quot;Continue&quot;, you agree to our <Link href="#" className="underline underline-offset-2 hover:text-blue-600 transition-colors">Terms of Service</Link> and <Link href="#" className="underline underline-offset-2 hover:text-blue-600 transition-colors">Privacy Policy</Link>.
+                By clicking &quot;Continue&quot;, you agree to our <Link href="#" className="underline underline-offset-2 hover:text-primary transition-colors">Terms of Service</Link> and <Link href="#" className="underline underline-offset-2 hover:text-primary transition-colors">Privacy Policy</Link>.
               </p>
             </CardFooter>
           </Card>
