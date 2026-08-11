@@ -39,6 +39,7 @@ import {
 import SidePopUp from "@/app/components/SidePopUp";
 import PaginationNav from "@/app/components/PaginationNav";
 import { useSession } from "@/lib/auth-client";
+import { getStoredAIKey, getStoredAIProvider, saveAICredentials, type AIProvider } from "@/lib/api";
 
 const achievements = [
   {
@@ -105,24 +106,29 @@ const achievements = [
 
 const SettingsPage = () => {
   const [activeButton, setActiveButton] = useState(0);
-  const [apiKey, setApiKey] = useState("");
+  const [aiProvider, setAiProvider] = useState<"gemini" | "openai">(() => getStoredAIProvider());
+  const [apiKey, setApiKey] = useState(() => getStoredAIKey() ?? "");
   const [showApiKey, setShowApiKey] = useState(false);
   const [isSavingApi, setIsSavingApi] = useState(false);
   const [apiSaveStatus, setApiSaveStatus] = useState<"idle" | "success" | "error">("idle");
   const { data: session } = useSession();
 
   const handleSaveApiKey = () => {
-    if (!apiKey) {
+    const valid =
+      aiProvider === "gemini"
+        ? /^AIza[0-9A-Za-z_-]{20,}$/.test(apiKey.trim())
+        : /^sk-[0-9A-Za-z_-]{10,}$/.test(apiKey.trim());
+    if (!apiKey.trim() || !valid) {
       setApiSaveStatus("error");
       return;
     }
     setIsSavingApi(true);
     setApiSaveStatus("idle");
     setTimeout(() => {
+      saveAICredentials(aiProvider, apiKey.trim());
       setIsSavingApi(false);
       setApiSaveStatus("success");
-      // Save logic placeholder (e.g. localStorage or state)
-    }, 1000);
+    }, 600);
   };
 
   // Derive user info
@@ -227,9 +233,9 @@ const SettingsPage = () => {
           {activeButton === 1 && (
             <Card className="border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-sm">
               <CardHeader>
-                <CardTitle className="text-xl">Gemini API Key Connection</CardTitle>
+                <CardTitle className="text-xl">AI API Key Connection</CardTitle>
                 <CardDescription>
-                  Save your personal Google Gemini API key to run writing evaluations. Keys are stored locally on your device.
+                  Save your personal AI API key (Gemini or OpenAI) to run writing evaluations. Keys are stored locally on your device and sent directly to the AI provider — never to our server.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-5">
@@ -244,13 +250,32 @@ const SettingsPage = () => {
                 {apiSaveStatus === "error" && (
                   <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-3 text-red-500">
                     <AlertCircle className="h-5 w-5 shrink-0" />
-                    <span className="text-xs font-bold">Please enter a valid API key pattern.</span>
+                    <span className="text-xs font-bold">Please enter a valid {aiProvider === "gemini" ? "Gemini" : "OpenAI"} API key pattern.</span>
                   </div>
                 )}
 
+                {/* Provider Picker */}
+                <div className="flex items-center p-1 bg-zinc-100/80 dark:bg-zinc-800/50 rounded-xl border border-border/50 dark:border-zinc-800/50 w-fit">
+                  {(["gemini", "openai"] as AIProvider[]).map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setAiProvider(p)}
+                      className={cn(
+                        "px-5 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer capitalize",
+                        aiProvider === p
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="api-key" className="text-xs font-bold uppercase tracking-widest text-muted-foreground/80">
-                    Gemini API Key
+                    {aiProvider === "gemini" ? "Gemini" : "OpenAI"} API Key
                   </Label>
                   <div className="relative">
                     <Input
@@ -258,7 +283,7 @@ const SettingsPage = () => {
                       type={showApiKey ? "text" : "password"}
                       value={apiKey}
                       onChange={(e) => setApiKey(e.target.value)}
-                      placeholder="Enter sk-..."
+                      placeholder={aiProvider === "gemini" ? "AIza..." : "sk-..."}
                       className="bg-white/50 dark:bg-zinc-900/50 pr-10 border-border/50 dark:border-zinc-800/80 rounded-xl"
                     />
                     <button
@@ -284,9 +309,13 @@ const SettingsPage = () => {
                 <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 flex items-start gap-3">
                   <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    Don't have an API key? You can get a free API key with generous usage rates from 
+                    Don't have an API key? Get a free one from{" "}
                     <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold ml-1 inline-flex items-center gap-0.5">
-                      Google AI Studio.
+                      Google AI Studio
+                    </a>
+                    {" "}or{" "}
+                    <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold inline-flex items-center gap-0.5">
+                      OpenAI Platform.
                     </a>
                   </p>
                 </div>
