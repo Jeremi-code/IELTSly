@@ -26,7 +26,7 @@ const SidePopUp: React.FC<props> = (props) => {
   return (
     <div>
       <Sheet key={props.item.id}>
-        <SheetTrigger className="bg-[#2563EB] text-white hover:bg-[#1D4ED8] shadow-md hover:shadow-lg transition-all active:scale-95 px-3 py-1 rounded-md cursor-pointer">
+        <SheetTrigger className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg transition-all active:scale-95 px-3 py-1 rounded-md cursor-pointer">
           read more
         </SheetTrigger>
         <SheetContent>

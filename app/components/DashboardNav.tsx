@@ -123,7 +123,7 @@ const DashboardNav = ({
                   className={cn(
                     "group flex items-center rounded-xl p-2.5 text-sm font-medium transition-all duration-200 px-3",
                     isActive
-                      ? "bg-[#2563EB] text-primary-foreground dark:text-white shadow-lg shadow-primary/20"
+                      ? "bg-primary text-primary-foreground dark:text-white shadow-lg shadow-primary/20"
                       : "text-muted-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-50 cursor-pointer"
                   )}
                 >
