@@ -15,9 +15,9 @@ import {
   evaluateEssay,
   getStoredAIKey,
   getStoredAIProvider,
-  type Question,
-  type Evaluation,
 } from "@/lib/api";
+import type { Question } from "@/types/question";
+import type { Evaluation } from "@/types/essay";
 
 const WritingBox = () => {
   const [question, setQuestion] = useState<Question | null>(null);

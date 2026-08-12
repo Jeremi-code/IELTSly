@@ -31,7 +31,8 @@ import DashboardShell from "../components/DashboardShell";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
-import { getAnalytics, getEssays, getStoredAIKey, getStoredAIProvider, timeAgo, type Essay } from "@/lib/api";
+import { getAnalytics, getEssays, getStoredAIKey, getStoredAIProvider, timeAgo } from "@/lib/api";
+import type { Essay } from "@/types/essay";
 
 const container = {
   hidden: { opacity: 0 },

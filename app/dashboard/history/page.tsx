@@ -22,7 +22,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getEssays, formatDate, type Essay } from "@/lib/api";
+import { getEssays, formatDate } from "@/lib/api";
+import type { Essay } from "@/types/essay";
 
 type HistoryEssay = {
   id: string;

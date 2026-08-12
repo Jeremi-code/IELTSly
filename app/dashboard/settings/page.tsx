@@ -39,7 +39,8 @@ import {
 import SidePopUp from "@/app/components/SidePopUp";
 import PaginationNav from "@/app/components/PaginationNav";
 import { useSession } from "@/lib/auth-client";
-import { getStoredAIKey, getStoredAIProvider, saveAICredentials, type AIProvider } from "@/lib/api";
+import { getStoredAIKey, getStoredAIProvider, saveAICredentials } from "@/lib/api";
+import type { AIProvider } from "@/types/ai";
 
 const achievements = [
   {
