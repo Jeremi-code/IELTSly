@@ -1,3 +1,8 @@
+import type { Essay } from "@/types/essay";
+import type { Question } from "@/types/question";
+import type { AnalyticsPayload } from "@/types/analytics";
+import type { AIProvider } from "@/types/ai";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
@@ -13,8 +18,6 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 // ── AI key storage (localStorage — never sent to our server as stored data) ──
-
-export type AIProvider = "gemini" | "openai";
 
 const KEY_STORAGE = "ai_api_key";
 const PROVIDER_STORAGE = "ai_provider";
@@ -39,70 +42,6 @@ export function aiHeaders(): Record<string, string> {
   const apiKey = getStoredAIKey();
   if (!apiKey) return {};
   return { "x-api-key": apiKey, "x-ai-provider": getStoredAIProvider() };
-}
-
-// ── Types (mirror the IELTSly-API responses) ──
-
-export type EssayStatus = "in_progress" | "submitted" | "evaluated";
-
-export interface Evaluation {
-  overallBand: number;
-  criteria: { ta: number; cc: number; lr: number; gra: number };
-  feedback: string;
-  tips: string[];
-  evaluatedAt: string;
-}
-
-export interface Essay {
-  _id: string;
-  user: string;
-  type: "task1" | "task2";
-  mode: "practice" | "exam";
-  questionId?: string;
-  question: { text: string; category?: string; imageUrl?: string };
-  response: string;
-  wordCount: number;
-  durationSec: number;
-  status: EssayStatus;
-  reworkOf?: string;
-  evaluation?: Evaluation;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Question {
-  _id: string;
-  taskType: "task1" | "task2";
-  category?: string;
-  text: string;
-  imageUrl?: string;
-  source: "official" | "scraped";
-  sourceUrl?: string;
-  timesUsed: number;
-  createdAt: string;
-}
-
-export interface AnalyticsPayload {
-  stats: {
-    totalAttempts: number;
-    evaluatedCount: number;
-    averageBand: number;
-    bestBand: number;
-    task1Average: number;
-    task2Average: number;
-    inProgressCount: number;
-  };
-  criteriaAverages: { ta: number; cc: number; lr: number; gra: number };
-  trend: { id: string; date: string; band: number; type: string }[];
-  improvements: {
-    originalId: string;
-    reworkId: string;
-    fromBand: number;
-    toBand: number;
-    delta: number;
-    date: string;
-  }[];
-  dailyComment: { text: string; tone: "positive" | "neutral" | "push" };
 }
 
 // ── Endpoints ──
