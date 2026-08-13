@@ -98,9 +98,16 @@ export function reworkEssay(
 
 // ── Question Bank Endpoints ─────────────────────────────────────────
 
+/**
+ * Fetch paginated questions matching task type, category, and search query.
+ *
+ * @param params Filter criteria including taskType, category, search term, page number, and limit.
+ * @returns Object containing the questions list, current page, limit, and total count in DB.
+ */
 export function getQuestions(params?: {
   taskType?: string;
   category?: string;
+  search?: string;
   page?: number;
   limit?: number;
 }): Promise<{
@@ -110,20 +117,57 @@ export function getQuestions(params?: {
   total: number;
 }> {
   const qs = new URLSearchParams();
-  if (params?.taskType) qs.set("taskType", params.taskType);
-  if (params?.category) qs.set("category", params.category);
+  if (params?.taskType && params.taskType !== "all") qs.set("taskType", params.taskType);
+  if (params?.category && params.category !== "all") qs.set("category", params.category);
+  if (params?.search?.trim()) qs.set("search", params.search.trim());
   qs.set("page", String(params?.page ?? 1));
   qs.set("limit", String(params?.limit ?? 10));
   return api(`/api/questions?${qs.toString()}`);
 }
 
-// ── Analytics Endpoints ─────────────────────────────────────────────
+/**
+ * Fetch distinct category/topic tags from the database, optionally filtered by taskType.
+ *
+ * @param taskType Optional task filter ('task1' or 'task2')
+ * @returns Array of unique category names
+ */
+export function getQuestionCategories(taskType?: string): Promise<string[]> {
+  const qs = new URLSearchParams();
+  if (taskType && taskType !== "all") qs.set("taskType", taskType);
+  return api<string[]>(`/api/questions/categories?${qs.toString()}`);
+}
+
+/**
+ * Fetch a single random question from the entire database matching current filter criteria.
+ *
+ * @param params Optional filters (taskType, category, search) to constrain the random pool
+ * @returns A single random Question document
+ */
+export function getRandomQuestion(params?: {
+  taskType?: string;
+  category?: string;
+  search?: string;
+}): Promise<Question> {
+  const qs = new URLSearchParams();
+  if (params?.taskType && params.taskType !== "all") qs.set("taskType", params.taskType);
+  if (params?.category && params.category !== "all") qs.set("category", params.category);
+  if (params?.search?.trim()) qs.set("search", params.search.trim());
+  return api<Question>(`/api/questions/random?${qs.toString()}`);
+}
+
+/**
+ * Retrieve a specific question document by its MongoDB ObjectId.
+ *
+ * @param id MongoDB ObjectId string of the question
+ * @returns The Question document
+ */
+export function getQuestion(id: string): Promise<Question> {
+  return api<Question>(`/api/questions/${id}`);
+}
 
 export function getAnalytics(): Promise<AnalyticsPayload> {
   return api("/api/analytics");
 }
-
-// ── Formatting Helpers ──────────────────────────────────────────────
 
 export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {

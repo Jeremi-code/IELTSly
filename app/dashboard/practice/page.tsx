@@ -1,22 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import DashboardShell from "../../components/DashboardShell";
+import QuestionSelectorModal from "../../components/QuestionSelectorModal";
 import {
   Zap,
   ShieldCheck,
   Clock,
   Target,
   Sparkles,
-  ChevronRight,
   BookOpen,
   TrendingUp,
   Award,
   PenTool,
   Lock,
-  Globe,
   Flame,
   ArrowRight,
+  Search,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -27,46 +27,44 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 const modes = [
   {
+    id: "practice" as const,
     title: "Practice Mode",
     description:
-      "Build specific IELTS writing skills at your own pace with guidance.",
+      "Build specific IELTS writing skills at your own pace with guidance and custom prompt selection.",
     icon: Zap,
     color: "text-yellow-500",
     glow: "group-hover:shadow-yellow-500/10",
     bg: "bg-yellow-500/10",
     borderColor: "group-hover:border-yellow-500/30",
     features: [
-      { icon: Clock, text: "Flexible Time Limits" },
-      { icon: Target, text: "Choose Specific Tasks (1 or 2)" },
-      { icon: Sparkles, text: "Instant AI Feedback" },
-      { icon: PenTool, text: "Focus on Argument Types" },
+      { icon: Target, text: "Choose Specific Tasks & Topics" },
+      { icon: Clock, text: "Flexible, Self-Paced Time Limits" },
+      { icon: Sparkles, text: "Instant AI Band Score & Feedback" },
+      { icon: PenTool, text: "Practice Reworks & Revisions" },
     ],
-    buttonText: "Start Practicing",
-    href: "/writingbox",
+    buttonText: "Choose Question & Practice",
   },
   {
+    id: "exam" as const,
     title: "Exam Mode",
     description:
-      "Authentic, high-pressure full exam experience under exam conditions.",
+      "Authentic, high-pressure full exam experience under strict IELTS conditions.",
     icon: ShieldCheck,
     color: "text-primary",
     glow: "group-hover:shadow-primary/10",
     bg: "bg-primary/10",
     borderColor: "group-hover:border-primary/30",
     features: [
-      { icon: Lock, text: "Strict Anti-Cheat Environment" },
-      { icon: Globe, text: "Public Fullscreen Mode" },
-      { icon: Clock, text: "Strict 60-Minute Limit" },
+      { icon: Target, text: "Select Authentic IELTS Exam Tasks" },
+      { icon: Clock, text: "Strict 20 / 40 Minute Countdown Timers" },
+      { icon: Lock, text: "Authentic Exam Environment" },
       { icon: Award, text: "Comprehensive Performance Band Report" },
     ],
-    buttonText: "Start Exam Run",
-    href: "/writingbox",
+    buttonText: "Choose Question & Start Exam",
   },
 ];
 
@@ -119,9 +117,22 @@ const itemVariants = {
 };
 
 const PracticePage = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedMode, setSelectedMode] = useState<"practice" | "exam">("practice");
+
+  const handleOpenMode = (mode: "practice" | "exam") => {
+    setSelectedMode(mode);
+    setModalOpen(true);
+  };
+
   return (
     <DashboardShell className="max-w-[1300px] p-6 lg:p-10 space-y-10">
-      {/* Header Section */}
+      <QuestionSelectorModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        mode={selectedMode}
+      />
+
       <header className="space-y-4 text-center max-w-3xl mx-auto">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
@@ -152,7 +163,6 @@ const PracticePage = () => {
         </motion.p>
       </header>
 
-      {/* Mode Selection Grid */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -163,12 +173,11 @@ const PracticePage = () => {
           <motion.div key={mode.title} variants={itemVariants}>
             <Card
               className={cn(
-                "group relative overflow-hidden h-full border border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-500 rounded-3xl",
+                "group relative overflow-hidden h-full border border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-500 rounded-3xl flex flex-col justify-between",
                 mode.borderColor,
                 mode.glow,
               )}
             >
-              {/* Top ambient colored gradient background */}
               <div
                 className={cn(
                   "absolute top-0 right-0 -mr-12 -mt-12 h-44 w-44 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-3xl opacity-10 group-hover:scale-150 transition-transform duration-700",
@@ -195,7 +204,7 @@ const PracticePage = () => {
                 </div>
               </CardHeader>
 
-              <CardContent className="space-y-8 p-6 lg:p-8 pt-0">
+              <CardContent className="space-y-8 p-6 lg:p-8 pt-0 flex-1 flex flex-col justify-between">
                 <div className="space-y-4">
                   {mode.features.map((feature, fIdx) => (
                     <div
@@ -212,22 +221,20 @@ const PracticePage = () => {
                   ))}
                 </div>
 
-                <Link href={mode.href}>
-                  <Button
-                    variant="blue"
-                    className="w-full h-14 text-base font-bold rounded-2xl shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:scale-[1.01] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
-                  >
-                    {mode.buttonText}
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
+                <Button
+                  variant="blue"
+                  onClick={() => handleOpenMode(mode.id)}
+                  className="w-full h-14 text-base font-bold rounded-2xl shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:scale-[1.01] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 mt-4"
+                >
+                  {mode.buttonText}
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
               </CardContent>
             </Card>
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Stats Cards - Clean & Responsive Grid */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
