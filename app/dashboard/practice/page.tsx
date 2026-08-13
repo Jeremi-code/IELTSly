@@ -16,7 +16,7 @@ import {
   Lock,
   Globe,
   Flame,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -34,7 +34,8 @@ import Link from "next/link";
 const modes = [
   {
     title: "Practice Mode",
-    description: "Build specific IELTS writing skills at your own pace with guidance.",
+    description:
+      "Build specific IELTS writing skills at your own pace with guidance.",
     icon: Zap,
     color: "text-yellow-500",
     glow: "group-hover:shadow-yellow-500/10",
@@ -51,7 +52,8 @@ const modes = [
   },
   {
     title: "Exam Mode",
-    description: "Authentic, high-pressure full exam experience under exam conditions.",
+    description:
+      "Authentic, high-pressure full exam experience under exam conditions.",
     icon: ShieldCheck,
     color: "text-primary",
     glow: "group-hover:shadow-primary/10",
@@ -69,10 +71,34 @@ const modes = [
 ];
 
 const progressStats = [
-  { label: "Essays Written", value: "12", icon: BookOpen, color: "text-primary", bg: "bg-primary/10" },
-  { label: "Average Band", value: "6.5", icon: TrendingUp, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-  { label: "Weekly Streak", value: "5 Days", icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10" },
-  { label: "Total Words", value: "5,240", icon: PenTool, color: "text-purple-500", bg: "bg-purple-500/10" },
+  {
+    label: "Essays Written",
+    value: "12",
+    icon: BookOpen,
+    color: "text-primary",
+    bg: "bg-primary/10",
+  },
+  {
+    label: "Average Band",
+    value: "6.5",
+    icon: TrendingUp,
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
+  },
+  {
+    label: "Weekly Streak",
+    value: "5 Days",
+    icon: Flame,
+    color: "text-orange-500",
+    bg: "bg-orange-500/10",
+  },
+  {
+    label: "Total Words",
+    value: "5,240",
+    icon: PenTool,
+    color: "text-purple-500",
+    bg: "bg-purple-500/10",
+  },
 ];
 
 const containerVariants = {
@@ -85,7 +111,11 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { y: 30, opacity: 0 },
-  show: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } as const },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: { type: "spring", stiffness: 100 } as const,
+  },
 };
 
 const PracticePage = () => {
@@ -102,7 +132,7 @@ const PracticePage = () => {
           <Sparkles className="h-3 w-3 fill-current" />
           Improve Your Writing
         </motion.div>
-        
+
         <motion.h1
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -110,14 +140,15 @@ const PracticePage = () => {
         >
           IELTS Writing <span className="text-primary italic">Practice</span>
         </motion.h1>
-        
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
           className="text-muted-foreground text-lg"
         >
-          Choose your practice format: refine your parameters step-by-step or replicate the real exam environment.
+          Choose your practice format: refine your parameters step-by-step or
+          replicate the real exam environment.
         </motion.p>
       </header>
 
@@ -130,26 +161,34 @@ const PracticePage = () => {
       >
         {modes.map((mode) => (
           <motion.div key={mode.title} variants={itemVariants}>
-            <Card className={cn(
-              "group relative overflow-hidden h-full border border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-500 rounded-3xl",
-              mode.borderColor,
-              mode.glow
-            )}>
+            <Card
+              className={cn(
+                "group relative overflow-hidden h-full border border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-500 rounded-3xl",
+                mode.borderColor,
+                mode.glow,
+              )}
+            >
               {/* Top ambient colored gradient background */}
-              <div className={cn(
-                "absolute top-0 right-0 -mr-12 -mt-12 h-44 w-44 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-3xl opacity-10 group-hover:scale-150 transition-transform duration-700",
-                mode.bg
-              )} />
+              <div
+                className={cn(
+                  "absolute top-0 right-0 -mr-12 -mt-12 h-44 w-44 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-3xl opacity-10 group-hover:scale-150 transition-transform duration-700",
+                  mode.bg,
+                )}
+              />
 
               <CardHeader className="space-y-4 p-6 lg:p-8">
-                <div className={cn(
-                  "w-12 h-12 rounded-2xl flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6",
-                  mode.bg
-                )}>
+                <div
+                  className={cn(
+                    "w-12 h-12 rounded-2xl flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6",
+                    mode.bg,
+                  )}
+                >
                   <mode.icon className={cn("h-6 w-6", mode.color)} />
                 </div>
                 <div className="space-y-2">
-                  <CardTitle className="text-2xl lg:text-3xl font-black">{mode.title}</CardTitle>
+                  <CardTitle className="text-2xl lg:text-3xl font-black">
+                    {mode.title}
+                  </CardTitle>
                   <CardDescription className="text-sm lg:text-base leading-relaxed text-muted-foreground">
                     {mode.description}
                   </CardDescription>
@@ -196,9 +235,17 @@ const PracticePage = () => {
         className="grid grid-cols-2 lg:grid-cols-4 gap-4"
       >
         {progressStats.map((stat, idx) => (
-          <Card key={idx} className="border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden relative group">
+          <Card
+            key={idx}
+            className="border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden relative group"
+          >
             <CardContent className="p-5 flex items-center gap-4">
-              <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105", stat.bg)}>
+              <div
+                className={cn(
+                  "h-10 w-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105",
+                  stat.bg,
+                )}
+              >
                 <stat.icon className={cn("h-5 w-5", stat.color)} />
               </div>
               <div className="min-w-0">
