@@ -1,7 +1,7 @@
 import type { Essay } from "@/types/essay";
 import type { Question } from "@/types/question";
 import type { AnalyticsPayload } from "@/types/analytics";
-import type { AIProvider } from "@/types/ai";
+import type { AICredentialStatus, AIProvider } from "@/types/ai";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -12,39 +12,42 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
     headers: { "Content-Type": "application/json", ...init?.headers },
   });
   if (!res.ok) {
-    throw new Error(`API ${res.status} on ${path}`);
+    let errorMessage = `API ${res.status} on ${path}`;
+    try {
+      const data = await res.json();
+      if (data?.message) errorMessage = data.message;
+    } catch {
+      // ignore json parse error
+    }
+    throw new Error(errorMessage);
   }
   return res.json() as Promise<T>;
 }
 
-// ── AI key storage (localStorage — never sent to our server as stored data) ──
+// ── AI Credential Management (Server-Encrypted BYOK) ───────────────
 
-const KEY_STORAGE = "ai_api_key";
-const PROVIDER_STORAGE = "ai_provider";
-
-export function getStoredAIKey(): string | null {
-  if (typeof window === "undefined") return null;
-  return window.localStorage.getItem(KEY_STORAGE);
+export function getAICredentials(): Promise<AICredentialStatus> {
+  return api<AICredentialStatus>("/api/user/ai-credentials");
 }
 
-export function getStoredAIProvider(): AIProvider {
-  if (typeof window === "undefined") return "gemini";
-  const stored = window.localStorage.getItem(PROVIDER_STORAGE);
-  return stored === "openai" ? "openai" : "gemini";
+export function saveAICredentials(data: {
+  provider: AIProvider;
+  apiKey: string;
+  model?: string;
+}): Promise<AICredentialStatus> {
+  return api<AICredentialStatus>("/api/user/ai-credentials", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 }
 
-export function saveAICredentials(provider: AIProvider, apiKey: string): void {
-  window.localStorage.setItem(PROVIDER_STORAGE, provider);
-  window.localStorage.setItem(KEY_STORAGE, apiKey);
+export function deleteAICredentials(): Promise<{ isConnected: false }> {
+  return api<{ isConnected: false }>("/api/user/ai-credentials", {
+    method: "DELETE",
+  });
 }
 
-export function aiHeaders(): Record<string, string> {
-  const apiKey = getStoredAIKey();
-  if (!apiKey) return {};
-  return { "x-api-key": apiKey, "x-ai-provider": getStoredAIProvider() };
-}
-
-// ── Endpoints ──
+// ── Essay Endpoints ─────────────────────────────────────────────────
 
 export function getEssays(params?: {
   type?: string;
@@ -80,14 +83,12 @@ export function createEssay(body: {
 export function evaluateEssay(id: string): Promise<Essay> {
   return api(`/api/essays/${id}/evaluate`, {
     method: "POST",
-    headers: aiHeaders(),
-    body: "{}",
   });
 }
 
 export function reworkEssay(
   id: string,
-  body: { response: string; durationSec: number }
+  body: { response: string; durationSec: number },
 ): Promise<Essay> {
   return api(`/api/essays/${id}/rework`, {
     method: "POST",
@@ -95,12 +96,19 @@ export function reworkEssay(
   });
 }
 
+// ── Question Bank Endpoints ─────────────────────────────────────────
+
 export function getQuestions(params?: {
   taskType?: string;
   category?: string;
   page?: number;
   limit?: number;
-}): Promise<{ questions: Question[]; page: number; limit: number; total: number }> {
+}): Promise<{
+  questions: Question[];
+  page: number;
+  limit: number;
+  total: number;
+}> {
   const qs = new URLSearchParams();
   if (params?.taskType) qs.set("taskType", params.taskType);
   if (params?.category) qs.set("category", params.category);
@@ -109,11 +117,13 @@ export function getQuestions(params?: {
   return api(`/api/questions?${qs.toString()}`);
 }
 
+// ── Analytics Endpoints ─────────────────────────────────────────────
+
 export function getAnalytics(): Promise<AnalyticsPayload> {
-  return api("/api/analytics", { headers: aiHeaders() });
+  return api("/api/analytics");
 }
 
-// ── Formatting helpers ──
+// ── Formatting Helpers ──────────────────────────────────────────────
 
 export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
