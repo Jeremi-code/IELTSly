@@ -13,15 +13,16 @@ import {
   getQuestions,
   createEssay,
   evaluateEssay,
-  getStoredAIKey,
-  getStoredAIProvider,
+  getAICredentials,
 } from "@/lib/api";
 import type { Question } from "@/types/question";
 import type { Evaluation } from "@/types/essay";
+import type { AICredentialStatus } from "@/types/ai";
 
 const WritingBox = () => {
   const [question, setQuestion] = useState<Question | null>(null);
   const [questionLoading, setQuestionLoading] = useState(true);
+  const [aiStatus, setAiStatus] = useState<AICredentialStatus | null>(null);
   const [essayText, setEssayText] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -34,11 +35,17 @@ const WritingBox = () => {
       .then((res) => {
         const pool = res.questions;
         const task2 = pool.filter((q) => q.taskType === "task2");
-        const picked = (task2.length ? task2 : pool)[Math.floor(Math.random() * (task2.length || pool.length))];
+        const picked = (task2.length ? task2 : pool)[
+          Math.floor(Math.random() * (task2.length || pool.length))
+        ];
         setQuestion(picked ?? null);
       })
       .catch(() => setQuestion(null))
       .finally(() => setQuestionLoading(false));
+
+    getAICredentials()
+      .then(setAiStatus)
+      .catch(() => setAiStatus(null));
   }, []);
 
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -59,10 +66,6 @@ const WritingBox = () => {
       setError("Write at least 10 words before submitting.");
       return;
     }
-    if (!getStoredAIKey()) {
-      setError("Add your AI API key in Settings first (Gemini or OpenAI).");
-      return;
-    }
 
     setSubmitting(true);
     try {
@@ -79,14 +82,15 @@ const WritingBox = () => {
       if (!evaluated.evaluation) {
         setError("Evaluation did not return a result. Please try again.");
       }
-    } catch {
-      setError("Evaluation failed. Check your API key and try again.");
+    } catch (err: any) {
+      setError(
+        err.message ||
+          "Evaluation failed. Please check your AI API key in Settings and try again.",
+      );
     } finally {
       setSubmitting(false);
     }
   };
-
-  const providerLabel = getStoredAIProvider() === "gemini" ? "Gemini" : "OpenAI";
 
   return (
     <div>
@@ -104,16 +108,28 @@ const WritingBox = () => {
                     exit={{ opacity: 0, x: 10 }}
                     className="text-base lg:text-xl font-black text-zinc-900 dark:text-zinc-50 truncate pr-6 tracking-tight"
                   >
-                    {question ? `Writing Task ${question.taskType === "task1" ? "1" : "2"} — ${question.category ?? "General"}` : questionLoading ? "Loading question..." : "No question available"}
+                    {question
+                      ? `Writing Task ${question.taskType === "task1" ? "1" : "2"} — ${question.category ?? "General"}`
+                      : questionLoading
+                        ? "Loading question..."
+                        : "No question available"}
                   </motion.h3>
                 </AnimatePresence>
                 <div className="flex items-center space-x-3 shrink-0">
                   <Badge className="bg-primary/10 text-primary hover:bg-primary/10 dark:bg-primary/10 dark:text-primary border-none px-2 py-0.5 text-[10px] lg:text-xs font-black uppercase tracking-wider">
-                    {getStoredAIKey() ? `${providerLabel.toUpperCase()} READY` : "NO AI KEY"}
+                    {aiStatus?.isConnected
+                      ? `${(aiStatus.provider || "AI").toUpperCase()} READY`
+                      : "AI EVALUATION"}
                   </Badge>
                   <div className="flex items-center text-zinc-600 dark:text-zinc-300 text-xs lg:text-sm font-bold">
                     <Clock className="w-4 h-4 lg:w-5 lg:h-5 mr-2" />
-                    <span>{Math.max(0, Math.floor((Date.now() - startedAt.current) / 60000))} min</span>
+                    <span>
+                      {Math.max(
+                        0,
+                        Math.floor((Date.now() - startedAt.current) / 60000),
+                      )}{" "}
+                      min
+                    </span>
                   </div>
                 </div>
               </div>
@@ -128,7 +144,11 @@ const WritingBox = () => {
                       exit={{ opacity: 0 }}
                       className="text-zinc-700 dark:text-zinc-200 leading-relaxed text-xs lg:text-sm italic font-medium overflow-hidden"
                     >
-                      {question ? question.text : questionLoading ? "Fetching a question from the bank..." : "No questions in the bank yet. Run the scraper or add one."}
+                      {question
+                        ? question.text
+                        : questionLoading
+                          ? "Fetching a question from the bank..."
+                          : "No questions in the bank yet. Run the scraper or add one."}
                     </motion.p>
                   </AnimatePresence>
                 </div>
@@ -149,7 +169,9 @@ const WritingBox = () => {
                 <div className="text-zinc-600 dark:text-zinc-300 text-xs lg:text-sm font-black border-t w-full pt-4 dark:border-zinc-800 flex justify-between uppercase tracking-tighter">
                   <span>
                     Word count:{" "}
-                    <span className="text-primary dark:text-primary">{wordCount}</span>
+                    <span className="text-primary dark:text-primary">
+                      {wordCount}
+                    </span>
                   </span>
                   <Button
                     variant="blue"
@@ -159,7 +181,8 @@ const WritingBox = () => {
                   >
                     {submitting ? (
                       <>
-                        <Loader2 className="h-3 w-3 mr-1 animate-spin" /> Evaluating...
+                        <Loader2 className="h-3 w-3 mr-1 animate-spin" />{" "}
+                        Evaluating...
                       </>
                     ) : (
                       "Submit"
@@ -180,8 +203,11 @@ const WritingBox = () => {
                 className="mt-4 p-4 rounded-2xl bg-red-500/5 border border-red-500/20 text-red-500 text-sm font-semibold"
               >
                 {error}
-                {!getStoredAIKey() && (
-                  <Link href="/dashboard/settings" className="underline font-bold ml-2">
+                {!aiStatus?.isConnected && (
+                  <Link
+                    href="/dashboard/settings"
+                    className="underline font-bold ml-2"
+                  >
                     Go to Settings
                   </Link>
                 )}
@@ -196,8 +222,12 @@ const WritingBox = () => {
                 <div className="flex items-center gap-4 mb-4">
                   <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-primary to-emerald-400 p-[3px] flex items-center justify-center shadow-md shrink-0">
                     <div className="h-full w-full rounded-full bg-white dark:bg-zinc-950 flex flex-col items-center justify-center">
-                      <span className="text-xl font-black leading-none">{result.overallBand.toFixed(1)}</span>
-                      <span className="text-[8px] text-muted-foreground font-black uppercase tracking-widest mt-0.5">Band</span>
+                      <span className="text-xl font-black leading-none">
+                        {result.overallBand.toFixed(1)}
+                      </span>
+                      <span className="text-[8px] text-muted-foreground font-black uppercase tracking-widest mt-0.5">
+                        Band
+                      </span>
                     </div>
                   </div>
                   <div>
@@ -206,7 +236,10 @@ const WritingBox = () => {
                       AI Evaluation Complete
                     </h3>
                     <p className="text-xs text-muted-foreground">
-                      TA {result.criteria.ta.toFixed(1)} · CC {result.criteria.cc.toFixed(1)} · LR {result.criteria.lr.toFixed(1)} · GRA {result.criteria.gra.toFixed(1)}
+                      TA {result.criteria.ta.toFixed(1)} · CC{" "}
+                      {result.criteria.cc.toFixed(1)} · LR{" "}
+                      {result.criteria.lr.toFixed(1)} · GRA{" "}
+                      {result.criteria.gra.toFixed(1)}
                     </p>
                   </div>
                 </div>
@@ -214,7 +247,10 @@ const WritingBox = () => {
                 {result.tips.length > 0 && (
                   <div className="mt-3 space-y-1">
                     {result.tips.map((tip, i) => (
-                      <p key={i} className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                      <p
+                        key={i}
+                        className="text-xs font-semibold text-zinc-700 dark:text-zinc-300"
+                      >
                         • {tip}
                       </p>
                     ))}
