@@ -31,7 +31,7 @@ import DashboardShell from "../components/DashboardShell";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
-import { getAnalytics, getEssays, getStoredAIKey, getStoredAIProvider, timeAgo } from "@/lib/api";
+import { getAnalytics, getEssays, getAICredentials, timeAgo } from "@/lib/api";
 import type { Essay } from "@/types/essay";
 
 const container = {
@@ -64,6 +64,9 @@ const DashboardPage = () => {
     inProgressCount: number;
   } | null>(null);
   const [recent, setRecent] = useState<Essay[]>([]);
+  const [aiStatus, setAiStatus] = useState<{ isConnected: boolean; provider?: string }>({
+    isConnected: false,
+  });
 
   useEffect(() => {
     getAnalytics()
@@ -72,10 +75,13 @@ const DashboardPage = () => {
     getEssays({ limit: 5 })
       .then((res) => setRecent(res.essays))
       .catch(() => setRecent([]));
+    getAICredentials()
+      .then((res) => setAiStatus(res))
+      .catch(() => setAiStatus({ isConnected: false }));
   }, []);
 
-  const hasAIKey = Boolean(getStoredAIKey());
-  const providerLabel = getStoredAIProvider() === "gemini" ? "Gemini" : "OpenAI";
+  const hasAIKey = aiStatus.isConnected;
+  const providerLabel = aiStatus.provider === "openai" ? "OpenAI" : "Gemini";
 
   const dashboardStat = useMemo(
     () => [
