@@ -9,14 +9,10 @@ import {
   Clock,
   Target,
   Sparkles,
-  BookOpen,
-  TrendingUp,
   Award,
   PenTool,
   Lock,
-  Flame,
   ArrowRight,
-  Search,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -36,10 +32,10 @@ const modes = [
     description:
       "Build specific IELTS writing skills at your own pace with guidance and custom prompt selection.",
     icon: Zap,
-    color: "text-yellow-500",
-    glow: "group-hover:shadow-yellow-500/10",
-    bg: "bg-yellow-500/10",
-    borderColor: "group-hover:border-yellow-500/30",
+    color: "text-amber-500",
+    glow: "group-hover:shadow-amber-500/10",
+    bg: "bg-amber-500/10",
+    borderColor: "group-hover:border-amber-500/30",
     features: [
       { icon: Target, text: "Choose Specific Tasks & Topics" },
       { icon: Clock, text: "Flexible, Self-Paced Time Limits" },
@@ -65,37 +61,6 @@ const modes = [
       { icon: Award, text: "Comprehensive Performance Band Report" },
     ],
     buttonText: "Choose Question & Start Exam",
-  },
-];
-
-const progressStats = [
-  {
-    label: "Essays Written",
-    value: "12",
-    icon: BookOpen,
-    color: "text-primary",
-    bg: "bg-primary/10",
-  },
-  {
-    label: "Average Band",
-    value: "6.5",
-    icon: TrendingUp,
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
-  },
-  {
-    label: "Weekly Streak",
-    value: "5 Days",
-    icon: Flame,
-    color: "text-orange-500",
-    bg: "bg-orange-500/10",
-  },
-  {
-    label: "Total Words",
-    value: "5,240",
-    icon: PenTool,
-    color: "text-purple-500",
-    bg: "bg-purple-500/10",
   },
 ];
 
@@ -135,21 +100,11 @@ const PracticePage = () => {
         mode={selectedMode}
       />
 
-      <header className="space-y-4 text-center max-w-3xl mx-auto">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary w-fit uppercase tracking-widest"
-        >
-          <Sparkles className="h-3 w-3 fill-current" />
-          Improve Your Writing
-        </motion.div>
-
+      <header className="space-y-3 text-center max-w-3xl mx-auto">
         <motion.h1
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-5xl font-extrabold tracking-tight lg:text-6xl"
+          className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl"
         >
           IELTS Writing <span className="text-primary italic">Practice</span>
         </motion.h1>
@@ -157,8 +112,8 @@ const PracticePage = () => {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-muted-foreground text-lg"
+          transition={{ delay: 0.15 }}
+          className="text-muted-foreground text-base sm:text-lg"
         >
           Choose your practice format: refine your parameters step-by-step or
           replicate the real exam environment.
@@ -234,39 +189,6 @@ const PracticePage = () => {
               </CardContent>
             </Card>
           </motion.div>
-        ))}
-      </motion.div>
-
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className="grid grid-cols-2 lg:grid-cols-4 gap-4"
-      >
-        {progressStats.map((stat, idx) => (
-          <Card
-            key={idx}
-            className="border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden relative group"
-          >
-            <CardContent className="p-5 flex items-center gap-4">
-              <div
-                className={cn(
-                  "h-10 w-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105",
-                  stat.bg,
-                )}
-              >
-                <stat.icon className={cn("h-5 w-5", stat.color)} />
-              </div>
-              <div className="min-w-0">
-                <span className="text-2xl font-black tracking-tight block group-hover:text-primary transition-colors">
-                  {stat.value}
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60 block truncate">
-                  {stat.label}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
         ))}
       </motion.div>
     </DashboardShell>
