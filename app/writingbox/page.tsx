@@ -81,6 +81,8 @@ function TaskFigure({ imageUrl }: { imageUrl: string }) {
         <img
           src={imageUrl}
           alt="IELTS Task 1 figure — graph, chart, table, or diagram for this prompt"
+          referrerPolicy="no-referrer"
+          loading="lazy"
           className={cn(
             "w-full object-contain transition-transform duration-300",
             zoomed ? "cursor-zoom-out" : "cursor-zoom-in",
