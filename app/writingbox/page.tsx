@@ -498,7 +498,7 @@ function WritingBoxInner() {
                 </div>
                 {!aiStatus?.isConnected && (
                   <Link
-                    href="/dashboard/settings"
+                    href="/dashboard/settings?tab=api"
                     className="underline font-bold text-xs shrink-0"
                   >
                     Connect API Key in Settings

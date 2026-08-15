@@ -324,7 +324,7 @@ export default function DashboardPage() {
                   </p>
                 </div>
               </div>
-              <Link href="/dashboard/settings" className="shrink-0 w-full md:w-auto">
+              <Link href="/dashboard/settings?tab=api" className="shrink-0 w-full md:w-auto">
                 <Button
                   variant="outline"
                   size="sm"
@@ -378,13 +378,13 @@ export default function DashboardPage() {
                   </p>
                 </div>
               </div>
-              <Link href="/dashboard/settings" className="shrink-0 w-full md:w-auto">
+              <Link href="/dashboard/settings?tab=api" className="shrink-0 w-full md:w-auto">
                 <Button
                   variant="outline"
                   size="sm"
                   className="w-full md:w-auto rounded-xl text-xs font-semibold cursor-pointer border-border/60 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                 >
-                  Settings
+                  Configure Key
                 </Button>
               </Link>
             </CardContent>

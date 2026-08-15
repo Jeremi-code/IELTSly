@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import DashboardShell from "../../components/DashboardShell";
 import { cn } from "@/lib/utils";
 import {
@@ -119,8 +120,21 @@ const achievements = [
   },
 ];
 
-const SettingsPage = () => {
-  const [activeButton, setActiveButton] = useState(0);
+function SettingsContent() {
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+
+  // Determine initial tab from query params: ?tab=api or ?tab=1 -> 1 (API Configuration)
+  const initialTab =
+    tabParam === "api" || tabParam === "1"
+      ? 1
+      : tabParam === "notifications" || tabParam === "2"
+        ? 2
+        : tabParam === "security" || tabParam === "3"
+          ? 3
+          : 0;
+
+  const [activeButton, setActiveButton] = useState(initialTab);
   const [aiProvider, setAiProvider] = useState<AIProvider>("gemini");
   const [apiKey, setApiKey] = useState("");
   const [showApiKey, setShowApiKey] = useState(false);
@@ -133,6 +147,19 @@ const SettingsPage = () => {
   >("idle");
   const [apiErrorMessage, setApiErrorMessage] = useState("");
   const { data: session } = useSession();
+
+  // Sync tab if query parameter changes dynamically
+  useEffect(() => {
+    if (tabParam === "api" || tabParam === "1") {
+      setActiveButton(1);
+    } else if (tabParam === "notifications" || tabParam === "2") {
+      setActiveButton(2);
+    } else if (tabParam === "security" || tabParam === "3") {
+      setActiveButton(3);
+    } else if (tabParam === "profile" || tabParam === "0") {
+      setActiveButton(0);
+    }
+  }, [tabParam]);
 
   useEffect(() => {
     getAICredentials()
@@ -637,6 +664,20 @@ const SettingsPage = () => {
       </div>
     </DashboardShell>
   );
-};
+}
 
-export default SettingsPage;
+export default function SettingsPage() {
+  return (
+    <Suspense
+      fallback={
+        <DashboardShell className="max-w-[1200px] p-6 lg:p-10">
+          <div className="h-40 flex items-center justify-center text-muted-foreground text-sm">
+            Loading settings...
+          </div>
+        </DashboardShell>
+      }
+    >
+      <SettingsContent />
+    </Suspense>
+  );
+}
