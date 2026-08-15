@@ -20,54 +20,68 @@ const mockData: WritingTask[] = [
   {
     task: 2,
     title: "IELTS Writing Task 2 - Agree/Disagree",
-    prompt: "Unpaid community service should be a compulsory part of high school. To what extent do you agree or disagree?",
-    fullText: "The proposal to make community service a mandatory requirement for high school students is a highly debated topic. I firmly believe that this initiative offers profound benefits. Firstly, it cultivates a sense of civic duty and empathy by exposing students to various social challenges.",
+    prompt:
+      "Unpaid community service should be a compulsory part of high school. To what extent do you agree or disagree?",
+    fullText:
+      "The proposal to make community service a mandatory requirement for high school students is a highly debated topic. I firmly believe that this initiative offers profound benefits. Firstly, it cultivates a sense of civic duty and empathy by exposing students to various social challenges.",
     targetScore: "7.5",
   },
   {
     task: 1,
     title: "IELTS Writing Task 1 - Bar Chart",
-    prompt: "The bar chart illustrates the participation of men and women in various sports in the UK.",
-    fullText: "The bar chart compares the levels of sports participation between genders in the United Kingdom. Overall, swimming emerges as the most popular activity for both men and women. Notably, women show a significantly higher preference for gymnastics and dance.",
+    prompt:
+      "The bar chart illustrates the participation of men and women in various sports in the UK.",
+    fullText:
+      "The bar chart compares the levels of sports participation between genders in the United Kingdom. Overall, swimming emerges as the most popular activity for both men and women. Notably, women show a significantly higher preference for gymnastics and dance.",
     targetScore: "8.0",
     chartType: "bar",
   },
   {
     task: 1,
     title: "IELTS Writing Task 1 - Table",
-    prompt: "The table shows the percentage of mobile phone owners who used various features from 2006 to 2010.",
-    fullText: "The table details the shifting trends in mobile phone usage over a five-year period. A notable observation is the exponential growth in internet access, starting at just 12% in 2006 and reaching 75% by 2010.",
+    prompt:
+      "The table shows the percentage of mobile phone owners who used various features from 2006 to 2010.",
+    fullText:
+      "The table details the shifting trends in mobile phone usage over a five-year period. A notable observation is the exponential growth in internet access, starting at just 12% in 2006 and reaching 75% by 2010.",
     targetScore: "7.0",
     chartType: "table",
   },
   {
     task: 2,
     title: "IELTS Writing Task 2 - Discuss Both Views",
-    prompt: "Some people think that it is best to work for the same organization for one's whole life. Others think that better to change jobs frequently.",
-    fullText: "The choice between lifelong employment at a single firm and frequent career changes is a pivotal one in the modern job market. Opponents of job-hopping argue that loyalty leads to greater security and specialized expertise.",
+    prompt:
+      "Some people think that it is best to work for the same organization for one's whole life. Others think that better to change jobs frequently.",
+    fullText:
+      "The choice between lifelong employment at a single firm and frequent career changes is a pivotal one in the modern job market. Opponents of job-hopping argue that loyalty leads to greater security and specialized expertise.",
     targetScore: "8.5",
   },
   {
     task: 1,
     title: "IELTS Writing Task 1 - Map",
-    prompt: "The maps below show a village called Ryemead in 1995 and its subsequent development in 2015.",
-    fullText: "The maps illustrate the transformation of Ryemead village over two decades. The most significant change is the conversion of farmland into residential areas. Additionally, several new amenities were introduced.",
+    prompt:
+      "The maps below show a village called Ryemead in 1995 and its subsequent development in 2015.",
+    fullText:
+      "The maps illustrate the transformation of Ryemead village over two decades. The most significant change is the conversion of farmland into residential areas. Additionally, several new amenities were introduced.",
     targetScore: "8.0",
     chartType: "map",
   },
   {
     task: 1,
     title: "IELTS Writing Task 1 - Line Graph",
-    prompt: "The line graph shows changes in the price of fresh fruit and vegetables in the US.",
-    fullText: "The line graph tracks the price fluctuations of produce in the United States over a twenty-year period. A striking trend is the continuous rise in fruit and vegetable prices compared to the general consumer price index.",
+    prompt:
+      "The line graph shows changes in the price of fresh fruit and vegetables in the US.",
+    fullText:
+      "The line graph tracks the price fluctuations of produce in the United States over a twenty-year period. A striking trend is the continuous rise in fruit and vegetable prices compared to the general consumer price index.",
     targetScore: "7.5",
     chartType: "line",
   },
   {
     task: 1,
     title: "IELTS Writing Task 1 - Pie Chart",
-    prompt: "The pie charts show the secondary school attendance by type in 2000 and 2010.",
-    fullText: "The pie charts depict the distribution of students across different types of secondary education over a decade. In 2000, community schools accounted for nearly half of all attendance.",
+    prompt:
+      "The pie charts show the secondary school attendance by type in 2000 and 2010.",
+    fullText:
+      "The pie charts depict the distribution of students across different types of secondary education over a decade. In 2000, community schools accounted for nearly half of all attendance.",
     targetScore: "7.5",
     chartType: "pie",
   },
@@ -86,23 +100,26 @@ const IELTSWritingInterface = () => {
     const startTyping = () => {
       setDisplayText("");
       setIsTyping(true);
-      
+
       typingInterval = setInterval(() => {
         if (charIndex < currentData.fullText.length) {
           setDisplayText(currentData.fullText.substring(0, charIndex + 1));
           charIndex++;
-          
+
           // If Task 1, check if we've reached a character limit that might truncate
           // Adding early exit for Task 1 to keep things snappy and ensure visibility
           if (currentData.task === 1 && charIndex > 220) {
             clearInterval(typingInterval);
             setIsTyping(false);
-            setTimeout(() => setCurrentIndex((prev) => (prev + 1) % mockData.length), 2000);
+            setTimeout(
+              () => setCurrentIndex((prev) => (prev + 1) % mockData.length),
+              2000,
+            );
           }
         } else {
           clearInterval(typingInterval);
           setIsTyping(false);
-          
+
           setTimeout(() => {
             setCurrentIndex((prev) => (prev + 1) % mockData.length);
           }, 2500);
@@ -124,7 +141,7 @@ const IELTSWritingInterface = () => {
           {/* Header */}
           <div className="flex items-center justify-between border-b pb-4 dark:border-zinc-800 shrink-0">
             <AnimatePresence mode="wait">
-              <motion.h3 
+              <motion.h3
                 key={currentIndex}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -148,7 +165,7 @@ const IELTSWritingInterface = () => {
           {/* Prompt Box */}
           <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border dark:border-zinc-800 h-[85px] shrink-0 overflow-hidden shadow-sm">
             <AnimatePresence mode="wait">
-              <motion.p 
+              <motion.p
                 key={currentIndex}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -163,14 +180,14 @@ const IELTSWritingInterface = () => {
           {/* Visual Data Area */}
           <AnimatePresence mode="wait">
             {currentData.task === 1 && currentData.chartType && (
-              <motion.div 
+              <motion.div
                 key={`chart-${currentIndex}`}
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 100 }}
                 exit={{ opacity: 0, height: 0 }}
                 className="shrink-0 py-3 bg-zinc-50/50 dark:bg-zinc-800/20 rounded-xl border border-dashed dark:border-zinc-800 flex items-center justify-center overflow-hidden"
               >
-                 <AnimatedChart type={currentData.chartType} />
+                <AnimatedChart type={currentData.chartType} />
               </motion.div>
             )}
           </AnimatePresence>
@@ -192,15 +209,22 @@ const IELTSWritingInterface = () => {
           {/* Footer */}
           <div className="flex items-center justify-between pt-3 shrink-0">
             <div className="text-zinc-600 dark:text-zinc-300 text-xs lg:text-sm font-black border-t w-full pt-4 dark:border-zinc-800 flex justify-between uppercase tracking-tighter">
-              <span>Word count: <span className="text-primary dark:text-primary">{wordCount} / {currentData.task === 1 ? '150' : '250'}</span></span>
-              <span className="opacity-60 text-[10px] tracking-widest font-black uppercase text-primary dark:text-primary">AI Feedback Loop</span>
+              <span>
+                Word count:{" "}
+                <span className="text-primary dark:text-primary">
+                  {wordCount} / {currentData.task === 1 ? "150" : "250"}
+                </span>
+              </span>
+              <span className="opacity-60 text-[10px] tracking-widest font-black uppercase text-primary dark:text-primary">
+                AI Feedback Loop
+              </span>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Synchronized Score Card */}
-      <motion.div 
+      <motion.div
         key={`score-${currentIndex}`}
         initial={{ scale: 0.95, opacity: 0, x: 20 }}
         animate={{ scale: 1, opacity: 1, x: 0 }}
@@ -216,7 +240,7 @@ const IELTSWritingInterface = () => {
               <p className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
                 Target Score
               </p>
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4 }}

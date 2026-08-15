@@ -54,11 +54,11 @@ const ITEMS_PER_PAGE = 6;
 
 /**
  * QuestionSelectorModal
- * 
+ *
  * A dialog allowing users to browse, search, filter, and randomly select
  * IELTS Task 1 (Academic/General report) and Task 2 (Essay) prompts from
  * the backend database.
- * 
+ *
  * Key Features:
  * - Server-side pagination for infinite scalability (>1,000+ prompts)
  * - 300ms debounced search on prompt text and topics
@@ -249,8 +249,9 @@ export default function QuestionSelectorModal({
                 Select Your Writing Prompt
               </DialogTitle>
               <DialogDescription className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-                Filter by task type, search topics, or surprise yourself with a
-                random official prompt.
+                Filter by task type, question format (e.g. Pie Chart, Table,
+                Map, Opinion, Advantages & Disadvantages), or choose a random
+                prompt.
               </DialogDescription>
             </div>
 
@@ -307,7 +308,7 @@ export default function QuestionSelectorModal({
                 <Input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search prompts or topics..."
+                  placeholder="Search prompts or question types..."
                   className="pl-9 pr-8 h-9 bg-zinc-50 dark:bg-zinc-900/80 border-border/50 dark:border-zinc-800 rounded-xl text-xs"
                 />
                 {searchQuery && (
@@ -325,7 +326,7 @@ export default function QuestionSelectorModal({
             {categories.length > 2 && (
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70 shrink-0 mr-1 flex items-center gap-1">
-                  <Filter className="h-3 w-3" /> Topic:
+                  <Filter className="h-3 w-3" /> Category:
                 </span>
                 {categories.map((cat) => (
                   <button
@@ -341,7 +342,7 @@ export default function QuestionSelectorModal({
                         : "bg-zinc-100/70 dark:bg-zinc-900/60 text-muted-foreground border-transparent hover:border-border",
                     )}
                   >
-                    {cat === "all" ? "All Topics" : cat}
+                    {cat === "all" ? "All Categories" : cat}
                   </button>
                 ))}
               </div>

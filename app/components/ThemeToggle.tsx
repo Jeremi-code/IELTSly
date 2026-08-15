@@ -23,7 +23,6 @@ export function ThemeToggle() {
   }
 
   const toggleTheme = (event: React.MouseEvent) => {
-
     const isAppearanceTransition =
       document.startViewTransition !== undefined &&
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -36,11 +35,11 @@ export function ThemeToggle() {
     // Get click position for radial animation origin
     const x = event.clientX;
     const y = event.clientY;
-    
+
     // Calculate the maximum distance to any corner for full coverage
     const endRadius = Math.hypot(
       Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
+      Math.max(y, window.innerHeight - y),
     );
 
     const transition = document.startViewTransition(async () => {
@@ -58,22 +57,22 @@ export function ThemeToggle() {
         },
         {
           duration: 700,
-          easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-          pseudoElement: '::view-transition-new(root)',
-        }
+          easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+          pseudoElement: "::view-transition-new(root)",
+        },
       );
 
       // Add subtle scale and fade effect to old theme
       document.documentElement.animate(
         {
-          transform: ['scale(1)', 'scale(1.05)'],
+          transform: ["scale(1)", "scale(1.05)"],
           opacity: [1, 0],
         },
         {
           duration: 350,
-          easing: 'cubic-bezier(0.4, 0, 1, 1)',
-          pseudoElement: '::view-transition-old(root)',
-        }
+          easing: "cubic-bezier(0.4, 0, 1, 1)",
+          pseudoElement: "::view-transition-old(root)",
+        },
       );
     });
   };

@@ -117,8 +117,10 @@ export function getQuestions(params?: {
   total: number;
 }> {
   const qs = new URLSearchParams();
-  if (params?.taskType && params.taskType !== "all") qs.set("taskType", params.taskType);
-  if (params?.category && params.category !== "all") qs.set("category", params.category);
+  if (params?.taskType && params.taskType !== "all")
+    qs.set("taskType", params.taskType);
+  if (params?.category && params.category !== "all")
+    qs.set("category", params.category);
   if (params?.search?.trim()) qs.set("search", params.search.trim());
   qs.set("page", String(params?.page ?? 1));
   qs.set("limit", String(params?.limit ?? 10));
@@ -149,8 +151,10 @@ export function getRandomQuestion(params?: {
   search?: string;
 }): Promise<Question> {
   const qs = new URLSearchParams();
-  if (params?.taskType && params.taskType !== "all") qs.set("taskType", params.taskType);
-  if (params?.category && params.category !== "all") qs.set("category", params.category);
+  if (params?.taskType && params.taskType !== "all")
+    qs.set("taskType", params.taskType);
+  if (params?.category && params.category !== "all")
+    qs.set("category", params.category);
   if (params?.search?.trim()) qs.set("search", params.search.trim());
   return api<Question>(`/api/questions/random?${qs.toString()}`);
 }

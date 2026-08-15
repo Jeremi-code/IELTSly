@@ -11,7 +11,6 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
   if (type === "bar") {
     return (
       <div className="flex items-end justify-between h-24 w-full gap-1.5 px-2">
-
         {[40, 70, 55, 90, 65, 80].map((height, i) => (
           <motion.div
             key={i}
@@ -25,12 +24,14 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
     );
   }
 
-
   if (type === "line") {
     return (
       <div className="relative h-24 w-full px-2 overflow-hidden flex items-center justify-center">
-        <svg viewBox="0 0 240 100" className="w-full h-full" preserveAspectRatio="none">
-
+        <svg
+          viewBox="0 0 240 100"
+          className="w-full h-full"
+          preserveAspectRatio="none"
+        >
           <motion.path
             d="M0,80 L50,60 L100,70 L150,30 L200,50 L240,10"
             fill="none"
@@ -62,7 +63,6 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
     return (
       <div className="relative h-24 w-full flex items-center justify-center">
         <svg viewBox="0 0 100 100" className="w-24 h-24 transform -rotate-90">
-
           <motion.circle
             cx="50"
             cy="50"
@@ -107,7 +107,6 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
   if (type === "table") {
     return (
       <div className="h-24 w-full flex flex-col items-center justify-center px-2">
-
         <div className="w-full border rounded-lg overflow-hidden border-slate-200 dark:border-zinc-800">
           {[...Array(4)].map((_, i) => (
             <motion.div
@@ -116,7 +115,9 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
               className={`grid grid-cols-3 p-2.5 border-b last:border-0 ${
-                i === 0 ? "bg-slate-50 dark:bg-zinc-800/50 font-extrabold text-xs" : "bg-white dark:bg-zinc-900 text-[11px]"
+                i === 0
+                  ? "bg-slate-50 dark:bg-zinc-800/50 font-extrabold text-xs"
+                  : "bg-white dark:bg-zinc-900 text-[11px]"
               } dark:border-zinc-800 text-center uppercase tracking-tight`}
             >
               <span>{i === 0 ? "Yearly Period" : 1990 + i * 5}</span>
@@ -129,17 +130,15 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
     );
   }
 
-
   return (
     <div className="relative h-24 w-full flex items-center justify-center p-2">
       <div className="relative w-full h-full bg-slate-100 dark:bg-zinc-800/50 rounded-xl overflow-hidden border dark:border-zinc-800 grid grid-cols-2 gap-px bg-slate-200 dark:bg-zinc-700">
-
         <div className="relative bg-teal-50 dark:bg-zinc-900 flex items-center justify-center overflow-hidden p-2">
           <div className="absolute inset-0 opacity-10 flex items-center justify-center">
-             <div className="w-20 h-20 border-2 border-teal-500 rounded-full" />
-             <div className="w-10 h-10 border-2 border-teal-500 absolute rotate-45" />
+            <div className="w-20 h-20 border-2 border-teal-500 rounded-full" />
+            <div className="w-10 h-10 border-2 border-teal-500 absolute rotate-45" />
           </div>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-[8px] font-bold text-teal-600 dark:text-teal-400 bg-teal-100 dark:bg-teal-900/50 px-2 py-1 rounded border border-teal-200 dark:border-teal-800 z-10"
@@ -149,11 +148,11 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
         </div>
         <div className="relative bg-emerald-50/50 dark:bg-zinc-900 flex items-center justify-center overflow-hidden p-2">
           <div className="absolute inset-0 opacity-10 flex flex-col items-center justify-center gap-1">
-             <div className="w-24 h-4 bg-emerald-500 rounded" />
-             <div className="w-24 h-4 bg-emerald-500 rounded" />
-             <div className="w-24 h-4 bg-emerald-500 rounded" />
+            <div className="w-24 h-4 bg-emerald-500 rounded" />
+            <div className="w-24 h-4 bg-emerald-500 rounded" />
+            <div className="w-24 h-4 bg-emerald-500 rounded" />
           </div>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
@@ -166,7 +165,5 @@ const AnimatedChart: React.FC<ChartProps> = ({ type }) => {
     </div>
   );
 };
-
-
 
 export default AnimatedChart;

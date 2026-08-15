@@ -34,8 +34,11 @@ const stepLists = [
 
 const Steps = () => {
   return (
-    <div id="how-it-works" className="py-24 px-6 lg:px-20 bg-white dark:bg-zinc-900 transition-colors duration-500 scroll-mt-24">
-      <motion.div 
+    <div
+      id="how-it-works"
+      className="py-24 px-6 lg:px-20 bg-white dark:bg-zinc-900 transition-colors duration-500 scroll-mt-24"
+    >
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -54,8 +57,7 @@ const Steps = () => {
         </p>
       </motion.div>
 
-
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
@@ -65,10 +67,11 @@ const Steps = () => {
         {stepLists.map((step, index) => (
           <div key={index} className="relative group">
             <Card className="relative z-10 border-none shadow-none bg-transparent text-center flex flex-col items-center">
-
               <div className="pb-4 px-0 flex flex-col items-center">
                 <div className="relative mb-6">
-                  <div className={`w-20 h-20 rounded-3xl ${step.bgColor} flex items-center justify-center group-hover:rotate-6 transition-transform duration-300 ring-4 ring-white dark:ring-zinc-900`}>
+                  <div
+                    className={`w-20 h-20 rounded-3xl ${step.bgColor} flex items-center justify-center group-hover:rotate-6 transition-transform duration-300 ring-4 ring-white dark:ring-zinc-900`}
+                  >
                     <step.icon className={`w-10 h-10 ${step.color}`} />
                   </div>
                   <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-slate-900 dark:bg-zinc-50 text-white dark:text-zinc-900 flex items-center justify-center font-bold text-sm border-4 border-white dark:border-zinc-900">
@@ -83,7 +86,6 @@ const Steps = () => {
                 {step.description}
               </div>
             </Card>
-
           </div>
         ))}
       </motion.div>

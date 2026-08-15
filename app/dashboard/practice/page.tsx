@@ -118,7 +118,9 @@ const itemVariants = {
 
 const PracticePage = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedMode, setSelectedMode] = useState<"practice" | "exam">("practice");
+  const [selectedMode, setSelectedMode] = useState<"practice" | "exam">(
+    "practice",
+  );
 
   const handleOpenMode = (mode: "practice" | "exam") => {
     setSelectedMode(mode);

@@ -20,9 +20,9 @@ export function ModeToggle() {
   };
 
   return (
-    <Button 
-      variant="outline" 
-      size="icon" 
+    <Button
+      variant="outline"
+      size="icon"
       onClick={toggleTheme}
       className="group rounded-full bg-background/50 backdrop-blur-sm border-zinc-200/50 dark:border-zinc-800/50 hover:border-primary/50 transition-all duration-300"
     >

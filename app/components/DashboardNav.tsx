@@ -29,12 +29,12 @@ const navItems = [
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
-const DashboardNav = ({ 
-  collapsed: externalCollapsed, 
-  onToggle 
-}: { 
-  collapsed?: boolean; 
-  onToggle?: (val: boolean) => void 
+const DashboardNav = ({
+  collapsed: externalCollapsed,
+  onToggle,
+}: {
+  collapsed?: boolean;
+  onToggle?: (val: boolean) => void;
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -43,7 +43,8 @@ const DashboardNav = ({
   const { data: session } = useSession();
 
   // Sync with external state if provided, otherwise manage internally
-  const collapsed = externalCollapsed !== undefined ? externalCollapsed : isCollapsed;
+  const collapsed =
+    externalCollapsed !== undefined ? externalCollapsed : isCollapsed;
 
   const toggleSidebar = () => {
     const newVal = !collapsed;
@@ -77,7 +78,7 @@ const DashboardNav = ({
     .slice(0, 2);
 
   return (
-    <motion.aside 
+    <motion.aside
       initial={false}
       animate={{ width: collapsed ? 80 : 256 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -90,7 +91,11 @@ const DashboardNav = ({
         onClick={toggleSidebar}
         className="absolute -right-3 top-10 h-6 w-6 rounded-full border border-zinc-200 bg-background shadow-md dark:border-zinc-800 dark:bg-zinc-950 z-50 hover:bg-accent"
       >
-        {collapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
+        {collapsed ? (
+          <ChevronRight className="h-3 w-3" />
+        ) : (
+          <ChevronLeft className="h-3 w-3" />
+        )}
       </Button>
 
       {/* Inner content wrapper with overflow clipping */}
@@ -98,9 +103,9 @@ const DashboardNav = ({
         {/* Logo Section */}
         <div className="h-16 mb-8 flex items-center px-2">
           <Logo className="h-12 w-12 shrink-0" />
-          <motion.span 
+          <motion.span
             initial={false}
-            animate={{ 
+            animate={{
               opacity: collapsed ? 0 : 1,
               width: collapsed ? 0 : "auto",
               marginLeft: collapsed ? 0 : 12,
@@ -124,13 +129,17 @@ const DashboardNav = ({
                     "group flex items-center rounded-xl p-2.5 text-sm font-medium transition-all duration-200 px-3",
                     isActive
                       ? "bg-primary text-primary-foreground dark:text-white shadow-lg shadow-primary/20"
-                      : "text-muted-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-50 cursor-pointer"
+                      : "text-muted-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-50 cursor-pointer",
                   )}
                 >
-                  <item.icon className={cn(
-                    "h-5 w-5 transition-transform duration-200 group-hover:scale-110 shrink-0",
-                    isActive ? "text-primary-foreground dark:text-white" : "text-muted-foreground group-hover:text-zinc-900 dark:group-hover:text-zinc-50"
-                  )} />
+                  <item.icon
+                    className={cn(
+                      "h-5 w-5 transition-transform duration-200 group-hover:scale-110 shrink-0",
+                      isActive
+                        ? "text-primary-foreground dark:text-white"
+                        : "text-muted-foreground group-hover:text-zinc-900 dark:group-hover:text-zinc-50",
+                    )}
+                  />
                   <motion.span
                     initial={false}
                     animate={{
@@ -151,31 +160,37 @@ const DashboardNav = ({
 
         {/* Bottom Section */}
         <div className="mt-auto space-y-4 pt-4 border-t border-zinc-200/50 dark:border-zinc-800/50">
-          <div className={cn(
-            "flex items-center justify-between",
-            collapsed ? "flex-col gap-4" : "px-2"
-          )}>
-             <ModeToggle />
-             <Button
-               variant="ghost"
-               size="icon"
-               onClick={handleLogout}
-               disabled={isLoggingOut}
-               title="Sign out"
-               className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full h-9 w-9"
-             >
-               {isLoggingOut ? (
-                 <Loader2 className="h-4 w-4 animate-spin" />
-               ) : (
-                 <LogOut className="h-4 w-4" />
-               )}
-             </Button>
+          <div
+            className={cn(
+              "flex items-center justify-between",
+              collapsed ? "flex-col gap-4" : "px-2",
+            )}
+          >
+            <ModeToggle />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              title="Sign out"
+              className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full h-9 w-9"
+            >
+              {isLoggingOut ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <LogOut className="h-4 w-4" />
+              )}
+            </Button>
           </div>
-          
-          <div className={cn(
-            "flex items-center rounded-2xl transition-all duration-300 overflow-hidden",
-            collapsed ? "justify-center p-1 bg-transparent border-transparent" : "bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/50 p-3"
-          )}>
+
+          <div
+            className={cn(
+              "flex items-center rounded-2xl transition-all duration-300 overflow-hidden",
+              collapsed
+                ? "justify-center p-1 bg-transparent border-transparent"
+                : "bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/50 p-3",
+            )}
+          >
             <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-emerald-400 p-[2px] flex-shrink-0">
               {user?.image ? (
                 <img
@@ -189,9 +204,9 @@ const DashboardNav = ({
                 </div>
               )}
             </div>
-            <motion.div 
+            <motion.div
               initial={false}
-              animate={{ 
+              animate={{
                 opacity: collapsed ? 0 : 1,
                 width: collapsed ? 0 : "auto",
                 marginLeft: collapsed ? 0 : 12,

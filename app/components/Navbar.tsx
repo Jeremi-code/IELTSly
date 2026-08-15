@@ -7,11 +7,7 @@ import Logo from "./Logo";
 import { Menu, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSession } from "@/lib/auth-client";
 
 const Navbar = () => {
@@ -44,11 +40,12 @@ const Navbar = () => {
     const element = document.getElementById(targetId);
     if (element) {
       const offset = 80; // Navbar height
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset - offset;
+      const elementPosition =
+        element.getBoundingClientRect().top + window.pageYOffset - offset;
 
       window.scrollTo({
         top: elementPosition,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     } else {
       router.push(`/#${targetId}`);
@@ -77,7 +74,9 @@ const Navbar = () => {
             {navItems.map((item) => (
               <button
                 key={item}
-                onClick={() => scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))}
+                onClick={() =>
+                  scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))
+                }
                 className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-all duration-300 relative group cursor-pointer bg-transparent border-none p-0 flex flex-col items-center"
               >
                 {item}
@@ -92,10 +91,10 @@ const Navbar = () => {
             {isPending ? (
               <div className="w-24 h-9 rounded-full bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
             ) : isAuthenticated ? (
-              <Button 
-                variant="blue" 
+              <Button
+                variant="blue"
                 className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5"
-                onClick={() => router.push('/dashboard')}
+                onClick={() => router.push("/dashboard")}
               >
                 <LayoutDashboard className="mr-2 h-4 w-4" />
                 Dashboard
@@ -105,14 +104,14 @@ const Navbar = () => {
                 <Button
                   variant="ghost"
                   className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-primary dark:hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all duration-300 rounded-full px-5"
-                  onClick={() => router.push('/signin')}
+                  onClick={() => router.push("/signin")}
                 >
                   Sign In
                 </Button>
-                <Button 
-                  variant="blue" 
+                <Button
+                  variant="blue"
                   className="rounded-full px-6 font-semibold text-sm shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5"
-                  onClick={() => router.push('/signin?mode=signup')}
+                  onClick={() => router.push("/signin?mode=signup")}
                 >
                   Get Started
                 </Button>
@@ -125,11 +124,7 @@ const Navbar = () => {
             <ThemeToggle />
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full"
-                >
+                <Button variant="ghost" size="icon" className="rounded-full">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
@@ -142,13 +137,15 @@ const Navbar = () => {
                   {navItems.map((item) => (
                     <button
                       key={item}
-                      onClick={() => scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))}
+                      onClick={() =>
+                        scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))
+                      }
                       className="text-2xl font-semibold text-zinc-700 dark:text-zinc-300 hover:text-primary dark:hover:text-primary transition-colors duration-200 text-left bg-transparent border-none p-0"
                     >
                       {item}
                     </button>
                   ))}
-                  
+
                   <div className="flex flex-col gap-4 mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
                     {isAuthenticated ? (
                       <Button
@@ -156,7 +153,7 @@ const Navbar = () => {
                         className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-primary/25"
                         onClick={() => {
                           setIsMobileMenuOpen(false);
-                          router.push('/dashboard');
+                          router.push("/dashboard");
                         }}
                       >
                         <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -169,7 +166,7 @@ const Navbar = () => {
                           className="w-full justify-center text-base font-semibold"
                           onClick={() => {
                             setIsMobileMenuOpen(false);
-                            router.push('/signin');
+                            router.push("/signin");
                           }}
                         >
                           Sign In
@@ -179,7 +176,7 @@ const Navbar = () => {
                           className="w-full justify-center rounded-full font-semibold text-base shadow-lg shadow-primary/25"
                           onClick={() => {
                             setIsMobileMenuOpen(false);
-                            router.push('/signin?mode=signup');
+                            router.push("/signin?mode=signup");
                           }}
                         >
                           Get Started

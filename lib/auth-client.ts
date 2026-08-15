@@ -5,12 +5,7 @@ export const authClient = createAuthClient({
 });
 
 // Export convenience methods
-export const {
-  signIn,
-  signUp,
-  signOut,
-  useSession,
-} = authClient;
+export const { signIn, signUp, signOut, useSession } = authClient;
 
 // Export inferred types
 export type Session = typeof authClient.$Infer.Session;

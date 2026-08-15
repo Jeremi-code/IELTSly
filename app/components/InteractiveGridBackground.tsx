@@ -9,9 +9,11 @@ interface GridCell {
 
 export default function InteractiveGridBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(
+    null,
+  );
   const animationFrameRef = useRef<number | undefined>(undefined);
-  
+
   const gridSize = 50; // Size of each grid cell
   const highlightFade = useRef<Map<string, number>>(new Map<string, number>());
 
@@ -54,7 +56,7 @@ export default function InteractiveGridBackground() {
       // Get current mouse grid position
       let currentRow = -1;
       let currentCol = -1;
-      
+
       if (mousePos) {
         currentCol = Math.floor(mousePos.x / gridSize);
         currentRow = Math.floor(mousePos.y / gridSize);
@@ -62,7 +64,7 @@ export default function InteractiveGridBackground() {
 
       // Update highlight fade values
       const newFadeMap = new Map<string, number>();
-      
+
       if (currentRow >= 0 && currentCol >= 0) {
         // Add current position with full opacity
         for (let r = 0; r < rows; r++) {
@@ -111,17 +113,17 @@ export default function InteractiveGridBackground() {
       highlightFade.current.forEach((opacity, key) => {
         const parts = key.split("-");
         const type = parts[0];
-        
+
         if (type === "row") {
           const row = parseInt(parts[1]);
           const col = parseInt(parts[2]);
-          
+
           ctx.fillStyle = `rgba(16, 185, 129, ${opacity * 0.15})`; // emerald-500
           ctx.fillRect(col * gridSize, row * gridSize, gridSize, gridSize);
         } else if (type === "col") {
           const col = parseInt(parts[1]);
           const row = parseInt(parts[2]);
-          
+
           ctx.fillStyle = `rgba(16, 185, 129, ${opacity * 0.15})`; // emerald-500
           ctx.fillRect(col * gridSize, row * gridSize, gridSize, gridSize);
         }
@@ -131,10 +133,10 @@ export default function InteractiveGridBackground() {
       if (currentRow >= 0 && currentCol >= 0) {
         ctx.strokeStyle = "rgba(16, 185, 129, 0.4)"; // emerald-500
         ctx.lineWidth = 2;
-        
+
         // Highlight current row
         ctx.strokeRect(0, currentRow * gridSize, canvas.width, gridSize);
-        
+
         // Highlight current column
         ctx.strokeRect(currentCol * gridSize, 0, gridSize, canvas.height);
       }

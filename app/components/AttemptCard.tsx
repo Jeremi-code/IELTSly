@@ -23,7 +23,7 @@ const AttemptCard = () => {
           <p className="text-[#959595]">Band score</p>
         </div>
         <div className="p-2 flex items-center justify-center hover:bg-[#204CC0] hover:text-white rounded-lg">
-            <MoveRight />
+          <MoveRight />
         </div>
       </div>
     </div>

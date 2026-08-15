@@ -8,8 +8,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn, signUp } from "@/lib/auth-client";
@@ -18,7 +32,8 @@ const SignInContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
   const [activeTab, setActiveTab] = useState("signin");
 
   // Form states
@@ -120,7 +135,7 @@ const SignInContent = () => {
   return (
     <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-zinc-950 relative overflow-hidden">
       <Navbar />
-      
+
       <main className="flex-1 flex items-center justify-center p-4 relative z-10 pt-20">
         <div className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500">
           <div className="text-center mb-4 space-y-1">
@@ -129,7 +144,9 @@ const SignInContent = () => {
               {activeTab === "signin" ? "Welcome Back" : "Create an Account"}
             </h1>
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              {activeTab === "signin" ? "Sign in to continue your IELTS journey" : "Start your journey to success today"}
+              {activeTab === "signin"
+                ? "Sign in to continue your IELTS journey"
+                : "Start your journey to success today"}
             </p>
           </div>
 
@@ -142,20 +159,42 @@ const SignInContent = () => {
                 </div>
               )}
 
-              <Tabs defaultValue="signin" value={activeTab} onValueChange={(v) => { setActiveTab(v); setError(""); }} className="w-full">
+              <Tabs
+                defaultValue="signin"
+                value={activeTab}
+                onValueChange={(v) => {
+                  setActiveTab(v);
+                  setError("");
+                }}
+                className="w-full"
+              >
                 <TabsList className="grid w-full grid-cols-2 mb-4 h-10 bg-zinc-100/80 dark:bg-zinc-800/50 p-1">
-                  <TabsTrigger value="signin" className="rounded-sm font-semibold text-xs h-full data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-sm data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-50 transition-all">
+                  <TabsTrigger
+                    value="signin"
+                    className="rounded-sm font-semibold text-xs h-full data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-sm data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-50 transition-all"
+                  >
                     Sign In
                   </TabsTrigger>
-                  <TabsTrigger value="signup" className="rounded-sm font-semibold text-xs h-full data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-sm data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-50 transition-all">
+                  <TabsTrigger
+                    value="signup"
+                    className="rounded-sm font-semibold text-xs h-full data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-sm data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-50 transition-all"
+                  >
                     Sign Up
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="signin" className="focus-visible:outline-none focus-visible:ring-0">
+                <TabsContent
+                  value="signin"
+                  className="focus-visible:outline-none focus-visible:ring-0"
+                >
                   <form onSubmit={handleSignIn} className="space-y-3">
                     <div className="space-y-1.5">
-                      <Label htmlFor="email" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Email</Label>
+                      <Label
+                        htmlFor="email"
+                        className="text-xs font-medium text-zinc-700 dark:text-zinc-300"
+                      >
+                        Email
+                      </Label>
                       <div className="relative group">
                         <Mail className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
                         <Input
@@ -172,33 +211,47 @@ const SignInContent = () => {
                     </div>
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <Label htmlFor="password" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Password</Label>
-                        <Link href="#" className="text-[10px] font-semibold text-primary hover:text-primary transition-colors">
+                        <Label
+                          htmlFor="password"
+                          className="text-xs font-medium text-zinc-700 dark:text-zinc-300"
+                        >
+                          Password
+                        </Label>
+                        <Link
+                          href="#"
+                          className="text-[10px] font-semibold text-primary hover:text-primary transition-colors"
+                        >
                           Forgot password?
                         </Link>
                       </div>
                       <div className="relative group">
                         <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
-                        <Input 
-                          id="password" 
-                          type={isPasswordVisible ? "text" : "password"} 
+                        <Input
+                          id="password"
+                          type={isPasswordVisible ? "text" : "password"}
                           value={signInPassword}
                           onChange={(e) => setSignInPassword(e.target.value)}
                           required
                           disabled={isLoading}
-                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" 
+                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
                           placeholder="••••••••"
                         />
                         <button
                           type="button"
-                          onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                          onClick={() =>
+                            setIsPasswordVisible(!isPasswordVisible)
+                          }
                           className="absolute right-3 top-2.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 focus:outline-none transition-colors"
                         >
-                          {isPasswordVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                          {isPasswordVisible ? (
+                            <Eye className="h-4 w-4" />
+                          ) : (
+                            <EyeOff className="h-4 w-4" />
+                          )}
                         </button>
                       </div>
                     </div>
-                    <Button 
+                    <Button
                       type="submit"
                       variant="blue"
                       disabled={isLoading}
@@ -218,11 +271,19 @@ const SignInContent = () => {
                   </form>
                 </TabsContent>
 
-                <TabsContent value="signup" className="focus-visible:outline-none focus-visible:ring-0">
+                <TabsContent
+                  value="signup"
+                  className="focus-visible:outline-none focus-visible:ring-0"
+                >
                   <form onSubmit={handleSignUp} className="space-y-3">
                     <div className="grid grid-cols-2 gap-2">
                       <div className="space-y-1.5">
-                        <Label htmlFor="signup-name" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Full Name</Label>
+                        <Label
+                          htmlFor="signup-name"
+                          className="text-xs font-medium text-zinc-700 dark:text-zinc-300"
+                        >
+                          Full Name
+                        </Label>
                         <div className="relative group">
                           <User className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
                           <Input
@@ -238,7 +299,12 @@ const SignInContent = () => {
                         </div>
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="signup-email" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Email</Label>
+                        <Label
+                          htmlFor="signup-email"
+                          className="text-xs font-medium text-zinc-700 dark:text-zinc-300"
+                        >
+                          Email
+                        </Label>
                         <div className="relative group">
                           <Mail className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
                           <Input
@@ -255,52 +321,78 @@ const SignInContent = () => {
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="signup-password" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Password</Label>
+                      <Label
+                        htmlFor="signup-password"
+                        className="text-xs font-medium text-zinc-700 dark:text-zinc-300"
+                      >
+                        Password
+                      </Label>
                       <div className="relative group">
                         <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
-                        <Input 
-                          id="signup-password" 
-                          type={isPasswordVisible ? "text" : "password"} 
+                        <Input
+                          id="signup-password"
+                          type={isPasswordVisible ? "text" : "password"}
                           value={signUpPassword}
                           onChange={(e) => setSignUpPassword(e.target.value)}
                           required
                           disabled={isLoading}
-                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" 
+                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
                           placeholder="Create a password"
                         />
                         <button
                           type="button"
-                          onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                          onClick={() =>
+                            setIsPasswordVisible(!isPasswordVisible)
+                          }
                           className="absolute right-3 top-2.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 focus:outline-none transition-colors"
                         >
-                          {isPasswordVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                          {isPasswordVisible ? (
+                            <Eye className="h-4 w-4" />
+                          ) : (
+                            <EyeOff className="h-4 w-4" />
+                          )}
                         </button>
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="signup-confirm" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Confirm Password</Label>
+                      <Label
+                        htmlFor="signup-confirm"
+                        className="text-xs font-medium text-zinc-700 dark:text-zinc-300"
+                      >
+                        Confirm Password
+                      </Label>
                       <div className="relative group">
                         <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
-                        <Input 
-                          id="signup-confirm" 
-                          type={isConfirmPasswordVisible ? "text" : "password"} 
+                        <Input
+                          id="signup-confirm"
+                          type={isConfirmPasswordVisible ? "text" : "password"}
                           value={signUpConfirmPassword}
-                          onChange={(e) => setSignUpConfirmPassword(e.target.value)}
+                          onChange={(e) =>
+                            setSignUpConfirmPassword(e.target.value)
+                          }
                           required
                           disabled={isLoading}
-                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" 
+                          className="pl-9 pr-9 h-9 text-sm bg-white dark:bg-zinc-950/50 border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
                           placeholder="Confirm password"
                         />
                         <button
                           type="button"
-                          onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+                          onClick={() =>
+                            setIsConfirmPasswordVisible(
+                              !isConfirmPasswordVisible,
+                            )
+                          }
                           className="absolute right-3 top-2.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 focus:outline-none transition-colors"
                         >
-                          {isConfirmPasswordVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                          {isConfirmPasswordVisible ? (
+                            <Eye className="h-4 w-4" />
+                          ) : (
+                            <EyeOff className="h-4 w-4" />
+                          )}
                         </button>
                       </div>
                     </div>
-                    <Button 
+                    <Button
                       type="submit"
                       variant="blue"
                       disabled={isLoading}
@@ -333,8 +425,8 @@ const SignInContent = () => {
               </div>
 
               <div className="grid grid-cols-1">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   disabled={isLoading}
                   onClick={handleGoogleSignIn}
                   className="w-full h-11 rounded-full border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 bg-white dark:bg-zinc-950/50 backdrop-blur-sm text-sm font-semibold shadow-sm transition-all duration-300 hover:shadow-md flex items-center justify-center gap-2"
@@ -346,7 +438,21 @@ const SignInContent = () => {
             </CardContent>
             <CardFooter className="px-8 pb-3 pt-1 bg-zinc-50/50 dark:bg-zinc-900/50 border-t border-zinc-200/50 dark:border-zinc-800/50 flex justify-center">
               <p className="text-xs text-center text-zinc-500 max-w-xs leading-relaxed">
-                By clicking &quot;Continue&quot;, you agree to our <Link href="#" className="underline underline-offset-2 hover:text-primary transition-colors">Terms of Service</Link> and <Link href="#" className="underline underline-offset-2 hover:text-primary transition-colors">Privacy Policy</Link>.
+                By clicking &quot;Continue&quot;, you agree to our{" "}
+                <Link
+                  href="#"
+                  className="underline underline-offset-2 hover:text-primary transition-colors"
+                >
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="#"
+                  className="underline underline-offset-2 hover:text-primary transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+                .
               </p>
             </CardFooter>
           </Card>
@@ -359,14 +465,16 @@ const SignInContent = () => {
 
 const SignInPage = () => {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
-        <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="w-16 h-16 bg-zinc-200 dark:bg-zinc-800 rounded-2xl" />
-          <div className="h-4 w-24 bg-zinc-200 dark:bg-zinc-800 rounded" />
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+          <div className="animate-pulse flex flex-col items-center gap-4">
+            <div className="w-16 h-16 bg-zinc-200 dark:bg-zinc-800 rounded-2xl" />
+            <div className="h-4 w-24 bg-zinc-200 dark:bg-zinc-800 rounded" />
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <SignInContent />
     </Suspense>
   );

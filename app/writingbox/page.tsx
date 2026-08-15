@@ -15,6 +15,9 @@ import {
   CheckCircle2,
   AlertCircle,
   Key,
+  ImageIcon,
+  ExternalLink,
+  ZoomIn,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../components/Navbar";
@@ -34,6 +37,60 @@ import type { Question } from "@/types/question";
 import type { Evaluation } from "@/types/essay";
 import type { AICredentialStatus } from "@/types/ai";
 import { cn } from "@/lib/utils";
+
+// ── TaskFigure ─────────────────────────────────────────────────────
+function TaskFigure({ imageUrl }: { imageUrl: string }) {
+  const [zoomed, setZoomed] = React.useState(false);
+  return (
+    <div className="rounded-xl overflow-hidden border border-border/50 dark:border-zinc-700/60 bg-white dark:bg-zinc-900 shadow-sm">
+      {/* Header */}
+      <div className="flex items-center justify-between px-3 py-2 border-b border-border/40 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/80">
+        <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+          <ImageIcon className="h-3 w-3" /> Figure / Diagram
+        </span>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setZoomed((z) => !z)}
+            className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground hover:text-primary transition-colors"
+            title={zoomed ? "Collapse" : "Zoom in"}
+          >
+            <ZoomIn className="h-3 w-3" />
+            {zoomed ? "Collapse" : "Zoom"}
+          </button>
+          <a
+            href={imageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground hover:text-primary transition-colors"
+            title="Open image in new tab"
+          >
+            <ExternalLink className="h-3 w-3" />
+            Full size
+          </a>
+        </div>
+      </div>
+      {/* Image */}
+      <div
+        className={cn(
+          "transition-all duration-300 overflow-auto",
+          zoomed ? "max-h-[600px]" : "max-h-64",
+        )}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageUrl}
+          alt="IELTS Task 1 figure — graph, chart, table, or diagram for this prompt"
+          className={cn(
+            "w-full object-contain transition-transform duration-300",
+            zoomed ? "cursor-zoom-out" : "cursor-zoom-in",
+          )}
+          onClick={() => setZoomed((z) => !z)}
+        />
+      </div>
+    </div>
+  );
+}
 
 function WritingBoxInner() {
   const router = useRouter();
@@ -308,19 +365,28 @@ function WritingBoxInner() {
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="text-zinc-800 dark:text-zinc-200 text-sm sm:text-base leading-relaxed font-medium"
+                        className="space-y-4"
                       >
-                        {question ? (
-                          question.text
-                        ) : questionLoading ? (
-                          <div className="space-y-2 py-4">
-                            <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse w-full" />
-                            <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse w-5/6" />
-                            <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse w-2/3" />
-                          </div>
-                        ) : (
-                          "Please click 'Change Question' above to choose an essay prompt."
-                        )}
+                        {/* Question text */}
+                        <p className="text-zinc-800 dark:text-zinc-200 text-sm sm:text-base leading-relaxed font-medium">
+                          {question ? (
+                            question.text
+                          ) : questionLoading ? (
+                            <span className="space-y-2 py-4 block">
+                              <span className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse w-full block" />
+                              <span className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse w-5/6 block" />
+                              <span className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse w-2/3 block" />
+                            </span>
+                          ) : (
+                            "Please click 'Change Question' above to choose an essay prompt."
+                          )}
+                        </p>
+
+                        {/* Task 1 Figure: graph / chart / table / diagram */}
+                        {question?.taskType === "task1" &&
+                          question.imageUrl && (
+                            <TaskFigure imageUrl={question.imageUrl} />
+                          )}
                       </motion.div>
                     </AnimatePresence>
                   </div>

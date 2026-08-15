@@ -18,7 +18,7 @@ interface item {
 }
 
 interface props {
-    item: item;
+  item: item;
 }
 
 const SidePopUp: React.FC<props> = (props) => {

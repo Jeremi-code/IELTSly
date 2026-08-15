@@ -3,18 +3,24 @@
 import React, { useState, useMemo, useEffect } from "react";
 import DashboardShell from "../../components/DashboardShell";
 import { cn } from "@/lib/utils";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  NotepadText, 
-  Search, 
-  Filter, 
-  Clock, 
-  ChevronRight, 
-  Sparkles, 
-  FileText, 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  NotepadText,
+  Search,
+  Filter,
+  Clock,
+  ChevronRight,
+  Sparkles,
+  FileText,
   CheckCircle,
   HelpCircle,
-  BookOpen
+  BookOpen,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -58,7 +64,9 @@ function mapEssay(essay: Essay): HistoryEssay {
 
 const HistoryPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<"All" | "Task 1" | "Task 2">("All");
+  const [activeTab, setActiveTab] = useState<"All" | "Task 1" | "Task 2">(
+    "All",
+  );
   const [essays, setEssays] = useState<Essay[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -66,15 +74,18 @@ const HistoryPage = () => {
   useEffect(() => {
     getEssays({ limit: 100 })
       .then((res) => setEssays(res.essays))
-      .catch(() => setLoadError("Could not load your essays. Is the API running?"))
+      .catch(() =>
+        setLoadError("Could not load your essays. Is the API running?"),
+      )
       .finally(() => setLoading(false));
   }, []);
 
   // Filtering logic
   const filteredEssays = useMemo(() => {
     return essays.map(mapEssay).filter((essay) => {
-      const matchesSearch = essay.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            essay.id.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch =
+        essay.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        essay.id.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesTab = activeTab === "All" || essay.type === activeTab;
       return matchesSearch && matchesTab;
     });
@@ -94,7 +105,10 @@ const HistoryPage = () => {
         </div>
 
         <Link href="/dashboard/practice">
-          <Button variant="blue" className="rounded-full shadow-lg shadow-primary/20 hover:scale-105 transition-transform cursor-pointer">
+          <Button
+            variant="blue"
+            className="rounded-full shadow-lg shadow-primary/20 hover:scale-105 transition-transform cursor-pointer"
+          >
             <Sparkles className="h-4 w-4 mr-2" />
             Write New Essay
           </Button>
@@ -113,7 +127,7 @@ const HistoryPage = () => {
                 "px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer flex-1 sm:flex-none whitespace-nowrap",
                 activeTab === tab
                   ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               {tab}
@@ -124,11 +138,11 @@ const HistoryPage = () => {
         {/* Search */}
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search essays by title or ID..." 
+          <Input
+            placeholder="Search essays by title or ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 bg-white/50 dark:bg-zinc-900/50 border-border/50 dark:border-zinc-800/80 rounded-xl" 
+            className="pl-9 bg-white/50 dark:bg-zinc-900/50 border-border/50 dark:border-zinc-800/80 rounded-xl"
           />
         </div>
       </div>
@@ -167,7 +181,6 @@ const HistoryPage = () => {
               <Card className="group overflow-hidden border-border/50 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/20">
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row gap-6 justify-between">
-                    
                     {/* Details Column */}
                     <div className="space-y-3 flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -182,11 +195,11 @@ const HistoryPage = () => {
                           {essay.date}
                         </span>
                       </div>
-                      
+
                       <h3 className="text-lg font-bold truncate group-hover:text-primary transition-colors">
                         {essay.title}
                       </h3>
-                      
+
                       {/* Sub-Criteria bands */}
                       <div className="flex gap-4 flex-wrap text-xs text-muted-foreground pt-1">
                         <span className="bg-zinc-100/50 dark:bg-zinc-900/50 px-2.5 py-1 rounded-lg border border-border/10">
@@ -223,20 +236,27 @@ const HistoryPage = () => {
                       <div className="text-center lg:space-y-1">
                         <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-primary to-emerald-400 p-[3px] flex items-center justify-center shadow-md">
                           <div className="h-full w-full rounded-full bg-white dark:bg-zinc-950 flex flex-col items-center justify-center">
-                            <span className="text-xl font-black leading-none">{essay.score}</span>
-                            <span className="text-[8px] text-muted-foreground font-black uppercase tracking-widest mt-0.5">Band</span>
+                            <span className="text-xl font-black leading-none">
+                              {essay.score}
+                            </span>
+                            <span className="text-[8px] text-muted-foreground font-black uppercase tracking-widest mt-0.5">
+                              Band
+                            </span>
                           </div>
                         </div>
                       </div>
-                      
+
                       <Link href={`/dashboard/history`}>
-                        <Button variant="outline" size="sm" className="rounded-full gap-1 border-primary/20 hover:bg-primary hover:text-white transition-all cursor-pointer">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-full gap-1 border-primary/20 hover:bg-primary hover:text-white transition-all cursor-pointer"
+                        >
                           Details
                           <ChevronRight className="h-3 w-3" />
                         </Button>
                       </Link>
                     </div>
-
                   </div>
                 </CardContent>
               </Card>
@@ -250,12 +270,19 @@ const HistoryPage = () => {
               </div>
               <div className="max-w-xs space-y-2 mx-auto">
                 <p className="font-bold text-lg">No essays found</p>
-                <p className="text-sm text-muted-foreground">{searchQuery || activeTab !== "All" ? "Try modifying your query or filter keywords." : "Write your first essay to see it here."}</p>
+                <p className="text-sm text-muted-foreground">
+                  {searchQuery || activeTab !== "All"
+                    ? "Try modifying your query or filter keywords."
+                    : "Write your first essay to see it here."}
+                </p>
               </div>
               {(searchQuery || activeTab !== "All") && (
-                <Button 
+                <Button
                   variant="outline"
-                  onClick={() => { setSearchQuery(""); setActiveTab("All"); }}
+                  onClick={() => {
+                    setSearchQuery("");
+                    setActiveTab("All");
+                  }}
                   className="rounded-full cursor-pointer"
                 >
                   Clear Filters

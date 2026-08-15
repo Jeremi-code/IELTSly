@@ -58,9 +58,11 @@ const featureLists = [
 
 const Features = () => {
   return (
-    <div id="features" className="w-full min-h-screen py-10 px-6 lg:px-20 bg-slate-50 dark:bg-zinc-950 flex flex-col items-center justify-center gap-12 lg:gap-16 transition-colors duration-500 scroll-mt-24">
-
-      <motion.div 
+    <div
+      id="features"
+      className="w-full min-h-screen py-10 px-6 lg:px-20 bg-slate-50 dark:bg-zinc-950 flex flex-col items-center justify-center gap-12 lg:gap-16 transition-colors duration-500 scroll-mt-24"
+    >
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -79,7 +81,7 @@ const Features = () => {
         </p>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
@@ -87,12 +89,14 @@ const Features = () => {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl mx-auto"
       >
         {featureLists.map((feature, index) => (
-          <Card 
-            key={index} 
+          <Card
+            key={index}
             className="group border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white dark:bg-zinc-900/50 backdrop-blur-sm overflow-hidden"
           >
             <CardHeader className="pt-8 px-8 pb-4">
-              <div className={`w-14 h-14 rounded-2xl ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+              <div
+                className={`w-14 h-14 rounded-2xl ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+              >
                 <feature.icon className={`w-7 h-7 ${feature.color}`} />
               </div>
               <CardTitle className="text-xl font-bold text-slate-900 dark:text-zinc-50 group-hover:text-primary dark:group-hover:text-primary transition-colors">
