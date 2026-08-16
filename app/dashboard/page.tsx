@@ -36,12 +36,7 @@ import QuestionSelectorModal from "../components/QuestionSelectorModal";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
-import {
-  getAnalytics,
-  getEssays,
-  getAICredentials,
-  timeAgo,
-} from "@/lib/api";
+import { getAnalytics, getEssays, getAICredentials, timeAgo } from "@/lib/api";
 import type { Essay } from "@/types/essay";
 import type {
   AnalyticsStats,
@@ -268,15 +263,9 @@ export default function DashboardPage() {
         className="flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            {stats && stats.evaluatedCount > 0 && (
-              <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-xs">
-                Band {stats.averageBand.toFixed(1)} Current Avg
-              </Badge>
-            )}
-          </div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
-            Welcome back, <span className="text-primary italic">{displayName}</span>
+            Welcome back,{" "}
+            <span className="text-primary italic">{displayName}</span>
           </h1>
           <p className="text-muted-foreground text-xs sm:text-sm max-w-2xl leading-relaxed">
             {dynamicSubtitle}
@@ -315,16 +304,24 @@ export default function DashboardPage() {
                     <h3 className="font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100">
                       AI Examiner Offline
                     </h3>
-                    <Badge variant="outline" className="text-[10px] font-medium border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-400">
+                    <Badge
+                      variant="outline"
+                      className="text-[10px] font-medium border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-400"
+                    >
                       Setup required
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground max-w-2xl">
-                    Connect your free <strong>Google Gemini</strong> or <strong>OpenAI</strong> API key to unlock instant band scoring, criteria breakdown, and examiner feedback.
+                    Connect your free <strong>Google Gemini</strong> or{" "}
+                    <strong>OpenAI</strong> API key to unlock instant band
+                    scoring, criteria breakdown, and examiner feedback.
                   </p>
                 </div>
               </div>
-              <Link href="/dashboard/settings?tab=api" className="shrink-0 w-full md:w-auto">
+              <Link
+                href="/dashboard/settings?tab=api"
+                className="shrink-0 w-full md:w-auto"
+              >
                 <Button
                   variant="outline"
                   size="sm"
@@ -374,11 +371,15 @@ export default function DashboardPage() {
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Band evaluations and examiner insights are active using your connected API key.
+                    Band evaluations and examiner insights are active using your
+                    connected API key.
                   </p>
                 </div>
               </div>
-              <Link href="/dashboard/settings?tab=api" className="shrink-0 w-full md:w-auto">
+              <Link
+                href="/dashboard/settings?tab=api"
+                className="shrink-0 w-full md:w-auto"
+              >
                 <Button
                   variant="outline"
                   size="sm"
@@ -401,9 +402,7 @@ export default function DashboardPage() {
       >
         {metricCards.map((metric) => (
           <motion.div key={metric.title} variants={itemVariants}>
-            <Card
-              className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200"
-            >
+            <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200">
               <CardContent className="p-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium text-muted-foreground">
@@ -527,7 +526,9 @@ export default function DashboardPage() {
           <CardContent className="p-4 pt-1 space-y-3.5">
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-bold">
-                <span className="text-muted-foreground text-[11px]">Progress to goal</span>
+                <span className="text-muted-foreground text-[11px]">
+                  Progress to goal
+                </span>
                 <span className="text-zinc-900 dark:text-zinc-100">
                   {weeklyPercent}%
                 </span>
@@ -636,10 +637,15 @@ export default function DashboardPage() {
                         </div>
                         <div>
                           <span className="font-bold text-xs block leading-none">
-                            {hasScore ? `Band ${band.toFixed(1)}` : "In Progress"}
+                            {hasScore
+                              ? `Band ${band.toFixed(1)}`
+                              : "In Progress"}
                           </span>
                           <span className="text-[10px] text-muted-foreground">
-                            {essay.wordCount || 0} words • {essay.durationSec >= 60 ? `${Math.round(essay.durationSec / 60)}m` : `${essay.durationSec}s`}
+                            {essay.wordCount || 0} words •{" "}
+                            {essay.durationSec >= 60
+                              ? `${Math.round(essay.durationSec / 60)}m`
+                              : `${essay.durationSec}s`}
                           </span>
                         </div>
                       </div>
@@ -672,7 +678,9 @@ export default function DashboardPage() {
                   No recent activity yet
                 </h3>
                 <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  You haven't submitted any essays recently. Start a practice task at your own pace or enter exam simulation mode to track your band score progress.
+                  You haven't submitted any essays recently. Start a practice
+                  task at your own pace or enter exam simulation mode to track
+                  your band score progress.
                 </p>
               </div>
 
@@ -714,12 +722,28 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {[
-            { label: "Agree / Disagree", type: "task2" as const, count: "Task 2" },
-            { label: "Discuss Both Views", type: "task2" as const, count: "Task 2" },
-            { label: "Advantages & Dis.", type: "task2" as const, count: "Task 2" },
+            {
+              label: "Agree / Disagree",
+              type: "task2" as const,
+              count: "Task 2",
+            },
+            {
+              label: "Discuss Both Views",
+              type: "task2" as const,
+              count: "Task 2",
+            },
+            {
+              label: "Advantages & Dis.",
+              type: "task2" as const,
+              count: "Task 2",
+            },
             { label: "Bar Charts", type: "task1" as const, count: "Task 1" },
             { label: "Line Graphs", type: "task1" as const, count: "Task 1" },
-            { label: "Pie Charts & Tables", type: "task1" as const, count: "Task 1" },
+            {
+              label: "Pie Charts & Tables",
+              type: "task1" as const,
+              count: "Task 1",
+            },
           ].map((cat) => (
             <button
               key={cat.label}
