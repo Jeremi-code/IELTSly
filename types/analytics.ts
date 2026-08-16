@@ -8,6 +8,8 @@ export interface AnalyticsStats {
   task1Average: number;
   task2Average: number;
   inProgressCount: number;
+  avgWordCount?: number;
+  avgDurationSec?: number;
 }
 
 export interface CriteriaAverages {
@@ -44,4 +46,5 @@ export interface AnalyticsPayload {
   trend: TrendPoint[];
   improvements: Improvement[];
   dailyComment: DailyComment;
+  recentTips?: string[];
 }
