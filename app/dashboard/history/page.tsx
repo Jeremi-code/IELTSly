@@ -772,7 +772,7 @@ export default function HistoryPage() {
           {selectedEssay && (
             <div className="space-y-0">
               {/* Modal Header */}
-              <div className="p-5 border-b border-border/40 bg-zinc-50/70 dark:bg-zinc-900/90 space-y-3">
+              <div className="p-5 pr-14 border-b border-border/40 bg-zinc-50/70 dark:bg-zinc-900/90 space-y-3">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div className="flex items-center gap-2">
                     <Badge
