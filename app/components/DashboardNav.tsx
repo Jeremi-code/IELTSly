@@ -25,7 +25,7 @@ const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: House },
   { name: "Practice Essay", href: "/dashboard/practice", icon: Plus },
   { name: "Essay History", href: "/dashboard/history", icon: NotepadText },
-  { name: "Error Analytics", href: "/dashboard/analytics", icon: ChartColumn },
+  { name: "Analytics", href: "/dashboard/analytics", icon: ChartColumn },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
