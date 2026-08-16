@@ -53,13 +53,32 @@ export function getEssays(params?: {
   type?: string;
   status?: string;
   mode?: string;
+  search?: string;
+  scoreFilter?: string;
+  minBand?: number;
+  maxBand?: number;
+  sortBy?: string;
   page?: number;
   limit?: number;
-}): Promise<{ essays: Essay[]; page: number; limit: number; total: number }> {
+}): Promise<{
+  essays: Essay[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}> {
   const qs = new URLSearchParams();
-  if (params?.type) qs.set("type", params.type);
-  if (params?.status) qs.set("status", params.status);
-  if (params?.mode) qs.set("mode", params.mode);
+  if (params?.type && params.type !== "all") qs.set("type", params.type);
+  if (params?.status && params.status !== "all")
+    qs.set("status", params.status);
+  if (params?.mode && params.mode !== "all") qs.set("mode", params.mode);
+  if (params?.search && params.search.trim())
+    qs.set("search", params.search.trim());
+  if (params?.scoreFilter && params.scoreFilter !== "all")
+    qs.set("scoreFilter", params.scoreFilter);
+  if (params?.minBand !== undefined) qs.set("minBand", String(params.minBand));
+  if (params?.maxBand !== undefined) qs.set("maxBand", String(params.maxBand));
+  if (params?.sortBy) qs.set("sortBy", params.sortBy);
   qs.set("page", String(params?.page ?? 1));
   qs.set("limit", String(params?.limit ?? 10));
   return api(`/api/essays?${qs.toString()}`);
