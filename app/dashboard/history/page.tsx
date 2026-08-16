@@ -45,7 +45,9 @@ export default function HistoryPage() {
   // Filters & Controls State
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [taskFilter, setTaskFilter] = useState<"all" | "task1" | "task2">("all");
+  const [taskFilter, setTaskFilter] = useState<"all" | "task1" | "task2">(
+    "all",
+  );
   const [scoreFilter, setScoreFilter] = useState<ScoreFilter>("all");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [viewMode, setViewMode] = useState<"cards" | "compact">("cards");
@@ -86,10 +88,14 @@ export default function HistoryPage() {
 
         setEssays(res.essays || []);
         setTotalCount(res.total || 0);
-        setTotalPages(res.totalPages || Math.max(1, Math.ceil((res.total || 0) / pageSize)));
+        setTotalPages(
+          res.totalPages || Math.max(1, Math.ceil((res.total || 0) / pageSize)),
+        );
       } catch (err: unknown) {
         setLoadError(
-          err instanceof Error ? err.message : "Could not load essays from server.",
+          err instanceof Error
+            ? err.message
+            : "Could not load essays from server.",
         );
       } finally {
         setLoading(false);
@@ -159,7 +165,8 @@ export default function HistoryPage() {
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-            Audit previous essays, inspect 4-pillar band breakdowns, and review examiner suggestions.
+            Audit previous essays, inspect 4-pillar band breakdowns, and review
+            examiner suggestions.
           </p>
         </div>
 
@@ -396,7 +403,7 @@ export default function HistoryPage() {
                       </div>
 
                       {/* Question Prompt Title */}
-                      <CardTitle className="text-xs sm:text-sm font-bold line-clamp-2 leading-snug text-zinc-900 dark:text-zinc-100 group-hover:text-primary transition-colors">
+                      <CardTitle className="text-xs sm:text-sm font-bold line-clamp-2 leading-snug text-zinc-900 dark:text-zinc-100">
                         {essay.question?.text || "IELTS Writing Prompt"}
                       </CardTitle>
 
