@@ -25,7 +25,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { getEssays, formatDate, timeAgo } from "@/lib/api";
@@ -811,9 +816,13 @@ export default function HistoryPage() {
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
                     Question Prompt
                   </span>
-                  <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
+                  <DialogTitle className="text-sm font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
                     {selectedEssay.question?.text || "IELTS Writing Prompt"}
-                  </p>
+                  </DialogTitle>
+                  <DialogDescription className="sr-only">
+                    Inspection modal for IELTS essay response, score breakdown,
+                    and examiner feedback.
+                  </DialogDescription>
                   {selectedEssay.question?.category && (
                     <span className="inline-block text-[10px] font-semibold text-primary bg-primary/5 px-2 py-0.5 rounded-md border border-primary/10 mt-1">
                       Topic: {selectedEssay.question.category}
