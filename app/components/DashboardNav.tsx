@@ -80,90 +80,114 @@ const DashboardNav = ({
   return (
     <motion.aside
       initial={false}
-      animate={{ width: collapsed ? 80 : 256 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed left-0 top-0 z-40 h-screen border-r border-zinc-200/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl"
+      animate={{ width: collapsed ? 76 : 256 }}
+      transition={{ type: "spring", stiffness: 320, damping: 32 }}
+      className="fixed left-0 top-0 z-40 h-screen border-r border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-2xl shadow-xs"
     >
-      {/* Toggle Button placed outside the overflow-clipped container */}
+      {/* Sidebar Toggle Button */}
       <Button
-        variant="ghost"
+        variant="outline"
         size="icon"
         onClick={toggleSidebar}
-        className="absolute -right-3 top-10 h-6 w-6 rounded-full border border-zinc-200 bg-background shadow-md dark:border-zinc-800 dark:bg-zinc-950 z-50 hover:bg-accent"
+        aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        className="absolute -right-3.5 top-7 h-7 w-7 rounded-full border border-border/80 bg-white dark:bg-zinc-900 shadow-md hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-all z-50 cursor-pointer p-0 flex items-center justify-center"
       >
         {collapsed ? (
-          <ChevronRight className="h-3 w-3" />
+          <ChevronRight className="h-3.5 w-3.5" />
         ) : (
-          <ChevronLeft className="h-3 w-3" />
+          <ChevronLeft className="h-3.5 w-3.5" />
         )}
       </Button>
 
-      {/* Inner content wrapper with overflow clipping */}
-      <div className="flex h-full flex-col p-4 relative w-full overflow-x-hidden">
-        {/* Logo Section */}
-        <div className="h-16 mb-8 flex items-center px-2">
-          <Logo className="h-12 w-12 shrink-0" />
-          <motion.span
-            initial={false}
-            animate={{
-              opacity: collapsed ? 0 : 1,
-              width: collapsed ? 0 : "auto",
-              marginLeft: collapsed ? 0 : 12,
-            }}
-            transition={{ duration: 0.15 }}
-            className="text-xl font-bold tracking-tight whitespace-nowrap relative bottom-1 overflow-hidden"
-          >
-            IELTSly
-          </motion.span>
+      {/* Inner container */}
+      <div className="flex h-full flex-col justify-between p-3.5 relative w-full overflow-hidden">
+        {/* Top Section: Logo & Nav Links */}
+        <div className="space-y-6">
+          {/* Logo Brand Emblem */}
+          <div className="h-12 flex items-center">
+            <Link
+              href="/dashboard"
+              className={cn(
+                "flex items-center group transition-all duration-200 cursor-pointer",
+                collapsed ? "w-full justify-center" : "gap-2.5 px-1.5 w-full",
+              )}
+            >
+              <Logo className="h-9 w-9 shrink-0 group-hover:scale-105 transition-transform duration-200 drop-shadow-xs" />
+
+              {!collapsed && (
+                <motion.div
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -6 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex items-center overflow-hidden whitespace-nowrap"
+                >
+                  <span className="text-xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+                    IELTSly
+                  </span>
+                </motion.div>
+              )}
+            </Link>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="space-y-1.5">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  title={collapsed ? item.name : undefined}
+                  className="block relative"
+                >
+                  <div
+                    className={cn(
+                      "flex items-center rounded-xl font-medium transition-all duration-150 cursor-pointer relative",
+                      collapsed
+                        ? "h-10 w-10 mx-auto justify-center p-0"
+                        : "w-full px-3 py-2.5 gap-3 text-xs sm:text-sm",
+                      isActive
+                        ? "bg-primary text-primary-foreground dark:text-white shadow-xs font-bold"
+                        : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100/80 dark:hover:bg-zinc-850 hover:text-zinc-950 dark:hover:text-zinc-100",
+                    )}
+                  >
+                    <Icon
+                      className={cn(
+                        "h-4 w-4 shrink-0 transition-colors",
+                        isActive
+                          ? "text-primary-foreground dark:text-white"
+                          : "text-zinc-500 dark:text-zinc-400",
+                      )}
+                    />
+
+                    {!collapsed && (
+                      <span className="whitespace-nowrap truncate leading-none">
+                        {item.name}
+                      </span>
+                    )}
+
+                    {isActive && !collapsed && (
+                      <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white dark:bg-white shrink-0" />
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="flex-1 space-y-2">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link key={item.name} href={item.href}>
-                <div
-                  title={collapsed ? item.name : ""}
-                  className={cn(
-                    "group flex items-center rounded-xl p-2.5 text-sm font-medium transition-all duration-200 px-3",
-                    isActive
-                      ? "bg-primary text-primary-foreground dark:text-white shadow-lg shadow-primary/20"
-                      : "text-muted-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-50 cursor-pointer",
-                  )}
-                >
-                  <item.icon
-                    className={cn(
-                      "h-5 w-5 transition-transform duration-200 group-hover:scale-110 shrink-0",
-                      isActive
-                        ? "text-primary-foreground dark:text-white"
-                        : "text-muted-foreground group-hover:text-zinc-900 dark:group-hover:text-zinc-50",
-                    )}
-                  />
-                  <motion.span
-                    initial={false}
-                    animate={{
-                      opacity: collapsed ? 0 : 1,
-                      width: collapsed ? 0 : "auto",
-                      marginLeft: collapsed ? 0 : 12,
-                    }}
-                    transition={{ duration: 0.15 }}
-                    className="whitespace-nowrap overflow-hidden"
-                  >
-                    {item.name}
-                  </motion.span>
-                </div>
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Bottom Section */}
-        <div className="mt-auto space-y-4 pt-4 border-t border-zinc-200/50 dark:border-zinc-800/50">
+        {/* Bottom Section: Mode Toggle, Sign Out & User Info */}
+        <div className="space-y-3 pt-3 border-t border-zinc-200/60 dark:border-zinc-800/60">
+          {/* Quick Actions Row */}
           <div
             className={cn(
-              "flex items-center justify-between",
-              collapsed ? "flex-col gap-4" : "px-2",
+              "flex items-center",
+              collapsed
+                ? "flex-col gap-2 justify-center"
+                : "justify-between px-1",
             )}
           >
             <ModeToggle />
@@ -173,7 +197,7 @@ const DashboardNav = ({
               onClick={handleLogout}
               disabled={isLoggingOut}
               title="Sign out"
-              className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full h-9 w-9"
+              className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl h-8 w-8 cursor-pointer"
             >
               {isLoggingOut ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -183,44 +207,44 @@ const DashboardNav = ({
             </Button>
           </div>
 
+          {/* User Profile Card */}
           <div
             className={cn(
-              "flex items-center rounded-2xl transition-all duration-300 overflow-hidden",
+              "rounded-xl border transition-all duration-200 flex items-center",
               collapsed
-                ? "justify-center p-1 bg-transparent border-transparent"
-                : "bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/50 p-3",
+                ? "justify-center p-1.5 border-transparent bg-transparent"
+                : "p-2.5 bg-zinc-50/80 dark:bg-zinc-900/60 border-border/50 gap-2.5 shadow-2xs",
             )}
           >
-            <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-emerald-400 p-[2px] flex-shrink-0">
-              {user?.image ? (
-                <img
-                  src={user.image}
-                  alt={displayName}
-                  className="h-full w-full rounded-full object-cover"
-                />
-              ) : (
-                <div className="h-full w-full rounded-full bg-background flex items-center justify-center font-bold text-sm">
-                  {initials}
-                </div>
-              )}
+            {/* Avatar with status ring */}
+            <div className="relative shrink-0">
+              <div className="h-8 w-8 rounded-full bg-linear-to-tr from-primary to-emerald-400 p-[1.5px] shadow-2xs">
+                {user?.image ? (
+                  <img
+                    src={user.image}
+                    alt={displayName}
+                    className="h-full w-full rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full rounded-full bg-background flex items-center justify-center font-bold text-xs text-foreground">
+                    {initials}
+                  </div>
+                )}
+              </div>
+              <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-background" />
             </div>
-            <motion.div
-              initial={false}
-              animate={{
-                opacity: collapsed ? 0 : 1,
-                width: collapsed ? 0 : "auto",
-                marginLeft: collapsed ? 0 : 12,
-              }}
-              transition={{ duration: 0.15 }}
-              className="flex flex-col min-w-0 overflow-hidden"
-            >
-              <span className="text-xs font-semibold truncate uppercase tracking-widest text-zinc-900 dark:text-zinc-200">
-                {displayName}
-              </span>
-              <span className="text-[10px] text-muted-foreground truncate">
-                {user?.email || ""}
-              </span>
-            </motion.div>
+
+            {/* User details */}
+            {!collapsed && (
+              <div className="flex flex-col min-w-0 overflow-hidden">
+                <span className="text-xs font-bold truncate text-zinc-900 dark:text-zinc-100 leading-tight">
+                  {displayName}
+                </span>
+                <span className="text-[10px] text-muted-foreground truncate leading-tight mt-0.5">
+                  {user?.email || "Pro Student"}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
