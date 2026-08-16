@@ -106,7 +106,7 @@ const DashboardNav = ({
           {/* Logo Brand Emblem */}
           <div className="h-12 flex items-center">
             <Link
-              href="/dashboard"
+              href="/"
               className={cn(
                 "flex items-center group transition-all duration-200 cursor-pointer",
                 collapsed ? "w-full justify-center" : "gap-2.5 px-1.5 w-full",

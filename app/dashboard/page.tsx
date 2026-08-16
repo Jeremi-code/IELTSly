@@ -613,7 +613,7 @@ export default function DashboardPage() {
                       </span>
                     </div>
 
-                    <CardTitle className="text-sm font-bold line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                    <CardTitle className="text-sm font-bold line-clamp-2 leading-snug text-zinc-900 dark:text-zinc-100">
                       {essay.question?.text || "IELTS Practice Question"}
                     </CardTitle>
                   </CardHeader>
@@ -650,14 +650,14 @@ export default function DashboardPage() {
                         </div>
                       </div>
 
-                      <Link href={`/writingbox?essayId=${essay._id}`}>
+                      <Link href={`/dashboard/history?inspect=${essay._id}`}>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
-                          className="h-8 px-2.5 rounded-lg text-xs font-semibold group-hover:bg-primary group-hover:text-white transition-all cursor-pointer"
+                          className="h-8 px-2.5 rounded-xl text-xs font-semibold border-border/60 hover:border-primary/40 hover:bg-primary/5 text-zinc-700 dark:text-zinc-300 hover:text-primary transition-colors cursor-pointer"
                         >
-                          Review
-                          <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
+                          Inspect
+                          <ChevronRight className="h-3 w-3 ml-0.5" />
                         </Button>
                       </Link>
                     </div>

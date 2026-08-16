@@ -96,6 +96,14 @@ export default function HistoryPage() {
         setTotalPages(
           res.totalPages || Math.max(1, Math.ceil((res.total || 0) / pageSize)),
         );
+
+        if (typeof window !== "undefined") {
+          const inspectId = new URLSearchParams(window.location.search).get("inspect");
+          if (inspectId && res.essays) {
+            const match = res.essays.find((e) => e._id === inspectId);
+            if (match) setSelectedEssay(match);
+          }
+        }
       } catch (err: unknown) {
         setLoadError(
           err instanceof Error
