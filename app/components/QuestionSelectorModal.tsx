@@ -43,6 +43,8 @@ interface QuestionSelectorModalProps {
   mode?: "practice" | "exam";
   /** Default task type filter preset ("all", "task1", or "task2") */
   defaultTaskType?: "all" | "task1" | "task2";
+  /** Default question category filter preset */
+  defaultCategory?: string;
   /** Optional callback invoked when a question is chosen */
   onSelectQuestion?: (question: Question) => void;
   /** When true, automatically navigates to /writingbox with question query params */
@@ -70,6 +72,7 @@ export default function QuestionSelectorModal({
   onOpenChange,
   mode = "practice",
   defaultTaskType = "all",
+  defaultCategory = "all",
   onSelectQuestion,
   directNavigate = true,
 }: QuestionSelectorModalProps) {
@@ -79,7 +82,9 @@ export default function QuestionSelectorModal({
   const [taskFilter, setTaskFilter] = useState<"all" | "task1" | "task2">(
     defaultTaskType,
   );
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    defaultCategory || "all",
+  );
   const [categories, setCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -91,12 +96,18 @@ export default function QuestionSelectorModal({
   const [loading, setLoading] = useState(false);
   const [randomLoading, setRandomLoading] = useState(false);
 
-  // Synchronize task filter if the defaultTaskType prop updates
+  // Synchronize task filter & category if default props update when modal opens
   useEffect(() => {
-    if (defaultTaskType) {
-      setTaskFilter(defaultTaskType);
+    if (open) {
+      if (defaultTaskType) {
+        setTaskFilter(defaultTaskType);
+      }
+      setSelectedCategory(defaultCategory || "all");
+      setSearchQuery("");
+      setDebouncedSearch("");
+      setPage(1);
     }
-  }, [defaultTaskType]);
+  }, [open, defaultTaskType, defaultCategory]);
 
   // Debounce search input by 300ms to minimize unnecessary backend requests
   useEffect(() => {
@@ -323,7 +334,7 @@ export default function QuestionSelectorModal({
             </div>
 
             {/* Categories Strip */}
-            {categories.length > 2 && (
+            {categories.length > 1 && (
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70 shrink-0 mr-1 flex items-center gap-1">
                   <Filter className="h-3 w-3" /> Category:
