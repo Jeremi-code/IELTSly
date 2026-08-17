@@ -24,6 +24,7 @@ import {
   Minimize2,
   Eye,
   EyeOff,
+  X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,7 @@ import type { Evaluation } from "@/types/essay";
 import type { AICredentialStatus } from "@/types/ai";
 import { cn } from "@/lib/utils";
 
-// ── TaskFigure: Displays IELTS Task 1 figure with interactive zoom ──
+// ── TaskFigure: Displays IELTS Task 1 figure with on-page full-size view ──
 function TaskFigure({
   imageUrl,
   maxHeightClass = "max-h-[460px]",
@@ -50,73 +51,158 @@ function TaskFigure({
   imageUrl: string;
   maxHeightClass?: string;
 }) {
-  const [zoomed, setZoomed] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && lightboxOpen) {
+        e.stopPropagation();
+        setLightboxOpen(false);
+      }
+    };
+    if (lightboxOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [lightboxOpen]);
 
   return (
-    <div className="rounded-2xl overflow-hidden border border-border/60 dark:border-zinc-700/70 bg-white dark:bg-zinc-900/90 shadow-sm space-y-0">
-      {/* Header */}
-      <div className="flex items-center justify-between px-3.5 py-2 border-b border-border/40 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/90">
-        <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-          <ImageIcon className="h-3.5 w-3.5 text-primary" /> Visual Figure / Diagram
-        </span>
-        <div className="flex items-center gap-2">
-          {/* Zoom Toggle Button */}
-          <button
-            type="button"
-            onClick={() => setZoomed((z) => !z)}
-            className="flex items-center gap-1 text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 hover:text-primary transition-colors cursor-pointer bg-zinc-200/70 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 px-2 py-0.5 rounded-md"
-            title={zoomed ? "Reset zoom to fit container" : "Zoom in on diagram details"}
-          >
-            {zoomed ? (
-              <>
-                <ZoomOut className="h-3 w-3 text-primary" />
-                <span>Fit</span>
-              </>
-            ) : (
-              <>
-                <ZoomIn className="h-3 w-3 text-primary" />
-                <span>Zoom</span>
-              </>
-            )}
-          </button>
+    <>
+      <div className="rounded-2xl overflow-hidden border border-border/60 dark:border-zinc-700/70 bg-white dark:bg-zinc-900/90 shadow-sm space-y-0">
+        {/* Header */}
+        <div className="flex items-center justify-between px-3.5 py-2 border-b border-border/40 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/90">
+          <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+            <ImageIcon className="h-3.5 w-3.5 text-primary" /> Visual Figure / Diagram
+          </span>
+          <div className="flex items-center gap-2">
+            {/* Full-size On-Page Zoom Button */}
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(true)}
+              className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-700 dark:text-zinc-200 hover:text-primary transition-colors cursor-pointer bg-zinc-200/80 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 px-2.5 py-1 rounded-lg"
+              title="Open full size image on this page"
+            >
+              <ZoomIn className="h-3.5 w-3.5 text-primary" />
+              <span>Full Size (Zoom)</span>
+            </button>
 
-          <a
-            href={imageUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline transition-colors ml-1"
-            title="Open figure full size in new tab"
-          >
-            <ExternalLink className="h-3 w-3" />
-            Open in new tab
-          </a>
+            <a
+              href={imageUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-semibold text-muted-foreground hover:text-primary transition-colors ml-1"
+              title="Open original image in new tab"
+            >
+              <ExternalLink className="h-3 w-3" />
+              New Tab
+            </a>
+          </div>
+        </div>
+
+        {/* Inline image display */}
+        <div
+          className={cn(
+            "p-2 sm:p-3 flex items-center justify-center bg-zinc-50/40 dark:bg-zinc-950/40 overflow-y-auto cursor-pointer group relative",
+            maxHeightClass,
+          )}
+          onClick={() => setLightboxOpen(true)}
+          title="Click to view full size on this page"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageUrl}
+            alt="IELTS Task 1 prompt diagram or data visual"
+            referrerPolicy="no-referrer"
+            loading="eager"
+            className="w-full object-contain rounded-xl drop-shadow-xs group-hover:opacity-95 transition-opacity"
+          />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 dark:group-hover:bg-white/5 transition-colors rounded-xl flex items-center justify-center pointer-events-none">
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-zinc-900/80 text-white text-xs font-semibold px-3 py-1.5 rounded-xl backdrop-blur-md flex items-center gap-1.5 shadow-lg">
+              <ZoomIn className="h-3.5 w-3.5" /> View Full Size
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Scrollable image display */}
-      <div
-        className={cn(
-          "p-2 sm:p-3 flex items-center justify-center bg-zinc-50/40 dark:bg-zinc-950/40 overflow-auto transition-all duration-200",
-          zoomed ? "max-h-[560px]" : maxHeightClass,
+      {/* On-Page Full-Size Lightbox Modal */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {lightboxOpen && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="fixed inset-0 z-[100000] bg-black/85 backdrop-blur-md flex flex-col items-center justify-between p-4 sm:p-6"
+                onClick={() => setLightboxOpen(false)}
+              >
+                {/* Top Control Bar */}
+                <div
+                  className="w-full max-w-5xl flex items-center justify-between text-white pb-3 shrink-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-2">
+                    <ImageIcon className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-bold tracking-tight">
+                      Task 1 Visual Diagram (Full Size)
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <a
+                      href={imageUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-xs font-medium text-zinc-300 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl transition-colors"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      Open New Tab
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => setLightboxOpen(false)}
+                      className="flex items-center gap-1 text-xs font-bold text-white bg-white/20 hover:bg-white/30 px-3.5 py-1.5 rounded-xl transition-colors cursor-pointer"
+                    >
+                      <X className="h-4 w-4 mr-0.5" />
+                      Close (Esc)
+                    </button>
+                  </div>
+                </div>
+
+                {/* Full-size Image Display */}
+                <div
+                  className="flex-1 w-full max-w-5xl flex items-center justify-center p-2 min-h-0 overflow-auto"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={imageUrl}
+                    alt="IELTS Task 1 prompt diagram full size view"
+                    referrerPolicy="no-referrer"
+                    className="max-h-[82vh] max-w-full object-contain rounded-2xl shadow-2xl bg-white dark:bg-zinc-900 p-2"
+                  />
+                </div>
+
+                {/* Bottom hint */}
+                <div className="text-zinc-400 text-xs text-center pt-2 shrink-0">
+                  Click anywhere outside or press{" "}
+                  <kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-200 font-mono text-[10px]">
+                    Esc
+                  </kbd>{" "}
+                  to return to writing
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imageUrl}
-          alt="IELTS Task 1 prompt diagram or data visual"
-          referrerPolicy="no-referrer"
-          loading="eager"
-          className={cn(
-            "object-contain rounded-xl drop-shadow-xs transition-all duration-200",
-            zoomed
-              ? "w-auto max-w-none min-w-[700px] cursor-zoom-out"
-              : "w-full cursor-zoom-in",
-          )}
-          onClick={() => setZoomed((z) => !z)}
-          title={zoomed ? "Click image to fit" : "Click image to zoom in"}
-        />
-      </div>
-    </div>
+    </>
   );
 }
 
