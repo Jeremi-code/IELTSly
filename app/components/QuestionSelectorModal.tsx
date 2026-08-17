@@ -33,6 +33,7 @@ import {
 import type { Question } from "@/types/question";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface QuestionSelectorModalProps {
   /** Whether the modal dialog is open */
@@ -366,11 +367,23 @@ export default function QuestionSelectorModal({
         {/* Questions List */}
         <div className="flex-1 overflow-y-auto p-6 space-y-3 min-h-[320px] max-h-[48vh]">
           {loading ? (
-            <div className="py-16 flex flex-col items-center justify-center gap-3 text-muted-foreground">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="text-xs font-semibold">
-                Searching IELTS question bank...
-              </p>
+            <div className="space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="p-4 rounded-2xl border border-border/40 dark:border-zinc-800/60 bg-white/60 dark:bg-zinc-900/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                >
+                  <div className="space-y-2.5 flex-1">
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-5 w-28 rounded-md" />
+                      <Skeleton className="h-5 w-20 rounded-md" />
+                    </div>
+                    <Skeleton className="h-4 w-11/12 rounded-md" />
+                    <Skeleton className="h-4 w-3/4 rounded-md" />
+                  </div>
+                  <Skeleton className="h-8 w-28 rounded-xl shrink-0 self-end sm:self-center" />
+                </div>
+              ))}
             </div>
           ) : questions.length === 0 ? (
             <div className="py-16 text-center space-y-3">
