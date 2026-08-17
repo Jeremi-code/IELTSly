@@ -177,7 +177,9 @@ export default function QuestionSelectorModal({
       onSelectQuestion(question);
     }
     if (directNavigate) {
-      router.push(`/writingbox?questionId=${question._id}&mode=${mode}`);
+      router.push(
+        `/dashboard/practice/writingbox?questionId=${question._id}&mode=${mode}`,
+      );
     }
     onOpenChange(false);
   };

@@ -228,7 +228,9 @@ const PracticePage = () => {
     try {
       const randomQ = await getRandomQuestion();
       if (randomQ?._id) {
-        router.push(`/writingbox?questionId=${randomQ._id}&mode=practice`);
+        router.push(
+          `/dashboard/practice/writingbox?questionId=${randomQ._id}&mode=practice`,
+        );
       } else {
         handleOpenMode("practice");
       }

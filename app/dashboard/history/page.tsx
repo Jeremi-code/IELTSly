@@ -98,7 +98,9 @@ export default function HistoryPage() {
         );
 
         if (typeof window !== "undefined") {
-          const inspectId = new URLSearchParams(window.location.search).get("inspect");
+          const inspectId = new URLSearchParams(window.location.search).get(
+            "inspect",
+          );
           if (inspectId && res.essays) {
             const match = res.essays.find((e) => e._id === inspectId);
             if (match) setSelectedEssay(match);
@@ -978,7 +980,7 @@ export default function HistoryPage() {
 
                 {selectedEssay.questionId && (
                   <Link
-                    href={`/writingbox?questionId=${selectedEssay.questionId}&mode=${selectedEssay.mode || "practice"}`}
+                    href={`/dashboard/practice/writingbox?questionId=${selectedEssay.questionId}&mode=${selectedEssay.mode || "practice"}`}
                   >
                     <Button
                       variant="blue"
