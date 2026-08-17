@@ -33,6 +33,7 @@ import { getAnalytics } from "@/lib/api";
 import type { AnalyticsPayload } from "@/types/analytics";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 const containerVariants = {
@@ -280,8 +281,107 @@ const AnalyticsPage = () => {
         </div>
       </header>
 
-      {/* ── Empty State (Only when loaded and has 0 evaluations) ──── */}
-      {!loading && !hasEvaluations ? (
+      {/* ── Loading Skeleton State ───────────────────────────────── */}
+      {loading ? (
+        <div className="space-y-5">
+          {/* Diagnostic Metrics Strip Skeleton */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Card
+                key={i}
+                className="border border-border/60 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md rounded-xl p-3 sm:p-3.5 space-y-2.5 py-4"
+              >
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-3.5 w-24 rounded" />
+                  <Skeleton className="h-4 w-4 rounded-full" />
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <Skeleton className="h-7 w-16 rounded" />
+                  <Skeleton className="h-3 w-8 rounded" />
+                </div>
+                <Skeleton className="h-4 w-28 rounded" />
+              </Card>
+            ))}
+          </div>
+
+          {/* Main 2-Column Balanced Layout Skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            {/* Left Column Skeleton */}
+            <div className="lg:col-span-7 space-y-5">
+              {/* Trajectory Chart Card Skeleton */}
+              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/40 rounded-2xl p-4 space-y-4 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <Skeleton className="h-4 w-36 rounded" />
+                    <Skeleton className="h-3 w-64 rounded" />
+                  </div>
+                  <Skeleton className="h-5 w-20 rounded-md" />
+                </div>
+                <Skeleton className="h-[130px] w-full rounded-xl" />
+              </Card>
+
+              {/* 4-Pillar Matrix Skeleton */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-4 w-48 rounded" />
+                  <Skeleton className="h-3 w-20 rounded" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="p-3 rounded-xl border border-border/60 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/40 space-y-3"
+                    >
+                      <div className="flex items-center justify-between">
+                        <Skeleton className="h-4 w-28 rounded" />
+                        <Skeleton className="h-5 w-12 rounded" />
+                      </div>
+                      <Skeleton className="h-2 w-full rounded-full" />
+                      <div className="flex items-center justify-between">
+                        <Skeleton className="h-4 w-20 rounded" />
+                        <Skeleton className="h-3 w-16 rounded" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Actionable Recommendations Skeleton */}
+              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/40 rounded-2xl p-4 space-y-3 py-4">
+                <Skeleton className="h-4 w-52 rounded" />
+                <div className="space-y-2">
+                  <Skeleton className="h-10 w-full rounded-xl" />
+                  <Skeleton className="h-10 w-full rounded-xl" />
+                </div>
+              </Card>
+            </div>
+
+            {/* Right Column Skeleton */}
+            <div className="lg:col-span-5 space-y-5">
+              {/* AI Coach Feedback Skeleton */}
+              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/40 rounded-2xl p-4 space-y-3 py-4">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-4 w-40 rounded" />
+                  <Skeleton className="h-5 w-24 rounded" />
+                </div>
+                <Skeleton className="h-12 w-full rounded-lg" />
+                <Skeleton className="h-16 w-full rounded-xl" />
+              </Card>
+
+              {/* Diagnostic Spotlight Skeleton */}
+              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/40 rounded-2xl p-4 space-y-3.5 py-4">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-4 w-32 rounded" />
+                  <Skeleton className="h-5 w-16 rounded" />
+                </div>
+                <Skeleton className="h-14 w-full rounded-xl" />
+                <Skeleton className="h-14 w-full rounded-xl" />
+                <Skeleton className="h-14 w-full rounded-xl" />
+              </Card>
+            </div>
+          </div>
+        </div>
+      ) : !hasEvaluations ? (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
