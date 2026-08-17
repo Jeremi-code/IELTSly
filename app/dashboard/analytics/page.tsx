@@ -32,7 +32,25 @@ import { Progress } from "@/components/ui/progress";
 import { getAnalytics } from "@/lib/api";
 import type { AnalyticsPayload } from "@/types/analytics";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.07 },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 16, opacity: 0 },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: { type: "spring", stiffness: 120, damping: 15 } as const,
+  },
+};
 
 // Official IELTS Descriptor Guide per criterion
 interface CriterionGuide {
@@ -264,294 +282,318 @@ const AnalyticsPage = () => {
 
       {/* ── Empty State (Only when loaded and has 0 evaluations) ──── */}
       {!loading && !hasEvaluations ? (
-        <Card className="border border-dashed border-border/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-950/30 backdrop-blur-md rounded-2xl p-8 sm:p-12 text-center shadow-xs py-4">
-          <div className="max-w-md mx-auto space-y-4">
-            <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mx-auto shadow-inner">
-              <BarChart3 className="h-6 w-6" />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Card className="border border-dashed border-border/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-950/30 backdrop-blur-md rounded-2xl p-8 sm:p-12 text-center shadow-xs py-4">
+            <div className="max-w-md mx-auto space-y-4">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mx-auto shadow-inner">
+                <BarChart3 className="h-6 w-6" />
+              </div>
+              <div className="space-y-1.5">
+                <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                  No Evaluation Data Yet
+                </h2>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Complete your first practice essay or submit an exam attempt. As
+                  soon as your writing is evaluated, this dashboard will visualize
+                  your 4-pillar performance, score progression, and personalized
+                  examiner tips.
+                </p>
+              </div>
+              <div className="pt-1">
+                <Button
+                  asChild
+                  variant="blue"
+                  className="h-9 px-4 rounded-xl font-bold shadow-md shadow-primary/20 cursor-pointer"
+                >
+                  <Link href="/dashboard/practice">
+                    <Sparkles className="h-4 w-4 mr-1.5" />
+                    Launch First Practice Session
+                  </Link>
+                </Button>
+              </div>
             </div>
-            <div className="space-y-1.5">
-              <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-                No Evaluation Data Yet
-              </h2>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Complete your first practice essay or submit an exam attempt. As
-                soon as your writing is evaluated, this dashboard will visualize
-                your 4-pillar performance, score progression, and personalized
-                examiner tips.
-              </p>
-            </div>
-            <div className="pt-1">
-              <Button
-                asChild
-                variant="blue"
-                className="h-9 px-4 rounded-xl font-bold shadow-md shadow-primary/20 cursor-pointer"
-              >
-                <Link href="/dashboard/practice">
-                  <Sparkles className="h-4 w-4 mr-1.5" />
-                  Launch First Practice Session
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </motion.div>
       ) : (
         /* ── Main Data View ─────────────────────────────────────────── */
-        <div className="space-y-5">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="space-y-5"
+        >
           {/* ── Compact Diagnostic Metrics Strip ───────────────────────── */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-3"
+          >
             {/* Overall Average Band */}
-            <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-3 sm:p-3.5 shadow- py-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-muted-foreground">
-                  Overall average
-                </span>
-                <Target className="h-3.5 w-3.5 text-primary" />
-              </div>
-              <div className="mt-1.5 flex items-baseline gap-1.5">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
-                  {stats?.averageBand ? stats.averageBand.toFixed(1) : "—"}
-                </span>
-                <span className="text-[11px] font-semibold text-muted-foreground">
-                  / 9.0
-                </span>
-              </div>
-              <div className="mt-1.5">
-                <Badge
-                  variant="outline"
-                  className={cn(
-                    "text-[9px] font-bold px-1.5 py-0 rounded border",
-                    getBandLabel(stats?.averageBand ?? 0).color,
-                  )}
-                >
-                  {getBandLabel(stats?.averageBand ?? 0).label}
-                </Badge>
-              </div>
-            </Card>
+            <motion.div variants={itemVariants}>
+              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-3 sm:p-3.5 shadow-2xs hover:shadow-md transition-all duration-300 py-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    Overall average
+                  </span>
+                  <Target className="h-3.5 w-3.5 text-primary" />
+                </div>
+                <div className="mt-1.5 flex items-baseline gap-1.5">
+                  <span className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+                    {stats?.averageBand ? stats.averageBand.toFixed(1) : "—"}
+                  </span>
+                  <span className="text-[11px] font-semibold text-muted-foreground">
+                    / 9.0
+                  </span>
+                </div>
+                <div className="mt-1.5">
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      "text-[9px] font-bold px-1.5 py-0 rounded border",
+                      getBandLabel(stats?.averageBand ?? 0).color,
+                    )}
+                  >
+                    {getBandLabel(stats?.averageBand ?? 0).label}
+                  </Badge>
+                </div>
+              </Card>
+            </motion.div>
 
             {/* Personal Best Band */}
-            <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-3 sm:p-3.5 shadow-2xs py-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-muted-foreground">
-                  Personal best
-                </span>
-                <Award className="h-3.5 w-3.5 text-amber-500" />
-              </div>
-              <div className="mt-1.5 flex items-baseline gap-1.5">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-amber-500">
-                  {stats?.bestBand ? stats.bestBand.toFixed(1) : "—"}
-                </span>
-                <span className="text-[11px] font-semibold text-muted-foreground">
-                  / 9.0
-                </span>
-              </div>
-              <div className="mt-1.5 text-[11px] text-muted-foreground flex items-center gap-1">
-                <Flame className="h-3 w-3 text-amber-500 shrink-0" />
-                <span>Peak score</span>
-              </div>
-            </Card>
+            <motion.div variants={itemVariants}>
+              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-3 sm:p-3.5 shadow-2xs hover:shadow-md transition-all duration-300 py-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    Personal best
+                  </span>
+                  <Award className="h-3.5 w-3.5 text-amber-500" />
+                </div>
+                <div className="mt-1.5 flex items-baseline gap-1.5">
+                  <span className="text-xl sm:text-2xl font-black tracking-tight text-amber-500">
+                    {stats?.bestBand ? stats.bestBand.toFixed(1) : "—"}
+                  </span>
+                  <span className="text-[11px] font-semibold text-muted-foreground">
+                    / 9.0
+                  </span>
+                </div>
+                <div className="mt-1.5 text-[11px] text-muted-foreground flex items-center gap-1">
+                  <Flame className="h-3 w-3 text-amber-500 shrink-0" />
+                  <span>Peak score</span>
+                </div>
+              </Card>
+            </motion.div>
 
             {/* Task 1 vs Task 2 Average */}
-            <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-3 sm:p-3.5 shadow-2xs py-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-muted-foreground">
-                  Task averages
-                </span>
-                <BarChart3 className="h-3.5 w-3.5 text-purple-500" />
-              </div>
-              <div className="mt-1.5 grid grid-cols-2 gap-2">
-                <div>
-                  <span className="text-[10px] font-medium text-muted-foreground">
-                    Task 1
+            <motion.div variants={itemVariants}>
+              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-3 sm:p-3.5 shadow-2xs hover:shadow-md transition-all duration-300 py-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    Task averages
                   </span>
-                  <div className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                    {stats?.task1Average ? stats.task1Average.toFixed(1) : "—"}
+                  <BarChart3 className="h-3.5 w-3.5 text-purple-500" />
+                </div>
+                <div className="mt-1.5 grid grid-cols-2 gap-2">
+                  <div>
+                    <span className="text-[10px] font-medium text-muted-foreground">
+                      Task 1
+                    </span>
+                    <div className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                      {stats?.task1Average ? stats.task1Average.toFixed(1) : "—"}
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-medium text-muted-foreground">
+                      Task 2
+                    </span>
+                    <div className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                      {stats?.task2Average ? stats.task2Average.toFixed(1) : "—"}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <span className="text-[10px] font-medium text-muted-foreground">
-                    Task 2
-                  </span>
-                  <div className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                    {stats?.task2Average ? stats.task2Average.toFixed(1) : "—"}
-                  </div>
+                <div className="mt-1 text-[10px] text-muted-foreground truncate">
+                  {stats?.evaluatedCount ?? 0} evaluations
                 </div>
-              </div>
-              <div className="mt-1 text-[10px] text-muted-foreground truncate">
-                {stats?.evaluatedCount ?? 0} evaluations
-              </div>
-            </Card>
+              </Card>
+            </motion.div>
 
             {/* Output & Pacing Efficiency */}
-            <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-3 sm:p-3.5 shadow-2xs py-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-muted-foreground">
-                  Writing output
-                </span>
-                <FileText className="h-3.5 w-3.5 text-emerald-500" />
-              </div>
-              <div className="mt-1.5 flex items-baseline gap-1">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
-                  {stats?.avgWordCount ? stats.avgWordCount : "—"}
-                </span>
-                <span className="text-[11px] font-medium text-muted-foreground">
-                  words avg
-                </span>
-              </div>
-              <div className="mt-1.5 text-[11px] text-muted-foreground flex items-center gap-1">
-                <Clock className="h-3 w-3 text-emerald-500 shrink-0" />
-                <span>
-                  {stats?.avgDurationSec
-                    ? `${Math.round(stats.avgDurationSec / 60)} mins active writing`
-                    : "Pacing active"}
-                </span>
-              </div>
-            </Card>
-          </div>
+            <motion.div variants={itemVariants}>
+              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-3 sm:p-3.5 shadow-2xs hover:shadow-md transition-all duration-300 py-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    Writing output
+                  </span>
+                  <FileText className="h-3.5 w-3.5 text-emerald-500" />
+                </div>
+                <div className="mt-1.5 flex items-baseline gap-1">
+                  <span className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+                    {stats?.avgWordCount ? stats.avgWordCount : "—"}
+                  </span>
+                  <span className="text-[11px] font-medium text-muted-foreground">
+                    words avg
+                  </span>
+                </div>
+                <div className="mt-1.5 text-[11px] text-muted-foreground flex items-center gap-1">
+                  <Clock className="h-3 w-3 text-emerald-500 shrink-0" />
+                  <span>
+                    {stats?.avgDurationSec
+                      ? `${Math.round(stats.avgDurationSec / 60)} mins active writing`
+                      : "Pacing active"}
+                  </span>
+                </div>
+              </Card>
+            </motion.div>
+          </motion.div>
 
           {/* ── Main 2-Column Balanced Dashboard Layout ───────────────── */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             {/* ── Left Column (7 cols): Trajectory -> 4-Pillars -> Recommendations ── */}
             <div className="lg:col-span-7 space-y-5">
               {/* Score Progression Trend Chart */}
-              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs overflow-hidden py-4">
-                <CardHeader className="p-3.5 sm:p-4 pb-2 border-b border-border/40 flex flex-row items-center justify-between">
-                  <div className="space-y-0.5">
-                    <CardTitle className="text-xs sm:text-sm font-bold flex items-center gap-1.5">
-                      <TrendingUp className="h-4 w-4 text-primary" />
-                      Band score trajectory
-                    </CardTitle>
-                    <CardDescription className="text-[11px]">
-                      Chronological progression across your latest evaluated attempts
-                    </CardDescription>
-                  </div>
-                  {trend.length > 0 && (
-                    <Badge
-                      variant="secondary"
-                      className="text-[10px] font-mono py-0 h-5"
-                    >
-                      {trend.length} sessions
-                    </Badge>
-                  )}
-                </CardHeader>
-                <CardContent className="p-3.5 sm:p-4 pt-3 space-y-2">
-                  {trend.length >= 2 ? (
-                    <div className="w-full relative h-[130px] flex items-end">
-                      <svg
-                        className="w-full h-full overflow-visible"
-                        viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-                        preserveAspectRatio="none"
+              <motion.div variants={itemVariants}>
+                <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-md transition-all duration-300 overflow-hidden py-4">
+                  <CardHeader className="p-3.5 sm:p-4 pb-2 border-b border-border/40 flex flex-row items-center justify-between">
+                    <div className="space-y-0.5">
+                      <CardTitle className="text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                        <TrendingUp className="h-4 w-4 text-primary" />
+                        Band score trajectory
+                      </CardTitle>
+                      <CardDescription className="text-[11px]">
+                        Chronological progression across your latest evaluated attempts
+                      </CardDescription>
+                    </div>
+                    {trend.length > 0 && (
+                      <Badge
+                        variant="secondary"
+                        className="text-[10px] font-mono py-0 h-5"
                       >
-                        <defs>
-                          <linearGradient
-                            id="scoreAreaGrad"
-                            x1="0"
-                            y1="0"
-                            x2="0"
-                            y2="1"
-                          >
-                            <stop
-                              offset="0%"
-                              stopColor="var(--color-primary, #2563eb)"
-                              stopOpacity="0.25"
-                            />
-                            <stop
-                              offset="100%"
-                              stopColor="var(--color-primary, #2563eb)"
-                              stopOpacity="0.0"
-                            />
-                          </linearGradient>
-                        </defs>
-
-                        {/* Band Score Horizontal Reference Lines */}
-                        {[5, 6, 7, 8].map((score) => {
-                          const y =
-                            chartHeight -
-                            paddingY -
-                            ((score - minScore) / (maxScore - minScore)) *
-                              (chartHeight - paddingY * 2);
-                          return (
-                            <g key={score}>
-                              <line
-                                x1={paddingX}
-                                y1={y}
-                                x2={chartWidth - paddingX}
-                                y2={y}
-                                stroke="currentColor"
-                                className="text-border/40"
-                                strokeWidth="1"
-                                strokeDasharray="3 3"
+                        {trend.length} sessions
+                      </Badge>
+                    )}
+                  </CardHeader>
+                  <CardContent className="p-3.5 sm:p-4 pt-3 space-y-2">
+                    {trend.length >= 2 ? (
+                      <div className="w-full relative h-[130px] flex items-end">
+                        <svg
+                          className="w-full h-full overflow-visible"
+                          viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+                          preserveAspectRatio="none"
+                        >
+                          <defs>
+                            <linearGradient
+                              id="scoreAreaGrad"
+                              x1="0"
+                              y1="0"
+                              x2="0"
+                              y2="1"
+                            >
+                              <stop
+                                offset="0%"
+                                stopColor="var(--color-primary, #2563eb)"
+                                stopOpacity="0.25"
                               />
-                              <text
-                                x={paddingX - 6}
-                                y={y + 3.5}
-                                fontSize="9"
-                                textAnchor="end"
-                                className="fill-muted-foreground/70 font-mono font-semibold"
-                              >
-                                {score}.0
-                              </text>
-                            </g>
-                          );
-                        })}
-
-                        {/* Area fill */}
-                        <path
-                          d={`M ${paddingX},${chartHeight - paddingY} L ${points} L ${chartWidth - paddingX},${chartHeight - paddingY} Z`}
-                          fill="url(#scoreAreaGrad)"
-                        />
-
-                        {/* Trend line */}
-                        <polyline
-                          fill="none"
-                          stroke="var(--color-primary, #2563eb)"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          points={points}
-                        />
-
-                        {/* Plot markers */}
-                        {trend.map((item, i) => {
-                          const x =
-                            paddingX +
-                            (i * (chartWidth - paddingX * 2)) /
-                              (trend.length - 1);
-                          const y =
-                            chartHeight -
-                            paddingY -
-                            ((Math.max(minScore, Math.min(maxScore, item.band)) -
-                              minScore) /
-                              (maxScore - minScore)) *
-                              (chartHeight - paddingY * 2);
-                          return (
-                            <g key={item.id ? String(item.id) : i}>
-                              <circle
-                                cx={x}
-                                cy={y}
-                                r="4"
-                                className="fill-white dark:fill-zinc-950 stroke-primary transition-all"
-                                strokeWidth="2"
+                              <stop
+                                offset="100%"
+                                stopColor="var(--color-primary, #2563eb)"
+                                stopOpacity="0.0"
                               />
-                            </g>
-                          );
-                        })}
-                      </svg>
-                    </div>
-                  ) : (
-                    <div className="h-[110px] flex items-center justify-center text-xs text-muted-foreground border border-dashed rounded-xl">
-                      Complete at least 2 evaluated essays to plot your trajectory curve.
-                    </div>
-                  )}
+                            </linearGradient>
+                          </defs>
 
-                  <div className="flex items-center justify-between text-[10px] font-medium text-muted-foreground/70 px-1 border-t border-border/30 pt-1.5">
-                    <span>First attempt</span>
-                    <span>Latest attempt</span>
-                  </div>
-                </CardContent>
-              </Card>
+                          {/* Band Score Horizontal Reference Lines */}
+                          {[5, 6, 7, 8].map((score) => {
+                            const y =
+                              chartHeight -
+                              paddingY -
+                              ((score - minScore) / (maxScore - minScore)) *
+                                (chartHeight - paddingY * 2);
+                            return (
+                              <g key={score}>
+                                <line
+                                  x1={paddingX}
+                                  y1={y}
+                                  x2={chartWidth - paddingX}
+                                  y2={y}
+                                  stroke="currentColor"
+                                  className="text-border/40"
+                                  strokeWidth="1"
+                                  strokeDasharray="3 3"
+                                />
+                                <text
+                                  x={paddingX - 6}
+                                  y={y + 3.5}
+                                  fontSize="9"
+                                  textAnchor="end"
+                                  className="fill-muted-foreground/70 font-mono font-semibold"
+                                >
+                                  {score}.0
+                                </text>
+                              </g>
+                            );
+                          })}
+
+                          {/* Area fill */}
+                          <path
+                            d={`M ${paddingX},${chartHeight - paddingY} L ${points} L ${chartWidth - paddingX},${chartHeight - paddingY} Z`}
+                            fill="url(#scoreAreaGrad)"
+                          />
+
+                          {/* Trend line */}
+                          <polyline
+                            fill="none"
+                            stroke="var(--color-primary, #2563eb)"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            points={points}
+                          />
+
+                          {/* Plot markers */}
+                          {trend.map((item, i) => {
+                            const x =
+                              paddingX +
+                              (i * (chartWidth - paddingX * 2)) /
+                                (trend.length - 1);
+                            const y =
+                              chartHeight -
+                              paddingY -
+                              ((Math.max(minScore, Math.min(maxScore, item.band)) -
+                                minScore) /
+                                (maxScore - minScore)) *
+                                (chartHeight - paddingY * 2);
+                            return (
+                              <g key={item.id ? String(item.id) : i}>
+                                <circle
+                                  cx={x}
+                                  cy={y}
+                                  r="4"
+                                  className="fill-white dark:fill-zinc-950 stroke-primary transition-all"
+                                  strokeWidth="2"
+                                />
+                              </g>
+                            );
+                          })}
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="h-[110px] flex items-center justify-center text-xs text-muted-foreground border border-dashed rounded-xl">
+                        Complete at least 2 evaluated essays to plot your trajectory curve.
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between text-[10px] font-medium text-muted-foreground/70 px-1 border-t border-border/30 pt-1.5">
+                      <span>First attempt</span>
+                      <span>Latest attempt</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
 
               {/* 4-Pillar Examiner Performance Matrix */}
-              <div className="space-y-2">
+              <motion.div variants={itemVariants} className="space-y-2">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-1.5">
                     <ShieldCheck className="h-4 w-4 text-primary" />
@@ -576,7 +618,7 @@ const AnalyticsPage = () => {
                         type="button"
                         onClick={() => setSelectedCriterion(item.key)}
                         className={cn(
-                          "w-full text-left p-3 rounded-xl border transition-all duration-150 cursor-pointer relative overflow-hidden flex flex-col justify-between space-y-2.5",
+                          "w-full text-left p-3 rounded-xl border transition-all duration-200 cursor-pointer relative overflow-hidden flex flex-col justify-between space-y-2.5 hover:scale-[1.01]",
                           isSelected
                             ? "bg-primary/5 border-primary/50 shadow-2xs ring-1 ring-primary/20"
                             : "bg-white dark:bg-zinc-900/50 border-border/60 dark:border-zinc-800/80 hover:border-border hover:bg-zinc-50/50 dark:hover:bg-zinc-900/80",
@@ -652,184 +694,201 @@ const AnalyticsPage = () => {
                     );
                   })}
                 </div>
-              </div>
+              </motion.div>
 
               {/* Actionable Examiner Recommendations Card (Placed below 4-Pillar Matrix) */}
-              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs overflow-hidden py-4">
-                <CardHeader className="p-3.5 sm:p-4 pb-2 border-b border-border/40 flex flex-row items-center justify-between">
-                  <div className="space-y-0.5">
-                    <CardTitle className="text-xs sm:text-sm font-bold flex items-center gap-1.5">
-                      <Target className="h-4 w-4 text-emerald-500" />
-                      Actionable examiner recommendations
-                    </CardTitle>
-                    <CardDescription className="text-[11px]">
-                      Aggregated directly from your recent essay evaluation feedback
-                    </CardDescription>
-                  </div>
-                  {recentTips.length > 0 && (
-                    <Badge
-                      variant="secondary"
-                      className="text-[10px] font-mono py-0 h-5"
-                    >
-                      {recentTips.length} tips
-                    </Badge>
-                  )}
-                </CardHeader>
-                <CardContent className="p-3.5 sm:p-4 pt-2.5">
-                  {recentTips.length > 0 ? (
-                    <div className="space-y-2">
-                      {recentTips.map((tip, idx) => (
-                        <div
-                          key={idx}
-                          className="p-2.5 rounded-xl border border-border/40 bg-zinc-50/50 dark:bg-zinc-900/30 flex items-start gap-2 text-xs"
-                        >
-                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                          <p className="text-zinc-800 dark:text-zinc-200 leading-relaxed font-medium text-[11px]">
-                            {tip}
-                          </p>
-                        </div>
-                      ))}
+              <motion.div variants={itemVariants}>
+                <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-md transition-all duration-300 overflow-hidden py-4">
+                  <CardHeader className="p-3.5 sm:p-4 pb-2 border-b border-border/40 flex flex-row items-center justify-between">
+                    <div className="space-y-0.5">
+                      <CardTitle className="text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                        <Target className="h-4 w-4 text-emerald-500" />
+                        Actionable examiner recommendations
+                      </CardTitle>
+                      <CardDescription className="text-[11px]">
+                        Aggregated directly from your recent essay evaluation feedback
+                      </CardDescription>
                     </div>
-                  ) : (
-                    <div className="p-4 rounded-xl border border-dashed text-center text-xs text-muted-foreground space-y-2">
-                      <p>
-                        Submit essays with feedback enabled to collect examiner
-                        correction tips.
-                      </p>
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="h-7 text-xs rounded-lg cursor-pointer"
+                    {recentTips.length > 0 && (
+                      <Badge
+                        variant="secondary"
+                        className="text-[10px] font-mono py-0 h-5"
                       >
-                        <Link href="/dashboard/practice">Start Practice</Link>
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                        {recentTips.length} tips
+                      </Badge>
+                    )}
+                  </CardHeader>
+                  <CardContent className="p-3.5 sm:p-4 pt-2.5">
+                    {recentTips.length > 0 ? (
+                      <div className="space-y-2">
+                        {recentTips.map((tip, idx) => (
+                          <div
+                            key={idx}
+                            className="p-2.5 rounded-xl border border-border/40 bg-zinc-50/50 dark:bg-zinc-900/30 flex items-start gap-2 text-xs"
+                          >
+                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                            <p className="text-zinc-800 dark:text-zinc-200 leading-relaxed font-medium text-[11px]">
+                              {tip}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="p-4 rounded-xl border border-dashed text-center text-xs text-muted-foreground space-y-2">
+                        <p>
+                          Submit essays with feedback enabled to collect examiner
+                          correction tips.
+                        </p>
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="sm"
+                          className="h-7 text-xs rounded-lg cursor-pointer"
+                        >
+                          <Link href="/dashboard/practice">Start Practice</Link>
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
 
             {/* ── Right Column (5 cols): AI Coach Analysis -> Diagnostic Spotlight ── */}
             <div className="lg:col-span-5 space-y-5">
               {/* Daily AI Coach Feedback */}
-              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs overflow-hidden py-4">
-                <CardHeader className="p-3.5 sm:p-4 pb-2 border-b border-border/40 flex flex-row items-center justify-between">
-                  <CardTitle className="text-xs sm:text-sm font-bold flex items-center gap-1.5">
-                    <MessageSquareQuote className="h-4 w-4 text-primary" />
-                    Examiner coach analysis
-                  </CardTitle>
-                  {dailyComment && (
-                    <Badge
-                      className={cn(
-                        "text-[10px] font-semibold py-0 px-2 h-5",
-                        dailyComment.tone === "positive"
-                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+              <motion.div variants={itemVariants}>
+                <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-md transition-all duration-300 overflow-hidden py-4">
+                  <CardHeader className="p-3.5 sm:p-4 pb-2 border-b border-border/40 flex flex-row items-center justify-between">
+                    <CardTitle className="text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                      <MessageSquareQuote className="h-4 w-4 text-primary" />
+                      Examiner coach analysis
+                    </CardTitle>
+                    {dailyComment && (
+                      <Badge
+                        className={cn(
+                          "text-[10px] font-semibold py-0 px-2 h-5",
+                          dailyComment.tone === "positive"
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                            : dailyComment.tone === "push"
+                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                              : "bg-primary/10 text-primary border-primary/20",
+                        )}
+                      >
+                        {dailyComment.tone === "positive"
+                          ? "Upward trend"
                           : dailyComment.tone === "push"
-                            ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
-                            : "bg-primary/10 text-primary border-primary/20",
-                      )}
-                    >
-                      {dailyComment.tone === "positive"
-                        ? "Upward trend"
-                        : dailyComment.tone === "push"
-                          ? "Needs focus"
-                          : "Steady progress"}
-                    </Badge>
-                  )}
-                </CardHeader>
-                <CardContent className="p-3.5 sm:p-4 pt-2.5 space-y-3">
-                  <p className="text-xs text-zinc-800 dark:text-zinc-200 leading-relaxed font-medium italic">
-                    "{dailyComment?.text || "Submit more essays to unlock personalized AI diagnostic comments based on your performance."}"
-                  </p>
+                            ? "Needs focus"
+                            : "Steady progress"}
+                      </Badge>
+                    )}
+                  </CardHeader>
+                  <CardContent className="p-3.5 sm:p-4 pt-2.5 space-y-3">
+                    <p className="text-xs text-zinc-800 dark:text-zinc-200 leading-relaxed font-medium italic">
+                      "{dailyComment?.text || "Submit more essays to unlock personalized AI diagnostic comments based on your performance."}"
+                    </p>
 
-                  {/* Rework Wins Delta */}
-                  {improvements.length > 0 && (
-                    <div className="p-2.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                          <Zap className="h-3 w-3" /> Rework mastery gains
-                        </span>
-                        <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
-                          {improvements.length} draft
-                          {improvements.length > 1 ? "s" : ""}
-                        </span>
-                      </div>
-                      <div className="space-y-0.5">
-                        {improvements.slice(0, 3).map((imp, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-center justify-between text-[11px] font-medium"
-                          >
-                            <span className="text-muted-foreground">
-                              Draft Rework #{idx + 1}
-                            </span>
-                            <span className="text-zinc-900 dark:text-zinc-100 font-mono">
-                              {imp.fromBand.toFixed(1)} → {imp.toBand.toFixed(1)}{" "}
-                              <span className="text-emerald-500 font-bold ml-1">
-                                (+{imp.delta.toFixed(1)})
+                    {/* Rework Wins Delta */}
+                    {improvements.length > 0 && (
+                      <div className="p-2.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                            <Zap className="h-3 w-3" /> Rework mastery gains
+                          </span>
+                          <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+                            {improvements.length} draft
+                            {improvements.length > 1 ? "s" : ""}
+                          </span>
+                        </div>
+                        <div className="space-y-0.5">
+                          {improvements.slice(0, 3).map((imp, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between text-[11px] font-medium"
+                            >
+                              <span className="text-muted-foreground">
+                                Draft Rework #{idx + 1}
                               </span>
-                            </span>
-                          </div>
-                        ))}
+                              <span className="text-zinc-900 dark:text-zinc-100 font-mono">
+                                {imp.fromBand.toFixed(1)} → {imp.toBand.toFixed(1)}{" "}
+                                <span className="text-emerald-500 font-bold ml-1">
+                                  (+{imp.delta.toFixed(1)})
+                                </span>
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
 
               {/* Selected Criterion Deep Dive (Diagnostic Spotlight) */}
-              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs overflow-hidden py-4">
-                <CardHeader className="p-3.5 sm:p-4 pb-2 border-b border-border/40 flex flex-row items-center justify-between">
-                  <div>
-                    <span className="text-[10px] font-semibold text-primary block">
-                      Diagnostic spotlight
-                    </span>
-                    <CardTitle className="text-xs sm:text-sm font-bold mt-0.5">
-                      {CRITERIA_GUIDE[selectedCriterion].name}
-                    </CardTitle>
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className="font-mono text-xs font-bold py-0 h-5"
-                  >
-                    {criteria?.[selectedCriterion]
-                      ? `${criteria[selectedCriterion].toFixed(1)} Band`
-                      : "—"}
-                  </Badge>
-                </CardHeader>
-                <CardContent className="p-3.5 sm:p-4 pt-2.5 space-y-3 text-xs">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-semibold text-muted-foreground block">
-                      What examiners look for
-                    </span>
-                    <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed text-[11px]">
-                      {CRITERIA_GUIDE[selectedCriterion].description}
-                    </p>
-                  </div>
+              <motion.div variants={itemVariants}>
+                <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-md transition-all duration-300 overflow-hidden py-4">
+                  <CardHeader className="p-3.5 sm:p-4 pb-2 border-b border-border/40 flex flex-row items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-semibold text-primary block">
+                        Diagnostic spotlight
+                      </span>
+                      <CardTitle className="text-xs sm:text-sm font-bold mt-0.5">
+                        {CRITERIA_GUIDE[selectedCriterion].name}
+                      </CardTitle>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className="font-mono text-xs font-bold py-0 h-5"
+                    >
+                      {criteria?.[selectedCriterion]
+                        ? `${criteria[selectedCriterion].toFixed(1)} Band`
+                        : "—"}
+                    </Badge>
+                  </CardHeader>
+                  <CardContent className="p-3.5 sm:p-4 pt-2.5 space-y-3 text-xs">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={selectedCriterion}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.15 }}
+                        className="space-y-3"
+                      >
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-semibold text-muted-foreground block">
+                            What examiners look for
+                          </span>
+                          <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed text-[11px]">
+                            {CRITERIA_GUIDE[selectedCriterion].description}
+                          </p>
+                        </div>
 
-                  <div className="p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-0.5">
-                    <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1">
-                      <AlertTriangle className="h-3 w-3" /> Common candidate pitfall
-                    </span>
-                    <p className="text-muted-foreground leading-relaxed text-[11px]">
-                      {CRITERIA_GUIDE[selectedCriterion].commonWeakness}
-                    </p>
-                  </div>
+                        <div className="p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-0.5">
+                          <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                            <AlertTriangle className="h-3 w-3" /> Common candidate pitfall
+                          </span>
+                          <p className="text-muted-foreground leading-relaxed text-[11px]">
+                            {CRITERIA_GUIDE[selectedCriterion].commonWeakness}
+                          </p>
+                        </div>
 
-                  <div className="p-2.5 rounded-xl bg-primary/5 border border-primary/20 space-y-0.5">
-                    <span className="text-[10px] font-semibold text-primary flex items-center gap-1">
-                      <Sparkles className="h-3 w-3" /> Band 7+ strategy
-                    </span>
-                    <p className="text-zinc-800 dark:text-zinc-200 leading-relaxed text-[11px] font-medium">
-                      {CRITERIA_GUIDE[selectedCriterion].targetTip}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+                        <div className="p-2.5 rounded-xl bg-primary/5 border border-primary/20 space-y-0.5">
+                          <span className="text-[10px] font-semibold text-primary flex items-center gap-1">
+                            <Sparkles className="h-3 w-3" /> Band 7+ strategy
+                          </span>
+                          <p className="text-zinc-800 dark:text-zinc-200 leading-relaxed text-[11px] font-medium">
+                            {CRITERIA_GUIDE[selectedCriterion].targetTip}
+                          </p>
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </DashboardShell>
   );
