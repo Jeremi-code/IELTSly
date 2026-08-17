@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -348,14 +349,71 @@ export default function HistoryPage() {
 
       {/* ── Essay Results Section ───────────────────────────────────── */}
       {loading ? (
-        <Card className="border border-dashed border-border/60 bg-white/40 dark:bg-zinc-900/30 backdrop-blur-md rounded-2xl p-12 text-center">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3 animate-pulse">
-            <FileText className="h-5 w-5" />
+        viewMode === "cards" ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Card
+                key={i}
+                className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl p-4 space-y-3.5"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Skeleton className="h-5 w-24 rounded-md" />
+                    <Skeleton className="h-5 w-16 rounded-md" />
+                  </div>
+                  <Skeleton className="h-4 w-16 rounded" />
+                </div>
+                <div className="space-y-1.5">
+                  <Skeleton className="h-4 w-full rounded" />
+                  <Skeleton className="h-4 w-3/4 rounded" />
+                  <Skeleton className="h-3 w-1/3 rounded" />
+                </div>
+                <div className="grid grid-cols-4 gap-1.5 pt-2 border-t border-border/30">
+                  {Array.from({ length: 4 }).map((_, j) => (
+                    <div
+                      key={j}
+                      className="bg-zinc-50 dark:bg-zinc-800/40 p-2 rounded-lg space-y-1"
+                    >
+                      <Skeleton className="h-2.5 w-6 mx-auto rounded" />
+                      <Skeleton className="h-3.5 w-8 mx-auto rounded" />
+                    </div>
+                  ))}
+                </div>
+                <Skeleton className="h-10 w-full rounded-xl" />
+                <div className="flex items-center justify-between pt-2 border-t border-border/40">
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-9 w-20 rounded-xl" />
+                    <div className="space-y-1">
+                      <Skeleton className="h-2.5 w-12 rounded" />
+                      <Skeleton className="h-2.5 w-10 rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-8 w-20 rounded-xl" />
+                </div>
+              </Card>
+            ))}
           </div>
-          <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-            Loading your essay archive...
-          </p>
-        </Card>
+        ) : (
+          <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl overflow-hidden shadow-2xs">
+            <div className="p-4 space-y-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between gap-4 py-2 border-b border-border/30 last:border-0"
+                >
+                  <div className="space-y-1.5 flex-1">
+                    <Skeleton className="h-4 w-2/3 rounded" />
+                    <Skeleton className="h-3 w-1/4 rounded" />
+                  </div>
+                  <Skeleton className="h-5 w-16 rounded-md hidden sm:block" />
+                  <Skeleton className="h-6 w-12 rounded-md" />
+                  <Skeleton className="h-4 w-20 rounded hidden md:block" />
+                  <Skeleton className="h-8 w-20 rounded-xl shrink-0" />
+                </div>
+              ))}
+            </div>
+          </Card>
+        )
       ) : loadError ? (
         <Card className="border border-rose-500/20 bg-rose-500/5 backdrop-blur-md rounded-2xl p-8 text-center space-y-2">
           <HelpCircle className="h-8 w-8 text-rose-500 mx-auto" />
