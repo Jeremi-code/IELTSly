@@ -31,6 +31,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import DashboardShell from "../components/DashboardShell";
 import QuestionSelectorModal from "../components/QuestionSelectorModal";
 import { cn } from "@/lib/utils";
@@ -394,44 +395,64 @@ export default function DashboardPage() {
       </motion.div>
 
       {/* ── METRICS GRID (COMPACT, CRISP DESIGN) ──────────────────────── */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5"
-      >
-        {metricCards.map((metric) => (
-          <motion.div key={metric.title} variants={itemVariants}>
-            <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200">
-              <CardContent className="p-4 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-muted-foreground">
-                    {metric.title}
-                  </span>
-                  <div
-                    className={cn(
-                      "h-7 w-7 rounded-lg flex items-center justify-center shrink-0 border",
-                      metric.bg,
-                      metric.border,
-                    )}
-                  >
-                    <metric.icon className={cn("h-3.5 w-3.5", metric.color)} />
-                  </div>
-                </div>
-
-                <div className="space-y-0.5">
-                  <div className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-                    {metric.value}
-                  </div>
-                  <p className="text-[11px] text-muted-foreground font-medium">
-                    {metric.detail}
-                  </p>
-                </div>
-              </CardContent>
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Card
+              key={i}
+              className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs p-4 space-y-3"
+            >
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-3.5 w-24 rounded" />
+                <Skeleton className="h-7 w-7 rounded-lg" />
+              </div>
+              <div className="space-y-1.5">
+                <Skeleton className="h-7 w-16 rounded" />
+                <Skeleton className="h-3 w-32 rounded" />
+              </div>
             </Card>
-          </motion.div>
-        ))}
-      </motion.div>
+          ))}
+        </div>
+      ) : (
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5"
+        >
+          {metricCards.map((metric) => (
+            <motion.div key={metric.title} variants={itemVariants}>
+              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200">
+                <CardContent className="p-4 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-muted-foreground">
+                      {metric.title}
+                    </span>
+                    <div
+                      className={cn(
+                        "h-7 w-7 rounded-lg flex items-center justify-center shrink-0 border",
+                        metric.bg,
+                        metric.border,
+                      )}
+                    >
+                      <metric.icon className={cn("h-3.5 w-3.5", metric.color)} />
+                    </div>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <div className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                      {metric.value}
+                    </div>
+                    <p className="text-[11px] text-muted-foreground font-medium">
+                      {metric.detail}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
 
       {/* ── EXAMINER DAILY COACHING & WEEKLY TARGET ───────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -582,7 +603,35 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {recent.length > 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Card
+                key={i}
+                className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl p-4 space-y-3"
+              >
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-5 w-24 rounded-md" />
+                  <Skeleton className="h-4 w-16 rounded" />
+                </div>
+                <div className="space-y-1.5">
+                  <Skeleton className="h-4 w-full rounded" />
+                  <Skeleton className="h-4 w-3/4 rounded" />
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-border/40">
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-9 w-9 rounded-xl" />
+                    <div className="space-y-1">
+                      <Skeleton className="h-3 w-16 rounded" />
+                      <Skeleton className="h-2.5 w-24 rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-8 w-16 rounded-xl" />
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : recent.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {recent.map((essay) => {
               const band = essay.evaluation?.overallBand;

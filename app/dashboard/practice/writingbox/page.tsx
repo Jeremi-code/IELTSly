@@ -41,6 +41,7 @@ import {
 import type { Question } from "@/types/question";
 import type { Evaluation } from "@/types/essay";
 import type { AICredentialStatus } from "@/types/ai";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 // ── TaskFigure: Displays IELTS Task 1 figure with on-page full-size view ──
@@ -698,11 +699,12 @@ function WritingBoxInner() {
                       {question ? (
                         question.text
                       ) : questionLoading ? (
-                        <span className="space-y-2 py-4 block">
-                          <span className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse w-full block" />
-                          <span className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse w-5/6 block" />
-                          <span className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse w-2/3 block" />
-                        </span>
+                        <div className="space-y-2.5 py-2">
+                          <Skeleton className="h-4 w-full rounded" />
+                          <Skeleton className="h-4 w-11/12 rounded" />
+                          <Skeleton className="h-4 w-4/5 rounded" />
+                          <Skeleton className="h-4 w-2/3 rounded" />
+                        </div>
                       ) : (
                         "Please click 'Change Question' above to choose an essay prompt."
                       )}
