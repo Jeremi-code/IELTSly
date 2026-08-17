@@ -353,179 +353,190 @@ const PracticePage = () => {
       </motion.div>
 
       {/* ── QUICK PRACTICE BY QUESTION CATEGORY ───────────────────────── */}
-      <div className="space-y-3 pt-1">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-          <div>
-            <h2 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-              <Layers className="h-4 w-4 text-primary" />
-              Practice by question category
-            </h2>
-            <p className="text-xs text-muted-foreground">
-              Select an authentic Cambridge taxonomy to launch targeted prompt
-              practice
-            </p>
-          </div>
-        </div>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="space-y-3 pt-1"
+      >
+        <motion.div variants={itemVariants}>
+          <h2 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
+            <Layers className="h-4 w-4 text-primary" />
+            Practice by question category
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            Select an authentic Cambridge taxonomy to launch targeted prompt
+            practice
+          </p>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {/* Task 2 Category Box */}
-          <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs">
-            <CardHeader className="p-3.5 sm:p-4 pb-2.5 border-b border-border/40 flex flex-row items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="h-7 w-7 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                  <FileText className="h-3.5 w-3.5" />
-                </div>
-                <div>
-                  <CardTitle className="text-xs sm:text-sm font-bold">
-                    IELTS Task 2: Academic Essay
-                  </CardTitle>
-                  <CardDescription className="text-[11px]">
-                    250+ words • 40 minutes • 66% of writing score
-                  </CardDescription>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleOpenMode("practice", "task2", "all")}
-                className="text-[11px] font-bold text-primary hover:bg-primary/10 h-7 px-2.5 rounded-lg cursor-pointer"
-              >
-                Browse all Task 2
-              </Button>
-            </CardHeader>
-            <CardContent className="p-3.5 sm:p-4 space-y-1.5">
-              {task2Categories.map((cat) => (
-                <button
-                  key={cat.title}
-                  type="button"
-                  onClick={() =>
-                    handleOpenMode("practice", "task2", cat.categoryValue)
-                  }
-                  className="w-full p-2.5 rounded-xl border border-border/40 hover:border-primary/40 bg-zinc-50/50 dark:bg-zinc-900/30 hover:bg-primary/5 transition-all text-left group flex items-center justify-between cursor-pointer"
-                >
-                  <div className="space-y-0.5 min-w-0 pr-2">
-                    <span className="font-semibold text-xs text-zinc-900 dark:text-zinc-100 group-hover:text-primary transition-colors block">
-                      {cat.title}
-                    </span>
-                    <span className="text-[11px] text-muted-foreground block truncate">
-                      {cat.desc}
-                    </span>
+          <motion.div variants={itemVariants}>
+            <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-md transition-all duration-300">
+              <CardHeader className="p-3.5 sm:p-4 pb-2.5 border-b border-border/40 flex flex-row items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="h-7 w-7 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                    <FileText className="h-3.5 w-3.5" />
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                </button>
-              ))}
-            </CardContent>
-          </Card>
+                  <div>
+                    <CardTitle className="text-xs sm:text-sm font-bold">
+                      IELTS Task 2: Academic Essay
+                    </CardTitle>
+                    <CardDescription className="text-[11px]">
+                      250+ words • 40 minutes • 66% of writing score
+                    </CardDescription>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleOpenMode("practice", "task2", "all")}
+                  className="text-[11px] font-bold text-primary hover:bg-primary/10 h-7 px-2.5 rounded-lg cursor-pointer"
+                >
+                  Browse all Task 2
+                </Button>
+              </CardHeader>
+              <CardContent className="p-3.5 sm:p-4 space-y-1.5">
+                {task2Categories.map((cat) => (
+                  <button
+                    key={cat.title}
+                    type="button"
+                    onClick={() =>
+                      handleOpenMode("practice", "task2", cat.categoryValue)
+                    }
+                    className="w-full p-2.5 rounded-xl border border-border/40 hover:border-primary/40 bg-zinc-50/50 dark:bg-zinc-900/30 hover:bg-primary/5 transition-all text-left group flex items-center justify-between cursor-pointer"
+                  >
+                    <div className="space-y-0.5 min-w-0 pr-2">
+                      <span className="font-semibold text-xs text-zinc-900 dark:text-zinc-100 group-hover:text-primary transition-colors block">
+                        {cat.title}
+                      </span>
+                      <span className="text-[11px] text-muted-foreground block truncate">
+                        {cat.desc}
+                      </span>
+                    </div>
+                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                  </button>
+                ))}
+              </CardContent>
+            </Card>
+          </motion.div>
 
           {/* Task 1 Category Box */}
-          <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs">
-            <CardHeader className="p-3.5 sm:p-4 pb-2.5 border-b border-border/40 flex flex-row items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="h-7 w-7 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
-                  <BarChart2 className="h-3.5 w-3.5" />
-                </div>
-                <div>
-                  <CardTitle className="text-xs sm:text-sm font-bold">
-                    IELTS Task 1: Visual Report
-                  </CardTitle>
-                  <CardDescription className="text-[11px]">
-                    150+ words • 20 minutes • 33% of writing score
-                  </CardDescription>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleOpenMode("practice", "task1", "all")}
-                className="text-[11px] font-bold text-primary hover:bg-primary/10 h-7 px-2.5 rounded-lg cursor-pointer"
-              >
-                Browse all Task 1
-              </Button>
-            </CardHeader>
-            <CardContent className="p-3.5 sm:p-4 space-y-1.5">
-              {task1Categories.map((cat) => (
-                <button
-                  key={cat.title}
-                  type="button"
-                  onClick={() =>
-                    handleOpenMode("practice", "task1", cat.categoryValue)
-                  }
-                  className="w-full p-2.5 rounded-xl border border-border/40 hover:border-primary/40 bg-zinc-50/50 dark:bg-zinc-900/30 hover:bg-primary/5 transition-all text-left group flex items-center justify-between cursor-pointer"
-                >
-                  <div className="space-y-0.5 min-w-0 pr-2">
-                    <span className="font-semibold text-xs text-zinc-900 dark:text-zinc-100 group-hover:text-primary transition-colors block">
-                      {cat.title}
-                    </span>
-                    <span className="text-[11px] text-muted-foreground block truncate">
-                      {cat.desc}
-                    </span>
+          <motion.div variants={itemVariants}>
+            <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-md transition-all duration-300">
+              <CardHeader className="p-3.5 sm:p-4 pb-2.5 border-b border-border/40 flex flex-row items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="h-7 w-7 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                    <BarChart2 className="h-3.5 w-3.5" />
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                </button>
-              ))}
-            </CardContent>
-          </Card>
+                  <div>
+                    <CardTitle className="text-xs sm:text-sm font-bold">
+                      IELTS Task 1: Visual Report
+                    </CardTitle>
+                    <CardDescription className="text-[11px]">
+                      150+ words • 20 minutes • 33% of writing score
+                    </CardDescription>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleOpenMode("practice", "task1", "all")}
+                  className="text-[11px] font-bold text-primary hover:bg-primary/10 h-7 px-2.5 rounded-lg cursor-pointer"
+                >
+                  Browse all Task 1
+                </Button>
+              </CardHeader>
+              <CardContent className="p-3.5 sm:p-4 space-y-1.5">
+                {task1Categories.map((cat) => (
+                  <button
+                    key={cat.title}
+                    type="button"
+                    onClick={() =>
+                      handleOpenMode("practice", "task1", cat.categoryValue)
+                    }
+                    className="w-full p-2.5 rounded-xl border border-border/40 hover:border-primary/40 bg-zinc-50/50 dark:bg-zinc-900/30 hover:bg-primary/5 transition-all text-left group flex items-center justify-between cursor-pointer"
+                  >
+                    <div className="space-y-0.5 min-w-0 pr-2">
+                      <span className="font-semibold text-xs text-zinc-900 dark:text-zinc-100 group-hover:text-primary transition-colors block">
+                        {cat.title}
+                      </span>
+                      <span className="text-[11px] text-muted-foreground block truncate">
+                        {cat.desc}
+                      </span>
+                    </div>
+                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                  </button>
+                ))}
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* ── 4 OFFICIAL EXAMINER CRITERIA ─────────────────────────────── */}
-      <div className="space-y-3 pt-1">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-              <BookOpen className="h-4 w-4 text-primary" />
-              Official 4-pillar examiner scoring criteria
-            </h2>
-            <p className="text-xs text-muted-foreground">
-              Each criterion contributes 25% towards your overall IELTS Writing
-              Band Score
-            </p>
-          </div>
-        </div>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="space-y-3 pt-1"
+      >
+        <motion.div variants={itemVariants}>
+          <h2 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
+            <BookOpen className="h-4 w-4 text-primary" />
+            Official 4-pillar examiner scoring criteria
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            Each criterion contributes 25% towards your overall IELTS Writing
+            Band Score
+          </p>
+        </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {examinerCriteria.map((c) => (
-            <Card
-              key={c.code}
-              className={cn(
-                "border bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs p-3.5 sm:p-4 space-y-2.5 flex flex-col justify-between",
-                c.bg,
-              )}
-            >
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <span
-                    className={cn("font-black text-xs sm:text-sm", c.color)}
-                  >
-                    {c.code}
-                  </span>
-                  <Badge
-                    variant="outline"
-                    className="text-[9px] font-mono py-0"
-                  >
-                    {c.badge}
-                  </Badge>
-                </div>
-                <h3 className="font-bold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100">
-                  {c.name}
-                </h3>
-              </div>
-
-              <div className="space-y-1.5 text-xs text-muted-foreground pt-1.5 border-t border-border/30">
-                {c.tips.map((tip, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-start gap-1.5 leading-relaxed"
-                  >
-                    <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0 mt-0.5" />
-                    <span className="text-[11px]">{tip}</span>
+            <motion.div key={c.code} variants={itemVariants}>
+              <Card
+                className={cn(
+                  "border bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-md transition-all duration-300 p-3.5 sm:p-4 space-y-2.5 flex flex-col justify-between h-full",
+                  c.bg,
+                )}
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={cn("font-black text-xs sm:text-sm", c.color)}
+                    >
+                      {c.code}
+                    </span>
+                    <Badge
+                      variant="outline"
+                      className="text-[9px] font-mono py-0"
+                    >
+                      {c.badge}
+                    </Badge>
                   </div>
-                ))}
-              </div>
-            </Card>
+                  <h3 className="font-bold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100">
+                    {c.name}
+                  </h3>
+                </div>
+
+                <div className="space-y-1.5 text-xs text-muted-foreground pt-1.5 border-t border-border/30">
+                  {c.tips.map((tip, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-1.5 leading-relaxed"
+                    >
+                      <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0 mt-0.5" />
+                      <span className="text-[11px]">{tip}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </DashboardShell>
   );
 };
