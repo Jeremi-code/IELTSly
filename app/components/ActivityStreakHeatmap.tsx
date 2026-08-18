@@ -236,7 +236,7 @@ export default function ActivityStreakHeatmap({
               <Flame className="h-4 w-4 fill-current" />
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+              <span className="text-[11px] font-medium text-muted-foreground block">
                 Current Streak
               </span>
               <span className="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400">
@@ -251,7 +251,7 @@ export default function ActivityStreakHeatmap({
               <Trophy className="h-4 w-4" />
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+              <span className="text-[11px] font-medium text-muted-foreground block">
                 Longest Streak
               </span>
               <span className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400">
@@ -266,7 +266,7 @@ export default function ActivityStreakHeatmap({
               <Clock className="h-4 w-4" />
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+              <span className="text-[11px] font-medium text-muted-foreground block">
                 Practice Time
               </span>
               <span className="text-base sm:text-lg font-black text-blue-600 dark:text-blue-400">
@@ -281,7 +281,7 @@ export default function ActivityStreakHeatmap({
               <TrendingUp className="h-4 w-4" />
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+              <span className="text-[11px] font-medium text-muted-foreground block">
                 Active Days
               </span>
               <span className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">

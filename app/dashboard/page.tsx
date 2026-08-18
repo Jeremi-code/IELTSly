@@ -400,11 +400,11 @@ export default function DashboardPage() {
 
       {/* ── METRICS GRID (COMPACT, CRISP DESIGN) ──────────────────────── */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 items-stretch">
           {Array.from({ length: 4 }).map((_, i) => (
             <Card
               key={i}
-              className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs p-4 space-y-3"
+              className="h-full flex flex-col justify-between border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs p-4 space-y-3 min-h-[110px]"
             >
               <div className="flex items-center justify-between">
                 <Skeleton className="h-3.5 w-24 rounded" />
@@ -422,12 +422,12 @@ export default function DashboardPage() {
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 items-stretch"
         >
           {metricCards.map((metric) => (
-            <motion.div key={metric.title} variants={itemVariants}>
-              <Card className="border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200">
-                <CardContent className="p-4 space-y-2">
+            <motion.div key={metric.title} variants={itemVariants} className="h-full">
+              <Card className="h-full flex flex-col justify-between border border-border/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl shadow-2xs hover:shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200">
+                <CardContent className="p-4 space-y-2 h-full flex flex-col justify-between">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-medium text-muted-foreground">
                       {metric.title}
