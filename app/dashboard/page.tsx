@@ -43,6 +43,7 @@ import type {
   AnalyticsStats,
   CriteriaAverages,
   DailyComment,
+  ActivitySummary,
 } from "@/types/analytics";
 import type { AICredentialStatus } from "@/types/ai";
 
@@ -74,6 +75,8 @@ export default function DashboardPage() {
   const [criteriaAverages, setCriteriaAverages] =
     useState<CriteriaAverages | null>(null);
   const [dailyComment, setDailyComment] = useState<DailyComment | null>(null);
+  const [activitySummary, setActivitySummary] =
+    useState<ActivitySummary | null>(null);
   const [recent, setRecent] = useState<Essay[]>([]);
   const [loading, setLoading] = useState(true);
   const [aiStatus, setAiStatus] = useState<AICredentialStatus>({
@@ -113,6 +116,7 @@ export default function DashboardPage() {
         setStats(analyticsRes.value.stats);
         setCriteriaAverages(analyticsRes.value.criteriaAverages);
         setDailyComment(analyticsRes.value.dailyComment);
+        setActivitySummary(analyticsRes.value.activitySummary || null);
       }
 
       if (essaysRes.status === "fulfilled") {
@@ -540,10 +544,10 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {analytics?.activitySummary?.currentStreak ? (
+                {activitySummary?.currentStreak ? (
                   <Badge className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 text-[10px] py-0 font-bold flex items-center gap-1">
                     <Flame className="h-3 w-3 fill-current" />
-                    {analytics.activitySummary.currentStreak}d Streak
+                    {activitySummary.currentStreak}d Streak
                   </Badge>
                 ) : null}
                 <span className="text-xs font-mono font-bold text-primary">
