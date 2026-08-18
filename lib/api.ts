@@ -1,6 +1,6 @@
 import type { Essay } from "@/types/essay";
 import type { Question } from "@/types/question";
-import type { AnalyticsPayload } from "@/types/analytics";
+import type { AnalyticsPayload, ActivitySummary } from "@/types/analytics";
 import type { AICredentialStatus, AIProvider } from "@/types/ai";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -190,6 +190,10 @@ export function getQuestion(id: string): Promise<Question> {
 
 export function getAnalytics(): Promise<AnalyticsPayload> {
   return api("/api/analytics");
+}
+
+export function getActivitySummary(): Promise<ActivitySummary> {
+  return api("/api/analytics/activity");
 }
 
 export function formatDate(iso: string): string {
