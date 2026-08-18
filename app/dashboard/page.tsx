@@ -535,13 +535,21 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <CardTitle className="text-sm font-bold">
-                    Weekly target
+                    Practice target
                   </CardTitle>
                 </div>
               </div>
-              <span className="text-xs font-mono font-bold text-primary">
-                {weeklyCompleted}/{weeklyTarget} essays
-              </span>
+              <div className="flex items-center gap-2">
+                {analytics?.activitySummary?.currentStreak ? (
+                  <Badge className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 text-[10px] py-0 font-bold flex items-center gap-1">
+                    <Flame className="h-3 w-3 fill-current" />
+                    {analytics.activitySummary.currentStreak}d Streak
+                  </Badge>
+                ) : null}
+                <span className="text-xs font-mono font-bold text-primary">
+                  {weeklyCompleted}/{weeklyTarget} essays
+                </span>
+              </div>
             </div>
           </CardHeader>
           <CardContent className="p-4 pt-1 space-y-3.5">

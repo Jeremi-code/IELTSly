@@ -35,6 +35,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import ActivityStreakHeatmap from "../../components/ActivityStreakHeatmap";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -304,6 +305,23 @@ const AnalyticsPage = () => {
             ))}
           </div>
 
+          {/* Activity Heatmap Skeleton */}
+          <Card className="border border-border/60 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md rounded-2xl p-4 sm:p-5 space-y-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Skeleton className="h-4 w-48 rounded" />
+                <Skeleton className="h-3 w-72 rounded" />
+              </div>
+              <Skeleton className="h-7 w-32 rounded-lg" />
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} className="h-14 rounded-xl" />
+              ))}
+            </div>
+            <Skeleton className="h-28 w-full rounded-xl" />
+          </Card>
+
           {/* Main 2-Column Balanced Layout Skeleton */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             {/* Left Column Skeleton */}
@@ -546,6 +564,13 @@ const AnalyticsPage = () => {
                 </div>
               </Card>
             </motion.div>
+          </motion.div>
+
+          {/* ── Writing Activity & Daily Practice Streak Heatmap ─────── */}
+          <motion.div variants={itemVariants}>
+            <ActivityStreakHeatmap
+              activitySummary={data?.activitySummary}
+            />
           </motion.div>
 
           {/* ── Main 2-Column Balanced Dashboard Layout ───────────────── */}
