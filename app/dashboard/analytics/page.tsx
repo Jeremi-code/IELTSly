@@ -265,32 +265,12 @@ const AnalyticsPage = () => {
       {/* ── Page Header ─────────────────────────────────────────────── */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="space-y-1">
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
-              Writing{" "}
-              <span className="text-primary italic">
-                Analytics & Diagnostics
-              </span>
-            </h1>
-            {userTarget?.examDate ? (
-              <Badge
-                onClick={() => setTargetModalOpen(true)}
-                className="bg-primary/10 hover:bg-primary/20 text-primary border-primary/20 text-xs py-1 px-2.5 rounded-xl font-bold flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105"
-              >
-                <Calendar className="h-3.5 w-3.5" />
-                <span>
-                  Exam:{" "}
-                  {new Date(userTarget.examDate).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </span>
-                <span className="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-md font-bold leading-none">
-                  Band {userTarget.targetBand?.toFixed(1) || "7.5"}
-                </span>
-              </Badge>
-            ) : null}
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
+            Writing{" "}
+            <span className="text-primary italic">
+              Analytics & Diagnostics
+            </span>
+          </h1>
           <p className="text-muted-foreground text-xs sm:text-sm max-w-2xl leading-relaxed">
             Real-time evaluation data, official 4-pillar band breakdowns, and
             actionable examiner diagnostics.

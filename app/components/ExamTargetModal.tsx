@@ -55,7 +55,6 @@ export default function ExamTargetModal({
   const [examDate, setExamDate] = useState("");
   const [targetBand, setTargetBand] = useState<number>(7.5);
   const [examType, setExamType] = useState<ExamType>("academic");
-  const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -79,7 +78,6 @@ export default function ExamTargetModal({
       }
       setTargetBand(currentTarget?.targetBand ?? 7.5);
       setExamType(currentTarget?.examType ?? "academic");
-      setNotes(currentTarget?.notes ?? "");
       setError(null);
     }
   }, [open, currentTarget]);
@@ -152,7 +150,6 @@ export default function ExamTargetModal({
         examDate: new Date(`${examDate}T00:00:00`).toISOString(),
         targetBand,
         examType,
-        notes,
       });
       onTargetSaved(saved);
       onOpenChange(false);
