@@ -399,7 +399,10 @@ function SettingsContent() {
                             <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                               IELTS {userTarget.examType === "general" ? "General Training" : "Academic"}
                             </span>
-                            <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] font-bold">
+                            <Badge
+                              variant="outline"
+                              className="text-[10px] font-semibold border-border/80 text-foreground"
+                            >
                               Target Band {userTarget.targetBand?.toFixed(1) || "7.5"}
                             </Badge>
                           </div>

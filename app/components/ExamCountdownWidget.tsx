@@ -8,18 +8,13 @@ import { Progress } from "@/components/ui/progress";
 import {
   Calendar,
   Target,
-  Clock,
-  Sparkles,
   Edit3,
   GraduationCap,
   BookOpen,
   Flame,
   ArrowRight,
-  CheckCircle2,
-  Hourglass,
   TrendingUp,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { UserTarget } from "@/types/target";
 
@@ -69,26 +64,26 @@ export default function ExamCountdownWidget({
     let paceDetail = "Balanced steady preparation pace";
     let urgencyBadge = "On Track";
     let urgencyColor =
-      "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20";
+      "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700";
 
     if (daysLeft <= 0) {
       paceDesc = "Exam Day / Completed";
       paceDetail = "Best of luck on your official score!";
       urgencyBadge = isToday ? "Test Day" : "Completed";
       urgencyColor =
-        "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
+        "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700";
     } else if (daysLeft <= 7) {
       paceDesc = "1-2 timed essays daily";
       paceDetail = "Final sprint & error review";
       urgencyBadge = "Final Sprint";
       urgencyColor =
-        "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20";
+        "bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 border-amber-200 dark:border-amber-800/60";
     } else if (daysLeft <= 30) {
       paceDesc = "4-5 essays / week";
       paceDetail = "Intensive criteria targeting";
       urgencyBadge = "Active Prep";
       urgencyColor =
-        "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
+        "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700";
     }
 
     return {
@@ -106,77 +101,59 @@ export default function ExamCountdownWidget({
     };
   }, [target]);
 
-  // ── State 1: Attractive Target Setting Widget (When no date is set) ──────
+  // ── State 1: Clean Target Setting Widget (When no date is set) ────────────
   if (!calculations) {
     return (
       <div
         className={cn(
-          "relative overflow-hidden rounded-3xl border border-primary/25 bg-gradient-to-br from-white/90 via-blue-50/50 to-indigo-50/30 dark:from-zinc-900/90 dark:via-zinc-900/60 dark:to-primary/10 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300 group",
+          "relative overflow-hidden rounded-2xl border border-border/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 backdrop-blur-md shadow-2xs transition-all duration-200",
           className,
         )}
       >
-        {/* Ambient decorative glow */}
-        <div className="absolute -top-24 -right-24 w-60 h-60 bg-gradient-to-br from-primary/20 via-blue-400/10 to-transparent rounded-full blur-3xl pointer-events-none group-hover:scale-110 transition-transform duration-700" />
-        <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-gradient-to-tr from-indigo-500/10 via-purple-400/10 to-transparent rounded-full blur-2xl pointer-events-none" />
-
-        <div className="relative p-5 sm:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+        <div className="p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           {/* Left content */}
-          <div className="flex items-start gap-4">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-primary via-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-primary/25 shrink-0 group-hover:scale-105 transition-transform duration-300">
-              <Target className="h-6 w-6" />
+          <div className="flex items-start gap-3.5">
+            <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20 mt-0.5">
+              <Target className="h-5 w-5" />
             </div>
 
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h3 className="font-extrabold text-base sm:text-lg tracking-tight text-zinc-900 dark:text-zinc-50">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="font-bold text-sm sm:text-base text-zinc-900 dark:text-zinc-50">
                   Set Your IELTS Exam Target Date
                 </h3>
-                <Badge className="bg-primary/15 text-primary border-primary/25 text-[10px] font-bold px-2 py-0.5 rounded-lg flex items-center gap-1 shadow-2xs">
-                  <Sparkles className="h-3 w-3" />
+                <Badge
+                  variant="outline"
+                  className="text-[10px] font-semibold text-muted-foreground border-border/70"
+                >
                   Goal Tracker
                 </Badge>
               </div>
 
-              <p className="text-xs sm:text-sm text-muted-foreground max-w-xl leading-relaxed">
-                Lock in your official test date and target band to activate
-                live countdowns, volume recommendations, and pacing milestones.
+              <p className="text-xs text-muted-foreground max-w-xl leading-relaxed">
+                Add your official test date and target band to track day
+                countdowns and weekly practice pacing.
               </p>
-
-              {/* Feature Benefit Badges */}
-              <div className="flex items-center gap-2 pt-1 flex-wrap">
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 bg-white/70 dark:bg-zinc-800/70 border border-border/50 px-2.5 py-0.5 rounded-full">
-                  <Hourglass className="h-3 w-3 text-primary" />
-                  Live Day Countdown
-                </span>
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 bg-white/70 dark:bg-zinc-800/70 border border-border/50 px-2.5 py-0.5 rounded-full">
-                  <Target className="h-3 w-3 text-emerald-500" />
-                  Band Goal Tracking
-                </span>
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 bg-white/70 dark:bg-zinc-800/70 border border-border/50 px-2.5 py-0.5 rounded-full">
-                  <Flame className="h-3 w-3 text-amber-500" />
-                  Study Pacing
-                </span>
-              </div>
             </div>
           </div>
 
           {/* Right Action Trigger */}
           <Button
             variant="blue"
-            size="lg"
+            size="sm"
             onClick={onOpenModal}
-            className="w-full md:w-auto px-6 py-2.5 h-11 rounded-2xl text-xs sm:text-sm font-bold shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 hover:scale-[1.02] active:scale-98 transition-all cursor-pointer shrink-0 flex items-center justify-center gap-2"
+            className="w-full md:w-auto px-4 py-2 h-9 rounded-xl text-xs font-bold shadow-2xs hover:scale-[1.01] active:scale-95 transition-all cursor-pointer shrink-0 flex items-center justify-center gap-1.5"
           >
-            <Calendar className="h-4 w-4" />
+            <Calendar className="h-3.5 w-3.5" />
             <span>Set Target Date</span>
-            <ArrowRight className="h-4 w-4 ml-0.5" />
+            <ArrowRight className="h-3.5 w-3.5 ml-0.5" />
           </Button>
         </div>
       </div>
     );
   }
 
-  // ── State 2: Highly Attractive Active Countdown Widget ────────────────────
+  // ── State 2: Clean Active Countdown Widget ────────────────────────────────
   const {
     daysLeft,
     weeksLeft,
@@ -196,38 +173,29 @@ export default function ExamCountdownWidget({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-3xl border border-border/80 dark:border-zinc-800/90 bg-white/90 dark:bg-zinc-950/70 backdrop-blur-2xl shadow-sm hover:shadow-md transition-all duration-300 group",
+        "relative overflow-hidden rounded-2xl border border-border/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 backdrop-blur-md shadow-2xs transition-all duration-200",
         className,
       )}
     >
-      {/* Subtle top accent gradient */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-indigo-500 to-emerald-400" />
-
-      {/* Ambient background glow */}
-      <div className="absolute top-0 right-0 w-80 h-36 bg-gradient-to-bl from-primary/10 via-indigo-500/5 to-transparent pointer-events-none rounded-tr-3xl" />
-
-      <div className="p-5 sm:p-6 space-y-4 relative">
+      <div className="p-4 sm:p-5 space-y-3.5">
         {/* Top Header Row */}
         <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20">
+          <div className="flex items-center gap-2.5">
+            <div className="h-8 w-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 flex items-center justify-center shrink-0 border border-border/50">
               {examType === "academic" ? (
-                <GraduationCap className="h-5 w-5" />
+                <GraduationCap className="h-4 w-4" />
               ) : (
-                <BookOpen className="h-5 w-5" />
+                <BookOpen className="h-4 w-4" />
               )}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+                <span className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100">
                   IELTS {examType === "academic" ? "Academic" : "General Training"}
                 </span>
                 <Badge
                   variant="outline"
-                  className={cn(
-                    "text-[10px] font-bold px-2 py-0.5 rounded-md",
-                    urgencyColor,
-                  )}
+                  className={cn("text-[10px] font-semibold px-2 py-0.5 rounded-md", urgencyColor)}
                 >
                   {urgencyBadge}
                 </Badge>
@@ -239,14 +207,14 @@ export default function ExamCountdownWidget({
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             {/* Target Band Pill */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/25">
-              <Target className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-300">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-border/60">
+              <Target className="h-3.5 w-3.5 text-primary" />
+              <span className="text-[11px] font-medium text-muted-foreground">
                 Target:
               </span>
-              <span className="text-xs font-black text-emerald-700 dark:text-emerald-300">
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                 Band {targetBand.toFixed(1)}
               </span>
             </div>
@@ -257,18 +225,18 @@ export default function ExamCountdownWidget({
               size="sm"
               onClick={onOpenModal}
               title="Edit Target Date & Goal"
-              className="h-8 px-3 rounded-xl border-border/70 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer transition-all gap-1.5"
+              className="h-7 px-2.5 rounded-lg border-border/60 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-all gap-1"
             >
-              <Edit3 className="h-3.5 w-3.5" />
+              <Edit3 className="h-3 w-3" />
               <span>Edit Goal</span>
             </Button>
           </div>
         </div>
 
         {/* Middle Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-0.5">
           {/* Main Countdown Stat Card */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 flex items-center justify-between gap-4">
+          <div className="p-3.5 rounded-xl bg-zinc-50/80 dark:bg-zinc-850/50 border border-border/50 flex items-center justify-between gap-3">
             <div className="space-y-0.5">
               <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
                 Time Remaining
@@ -282,34 +250,32 @@ export default function ExamCountdownWidget({
               </h4>
               <p className="text-[11px] text-muted-foreground">
                 {isPassed
-                  ? "Click Edit Goal to plan your next attempt"
-                  : "Target date locked and counting down"}
+                  ? "Click Edit Goal to plan next test"
+                  : `${daysLeft} total days until official test`}
               </p>
             </div>
 
-            {/* Large Glowing Number Badge */}
-            <div className="h-16 w-20 rounded-2xl bg-gradient-to-tr from-primary to-blue-600 text-white flex flex-col items-center justify-center shadow-lg shadow-primary/25 shrink-0">
-              <span className="text-2xl font-black leading-none tracking-tight">
+            {/* Clean Number Badge */}
+            <div className="h-13 w-16 rounded-xl bg-primary text-primary-foreground flex flex-col items-center justify-center shrink-0 shadow-2xs">
+              <span className="text-xl font-black leading-none">
                 {isPassed ? "0" : daysLeft}
               </span>
-              <span className="text-[9px] font-extrabold uppercase tracking-widest opacity-90 mt-0.5">
+              <span className="text-[9px] font-bold uppercase tracking-wider opacity-90 mt-0.5">
                 {daysLeft === 1 ? "Day" : "Days"}
               </span>
             </div>
           </div>
 
           {/* Recommended Study Pace Card */}
-          <div className="p-4 rounded-2xl bg-zinc-50/80 dark:bg-zinc-900/50 border border-border/50 flex items-center gap-3.5">
-            <div className="h-11 w-11 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/20">
-              <Flame className="h-5 w-5 fill-current" />
+          <div className="p-3.5 rounded-xl bg-zinc-50/80 dark:bg-zinc-850/50 border border-border/50 flex items-center gap-3">
+            <div className="h-10 w-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center shrink-0 border border-border/50">
+              <Flame className="h-4 w-4" />
             </div>
 
             <div className="space-y-0.5 overflow-hidden">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
-                  Recommended Study Pace
-                </span>
-              </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+                Study Pacing
+              </span>
               <h4 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
                 {paceDesc}
               </h4>
@@ -322,17 +288,17 @@ export default function ExamCountdownWidget({
 
         {/* Timeline Progress Bar */}
         {!isPassed && (
-          <div className="space-y-1.5 pt-1">
-            <div className="flex items-center justify-between text-[10px] font-semibold text-muted-foreground">
+          <div className="space-y-1 pt-0.5">
+            <div className="flex items-center justify-between text-[10px] font-medium text-muted-foreground">
               <span className="flex items-center gap-1">
-                <TrendingUp className="h-3 w-3 text-primary" />
+                <TrendingUp className="h-3 w-3 text-muted-foreground" />
                 Preparation Window Progress
               </span>
               <span>
-                {daysLeft > 0 ? `${daysLeft} days until test` : "Exam Day"}
+                {daysLeft > 0 ? `${daysLeft} days left` : "Exam Day"}
               </span>
             </div>
-            <Progress value={progressPercent} className="h-1.5 bg-zinc-100 dark:bg-zinc-800" />
+            <Progress value={progressPercent} className="h-1 bg-zinc-100 dark:bg-zinc-800" />
           </div>
         )}
       </div>

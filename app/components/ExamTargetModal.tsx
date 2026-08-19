@@ -326,15 +326,18 @@ export default function ExamTargetModal({
 
             {/* Live Interactive Preview Card */}
             {preview && (
-              <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-500/10 via-primary/5 to-primary/10 border border-emerald-500/20 space-y-2">
+              <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-900/60 border border-border/60 space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <Sparkles className="h-4 w-4 text-emerald-500" />
+                    <Target className="h-4 w-4 text-primary" />
                     <span className="text-xs font-bold text-zinc-900 dark:text-zinc-50">
-                      Countdown Preview
+                      Target Summary
                     </span>
                   </div>
-                  <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px] font-bold">
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] font-semibold border-border/80 text-foreground"
+                  >
                     {preview.isToday
                       ? "Today is Exam Day!"
                       : preview.isPassed
@@ -344,7 +347,7 @@ export default function ExamTargetModal({
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="p-2 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-border/40">
+                  <div className="p-2 rounded-lg bg-white dark:bg-zinc-800/80 border border-border/40">
                     <span className="text-[10px] font-medium text-muted-foreground block">
                       Target Goal
                     </span>
@@ -352,7 +355,7 @@ export default function ExamTargetModal({
                       Band {targetBand.toFixed(1)} ({examType === "academic" ? "Academic" : "General"})
                     </span>
                   </div>
-                  <div className="p-2 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-border/40">
+                  <div className="p-2 rounded-lg bg-white dark:bg-zinc-800/80 border border-border/40">
                     <span className="text-[10px] font-medium text-muted-foreground block">
                       Suggested Pacing
                     </span>
