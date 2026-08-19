@@ -23,6 +23,11 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
+  Calendar,
+  Target,
+  GraduationCap,
+  BookOpen,
+  Edit3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -39,13 +44,16 @@ import {
 } from "@/components/ui/table";
 import SidePopUp from "@/app/components/SidePopUp";
 import PaginationNav from "@/app/components/PaginationNav";
+import ExamTargetModal from "@/app/components/ExamTargetModal";
 import { useSession } from "@/lib/auth-client";
 import {
   getAICredentials,
   saveAICredentials,
   deleteAICredentials,
+  getUserTarget,
 } from "@/lib/api";
 import type { AIProvider, AICredentialStatus } from "@/types/ai";
+import type { UserTarget } from "@/types/target";
 
 const achievements = [
   {
@@ -138,6 +146,8 @@ function SettingsContent() {
   const [aiProvider, setAiProvider] = useState<AIProvider>("gemini");
   const [apiKey, setApiKey] = useState("");
   const [showApiKey, setShowApiKey] = useState(false);
+  const [userTarget, setUserTarget] = useState<UserTarget | null>(null);
+  const [targetModalOpen, setTargetModalOpen] = useState(false);
   const [credentialStatus, setCredentialStatus] =
     useState<AICredentialStatus | null>(null);
   const [isSavingApi, setIsSavingApi] = useState(false);
@@ -168,6 +178,12 @@ function SettingsContent() {
         if (status.provider) setAiProvider(status.provider);
       })
       .catch((err) => console.error("Failed to load AI credentials:", err));
+
+    getUserTarget()
+      .then((target) => {
+        if (target) setUserTarget(target);
+      })
+      .catch((err) => console.error("Failed to load user target:", err));
   }, []);
 
   const handleSaveApiKey = async () => {
@@ -342,9 +358,85 @@ function SettingsContent() {
                     className="bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground cursor-not-allowed"
                   />
                 </div>
+
+                <Separator />
+
+                {/* Target Exam Goal Section */}
+                <div className="space-y-3 pt-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                        <Target className="h-4 w-4 text-primary" />
+                        Target IELTS Exam & Score Goal
+                      </h4>
+                      <p className="text-xs text-muted-foreground">
+                        Your test date is used to calculate daily preparation countdowns and recommended practice volume.
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setTargetModalOpen(true)}
+                      className="text-xs font-bold border-primary/30 text-primary hover:bg-primary/10 cursor-pointer rounded-xl shrink-0 self-start sm:self-auto"
+                    >
+                      <Edit3 className="h-3.5 w-3.5 mr-1" />
+                      {userTarget?.examDate ? "Edit Target" : "Set Target Date"}
+                    </Button>
+                  </div>
+
+                  {userTarget?.examDate ? (
+                    <div className="p-4 rounded-2xl bg-zinc-50/70 dark:bg-zinc-900/50 border border-border/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                          {userTarget.examType === "general" ? (
+                            <BookOpen className="h-5 w-5" />
+                          ) : (
+                            <GraduationCap className="h-5 w-5" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                              IELTS {userTarget.examType === "general" ? "General Training" : "Academic"}
+                            </span>
+                            <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] font-bold">
+                              Target Band {userTarget.targetBand?.toFixed(1) || "7.5"}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            Exam Date: <strong className="text-zinc-800 dark:text-zinc-200">{new Date(userTarget.examDate).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</strong>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/30 border border-dashed border-border/60 flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground font-medium">
+                        No official exam date configured yet.
+                      </span>
+                      <Button
+                        variant="blue"
+                        size="sm"
+                        onClick={() => setTargetModalOpen(true)}
+                        className="text-xs font-bold rounded-xl cursor-pointer"
+                      >
+                        Set Exam Date
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
           )}
+
+          {/* Exam Target Modal */}
+          <ExamTargetModal
+            open={targetModalOpen}
+            onOpenChange={setTargetModalOpen}
+            currentTarget={userTarget}
+            onTargetSaved={(saved) => setUserTarget(saved)}
+            onTargetDeleted={() => setUserTarget(null)}
+          />
 
           {/* API CONFIGURATION */}
           {activeButton === 1 && (

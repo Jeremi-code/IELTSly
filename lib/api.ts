@@ -2,6 +2,7 @@ import type { Essay } from "@/types/essay";
 import type { Question } from "@/types/question";
 import type { AnalyticsPayload, ActivitySummary } from "@/types/analytics";
 import type { AICredentialStatus, AIProvider } from "@/types/ai";
+import type { UserTarget } from "@/types/target";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -43,6 +44,25 @@ export function saveAICredentials(data: {
 
 export function deleteAICredentials(): Promise<{ isConnected: false }> {
   return api<{ isConnected: false }>("/api/user/ai-credentials", {
+    method: "DELETE",
+  });
+}
+
+// ── Target Exam & Goal Management ───────────────────────────────────
+
+export function getUserTarget(): Promise<UserTarget> {
+  return api<UserTarget>("/api/user/target");
+}
+
+export function saveUserTarget(data: Partial<UserTarget>): Promise<UserTarget> {
+  return api<UserTarget>("/api/user/target", {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+}
+
+export function deleteUserTarget(): Promise<{ success: boolean; message: string }> {
+  return api<{ success: boolean; message: string }>("/api/user/target", {
     method: "DELETE",
   });
 }

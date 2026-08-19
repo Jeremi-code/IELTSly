@@ -19,6 +19,8 @@ import {
   Layers,
   ShieldCheck,
   Timer,
+  Calendar,
+  Target,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -34,10 +36,18 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import DashboardShell from "../components/DashboardShell";
 import QuestionSelectorModal from "../components/QuestionSelectorModal";
+import ExamTargetModal from "../components/ExamTargetModal";
+import ExamCountdownWidget from "../components/ExamCountdownWidget";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
-import { getAnalytics, getEssays, getAICredentials, timeAgo } from "@/lib/api";
+import {
+  getAnalytics,
+  getEssays,
+  getAICredentials,
+  getUserTarget,
+  timeAgo,
+} from "@/lib/api";
 import type { Essay } from "@/types/essay";
 import type {
   AnalyticsStats,
@@ -46,6 +56,7 @@ import type {
   ActivitySummary,
 } from "@/types/analytics";
 import type { AICredentialStatus } from "@/types/ai";
+import type { UserTarget } from "@/types/target";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -77,6 +88,8 @@ export default function DashboardPage() {
   const [dailyComment, setDailyComment] = useState<DailyComment | null>(null);
   const [activitySummary, setActivitySummary] =
     useState<ActivitySummary | null>(null);
+  const [userTarget, setUserTarget] = useState<UserTarget | null>(null);
+  const [targetModalOpen, setTargetModalOpen] = useState(false);
   const [recent, setRecent] = useState<Essay[]>([]);
   const [loading, setLoading] = useState(true);
   const [aiStatus, setAiStatus] = useState<AICredentialStatus>({
@@ -109,7 +122,8 @@ export default function DashboardPage() {
       getAnalytics(),
       getEssays({ limit: 6 }),
       getAICredentials(),
-    ]).then(([analyticsRes, essaysRes, aiRes]) => {
+      getUserTarget(),
+    ]).then(([analyticsRes, essaysRes, aiRes, targetRes]) => {
       if (!mounted) return;
 
       if (analyticsRes.status === "fulfilled") {
@@ -125,6 +139,10 @@ export default function DashboardPage() {
 
       if (aiRes.status === "fulfilled") {
         setAiStatus(aiRes.value);
+      }
+
+      if (targetRes.status === "fulfilled" && targetRes.value) {
+        setUserTarget(targetRes.value);
       }
 
       setLoading(false);
@@ -260,6 +278,15 @@ export default function DashboardPage() {
         defaultTaskType={defaultTaskFilter}
       />
 
+      {/* ── EXAM TARGET MODAL ────────────────────────────────────────── */}
+      <ExamTargetModal
+        open={targetModalOpen}
+        onOpenChange={setTargetModalOpen}
+        currentTarget={userTarget}
+        onTargetSaved={(saved) => setUserTarget(saved)}
+        onTargetDeleted={() => setUserTarget(null)}
+      />
+
       {/* ── HERO HEADER ──────────────────────────────────────────────── */}
       <motion.header
         initial={{ opacity: 0, y: -10 }}
@@ -268,16 +295,46 @@ export default function DashboardPage() {
         className="flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
-            Welcome back,{" "}
-            <span className="text-primary italic">{displayName}</span>
-          </h1>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+              Welcome back,{" "}
+              <span className="text-primary italic">{displayName}</span>
+            </h1>
+            {userTarget?.examDate ? (
+              <Badge
+                onClick={() => setTargetModalOpen(true)}
+                className="bg-primary/10 hover:bg-primary/20 text-primary border-primary/20 text-xs py-1 px-2.5 rounded-xl font-bold flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105"
+              >
+                <Calendar className="h-3.5 w-3.5" />
+                <span>
+                  Exam:{" "}
+                  {new Date(userTarget.examDate).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-md font-bold leading-none">
+                  Band {userTarget.targetBand?.toFixed(1) || "7.5"}
+                </span>
+              </Badge>
+            ) : null}
+          </div>
           <p className="text-muted-foreground text-xs sm:text-sm max-w-2xl leading-relaxed">
             {dynamicSubtitle}
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+          <Button
+            variant="outline"
+            size="default"
+            onClick={() => setTargetModalOpen(true)}
+            className="h-10 px-4 rounded-xl text-xs font-bold border-primary/30 text-primary hover:bg-primary/10 transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs"
+          >
+            <Target className="h-4 w-4" />
+            {userTarget?.examDate ? "Edit Exam Target" : "Set Exam Date"}
+          </Button>
+
           <Button
             variant="blue"
             size="default"
@@ -285,11 +342,24 @@ export default function DashboardPage() {
             className="h-10 px-5 rounded-xl font-bold shadow-xs hover:scale-[1.02] active:scale-95 transition-all cursor-pointer flex items-center gap-2 text-xs sm:text-sm"
           >
             <Zap className="h-4 w-4 fill-current" />
-            Start Practice Session
+            Start Practice
             <ArrowRight className="h-4 w-4 ml-0.5" />
           </Button>
         </div>
       </motion.header>
+
+      {/* ── EXAM TARGET & COUNTDOWN WIDGET (HIGH VISIBILITY) ──────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05 }}
+      >
+        <ExamCountdownWidget
+          target={userTarget}
+          onOpenModal={() => setTargetModalOpen(true)}
+          onStartPractice={() => openPromptModal("exam")}
+        />
+      </motion.div>
 
       {/* ── AI STATUS BANNER ─────────────────────────────────────────── */}
       <motion.div

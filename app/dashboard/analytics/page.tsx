@@ -18,6 +18,8 @@ import {
   MessageSquareQuote,
   ShieldCheck,
   Zap,
+  Calendar,
+  Edit3,
 } from "lucide-react";
 import {
   Card,
@@ -29,13 +31,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { getAnalytics } from "@/lib/api";
+import { getAnalytics, getUserTarget } from "@/lib/api";
 import type { AnalyticsPayload } from "@/types/analytics";
+import type { UserTarget } from "@/types/target";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import ActivityStreakHeatmap from "../../components/ActivityStreakHeatmap";
+import ExamTargetModal from "../../components/ExamTargetModal";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -155,6 +159,8 @@ function getBandLabel(band: number): { label: string; color: string } {
 
 const AnalyticsPage = () => {
   const [data, setData] = useState<AnalyticsPayload | null>(null);
+  const [userTarget, setUserTarget] = useState<UserTarget | null>(null);
+  const [targetModalOpen, setTargetModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedCriterion, setSelectedCriterion] = useState<
@@ -164,8 +170,18 @@ const AnalyticsPage = () => {
   const loadData = async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
     try {
-      const payload = await getAnalytics();
-      setData(payload);
+      const [payload, target] = await Promise.allSettled([
+        getAnalytics(),
+        getUserTarget(),
+      ]);
+      if (payload.status === "fulfilled") {
+        setData(payload.value);
+      } else {
+        setData(null);
+      }
+      if (target.status === "fulfilled" && target.value) {
+        setUserTarget(target.value);
+      }
     } catch {
       setData(null);
     } finally {
@@ -237,16 +253,43 @@ const AnalyticsPage = () => {
 
   return (
     <DashboardShell className="max-w-[1360px] p-4 sm:p-6 lg:p-7 space-y-5">
+      {/* ── Exam Target Modal ────────────────────────────────────────── */}
+      <ExamTargetModal
+        open={targetModalOpen}
+        onOpenChange={setTargetModalOpen}
+        currentTarget={userTarget}
+        onTargetSaved={(saved) => setUserTarget(saved)}
+        onTargetDeleted={() => setUserTarget(null)}
+      />
+
       {/* ── Page Header ─────────────────────────────────────────────── */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
               Writing{" "}
               <span className="text-primary italic">
                 Analytics & Diagnostics
               </span>
             </h1>
+            {userTarget?.examDate ? (
+              <Badge
+                onClick={() => setTargetModalOpen(true)}
+                className="bg-primary/10 hover:bg-primary/20 text-primary border-primary/20 text-xs py-1 px-2.5 rounded-xl font-bold flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105"
+              >
+                <Calendar className="h-3.5 w-3.5" />
+                <span>
+                  Exam:{" "}
+                  {new Date(userTarget.examDate).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-md font-bold leading-none">
+                  Band {userTarget.targetBand?.toFixed(1) || "7.5"}
+                </span>
+              </Badge>
+            ) : null}
           </div>
           <p className="text-muted-foreground text-xs sm:text-sm max-w-2xl leading-relaxed">
             Real-time evaluation data, official 4-pillar band breakdowns, and
@@ -254,7 +297,17 @@ const AnalyticsPage = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setTargetModalOpen(true)}
+            className="h-8 px-3 rounded-lg text-xs font-semibold gap-1.5 border-primary/30 text-primary hover:bg-primary/10 cursor-pointer"
+          >
+            <Target className="h-3.5 w-3.5" />
+            <span>{userTarget?.examDate ? "Edit Target" : "Set Exam Date"}</span>
+          </Button>
+
           <Button
             variant="outline"
             size="sm"
