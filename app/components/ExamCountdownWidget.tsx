@@ -16,6 +16,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { differenceInCalendarDays, format, parseISO, startOfDay } from "date-fns";
 import type { UserTarget } from "@/types/target";
 
 interface ExamCountdownWidgetProps {
@@ -31,24 +32,36 @@ export default function ExamCountdownWidget({
 }: ExamCountdownWidgetProps) {
   const calculations = useMemo(() => {
     if (!target?.examDate) return null;
-    const exam = new Date(target.examDate);
-    if (isNaN(exam.getTime())) return null;
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    let exam: Date;
+    try {
+      exam = typeof target.examDate === "string" ? parseISO(target.examDate) : new Date(target.examDate);
+      if (isNaN(exam.getTime())) return null;
+    } catch {
+      return null;
+    }
 
-    const diffMs = exam.getTime() - today.getTime();
-    const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-    const weeksLeft = Math.max(0, Math.ceil(daysLeft / 7));
-    const hoursLeft = Math.max(0, daysLeft * 24);
+    const today = startOfDay(new Date());
+    const examDay = startOfDay(exam);
 
-    const formattedDate = exam.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+    const daysLeft = differenceInCalendarDays(examDay, today);
+    const weeksLeft = Math.floor(daysLeft / 7);
+    const extraDays = daysLeft % 7;
 
+    let timeRemainingText = "";
+    if (daysLeft === 0) {
+      timeRemainingText = "Today is Exam Day!";
+    } else if (daysLeft < 0) {
+      timeRemainingText = "Exam Date Completed";
+    } else if (weeksLeft > 0 && extraDays > 0) {
+      timeRemainingText = `${weeksLeft} wk${weeksLeft === 1 ? "" : "s"}, ${extraDays} day${extraDays === 1 ? "" : "s"} remaining`;
+    } else if (weeksLeft > 0) {
+      timeRemainingText = `${weeksLeft} week${weeksLeft === 1 ? "" : "s"} remaining`;
+    } else {
+      timeRemainingText = `${daysLeft} day${daysLeft === 1 ? "" : "s"} remaining`;
+    }
+
+    const formattedDate = format(examDay, "EEEE, MMM d, yyyy");
     const isToday = daysLeft === 0;
     const isPassed = daysLeft < 0;
 
@@ -62,42 +75,28 @@ export default function ExamCountdownWidget({
 
     let paceDesc = "3-4 essays / week";
     let paceDetail = "Balanced steady preparation pace";
-    let urgencyBadge = "On Track";
-    let urgencyColor =
-      "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700";
 
     if (daysLeft <= 0) {
       paceDesc = "Exam Day / Completed";
       paceDetail = "Best of luck on your official score!";
-      urgencyBadge = isToday ? "Test Day" : "Completed";
-      urgencyColor =
-        "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700";
     } else if (daysLeft <= 7) {
       paceDesc = "1-2 timed essays daily";
       paceDetail = "Final sprint & error review";
-      urgencyBadge = "Final Sprint";
-      urgencyColor =
-        "bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 border-amber-200 dark:border-amber-800/60";
     } else if (daysLeft <= 30) {
       paceDesc = "4-5 essays / week";
       paceDetail = "Intensive criteria targeting";
-      urgencyBadge = "Active Prep";
-      urgencyColor =
-        "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700";
     }
 
     return {
       daysLeft,
       weeksLeft,
-      hoursLeft,
+      timeRemainingText,
       formattedDate,
       isToday,
       isPassed,
       progressPercent,
       paceDesc,
       paceDetail,
-      urgencyBadge,
-      urgencyColor,
     };
   }, [target]);
 
@@ -156,15 +155,13 @@ export default function ExamCountdownWidget({
   // ── State 2: Clean Active Countdown Widget ────────────────────────────────
   const {
     daysLeft,
-    weeksLeft,
+    timeRemainingText,
     formattedDate,
     isToday,
     isPassed,
     progressPercent,
     paceDesc,
     paceDetail,
-    urgencyBadge,
-    urgencyColor,
   } = calculations;
 
   const targetBand = target?.targetBand ?? 7.5;
@@ -189,17 +186,9 @@ export default function ExamCountdownWidget({
               )}
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                  IELTS {examType === "academic" ? "Academic" : "General Training"}
-                </span>
-                <Badge
-                  variant="outline"
-                  className={cn("text-[10px] font-semibold px-2 py-0.5 rounded-md", urgencyColor)}
-                >
-                  {urgencyBadge}
-                </Badge>
-              </div>
+              <span className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 block">
+                IELTS {examType === "academic" ? "Academic" : "General Training"}
+              </span>
               <span className="text-[11px] text-muted-foreground font-medium flex items-center gap-1 mt-0.5">
                 <Calendar className="h-3 w-3" />
                 {formattedDate}
@@ -242,11 +231,7 @@ export default function ExamCountdownWidget({
                 Time Remaining
               </span>
               <h4 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                {isToday
-                  ? "Today is Exam Day!"
-                  : isPassed
-                    ? "Exam Date Completed"
-                    : `${weeksLeft} week${weeksLeft === 1 ? "" : "s"} remaining`}
+                {timeRemainingText}
               </h4>
               <p className="text-[11px] text-muted-foreground">
                 {isPassed

@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import DashboardShell from "../../components/DashboardShell";
 import { cn } from "@/lib/utils";
+import { format, parseISO } from "date-fns";
 import {
   Card,
   CardContent,
@@ -407,7 +408,7 @@ function SettingsContent() {
                             </Badge>
                           </div>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            Exam Date: <strong className="text-zinc-800 dark:text-zinc-200">{new Date(userTarget.examDate).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</strong>
+                            Exam Date: <strong className="text-zinc-800 dark:text-zinc-200">{format(typeof userTarget.examDate === "string" ? parseISO(userTarget.examDate) : new Date(userTarget.examDate), "EEEE, MMMM d, yyyy")}</strong>
                           </p>
                         </div>
                       </div>

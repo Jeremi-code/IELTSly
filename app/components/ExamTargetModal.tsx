@@ -26,6 +26,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { UserTarget, ExamType } from "@/types/target";
 import { saveUserTarget, deleteUserTarget } from "@/lib/api";
+import { addDays, differenceInCalendarDays, format, parseISO, startOfDay } from "date-fns";
 
 interface ExamTargetModalProps {
   open: boolean;
@@ -63,14 +64,14 @@ export default function ExamTargetModal({
   useEffect(() => {
     if (open) {
       if (currentTarget?.examDate) {
-        // Format ISO date into YYYY-MM-DD for native date input
-        const d = new Date(currentTarget.examDate);
-        if (!isNaN(d.getTime())) {
-          const year = d.getFullYear();
-          const month = String(d.getMonth() + 1).padStart(2, "0");
-          const day = String(d.getDate()).padStart(2, "0");
-          setExamDate(`${year}-${month}-${day}`);
-        } else {
+        try {
+          const d = typeof currentTarget.examDate === "string" ? parseISO(currentTarget.examDate) : new Date(currentTarget.examDate);
+          if (!isNaN(d.getTime())) {
+            setExamDate(format(d, "yyyy-MM-dd"));
+          } else {
+            setExamDate("");
+          }
+        } catch {
           setExamDate("");
         }
       } else {
@@ -84,56 +85,43 @@ export default function ExamTargetModal({
 
   // Today ISO string for min date in picker
   const todayStr = useMemo(() => {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    return format(new Date(), "yyyy-MM-dd");
   }, []);
 
   // Quick Presets
   const applyPreset = (daysToAdd: number) => {
-    const d = new Date();
-    d.setDate(d.getDate() + daysToAdd);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    setExamDate(`${year}-${month}-${day}`);
+    setExamDate(format(addDays(new Date(), daysToAdd), "yyyy-MM-dd"));
   };
 
   // Calculate live preview metrics
   const preview = useMemo(() => {
     if (!examDate) return null;
-    const target = new Date(`${examDate}T00:00:00`);
-    if (isNaN(target.getTime())) return null;
+    try {
+      const targetDate = startOfDay(parseISO(`${examDate}T00:00:00`));
+      if (isNaN(targetDate.getTime())) return null;
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+      const today = startOfDay(new Date());
+      const daysLeft = differenceInCalendarDays(targetDate, today);
+      const weeksLeft = Math.floor(daysLeft / 7);
 
-    const diffMs = target.getTime() - today.getTime();
-    const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-    const weeksLeft = Math.ceil(daysLeft / 7);
+      const formattedDate = format(targetDate, "EEEE, MMM d, yyyy");
 
-    const formattedDate = target.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+      let pace = "3-4 essays / week";
+      if (daysLeft <= 7) pace = "1-2 essays daily (Final sprint!)";
+      else if (daysLeft <= 30) pace = "4-5 essays / week";
+      else if (daysLeft > 60) pace = "2-3 essays / week (Consistent pacing)";
 
-    let pace = "3-4 essays / week";
-    if (daysLeft <= 7) pace = "1-2 essays daily (Final sprint!)";
-    else if (daysLeft <= 30) pace = "4-5 essays / week";
-    else if (daysLeft > 60) pace = "2-3 essays / week (Consistent pacing)";
-
-    return {
-      daysLeft,
-      weeksLeft,
-      formattedDate,
-      pace,
-      isToday: daysLeft === 0,
-      isPassed: daysLeft < 0,
-    };
+      return {
+        daysLeft,
+        weeksLeft,
+        formattedDate,
+        pace,
+        isToday: daysLeft === 0,
+        isPassed: daysLeft < 0,
+      };
+    } catch {
+      return null;
+    }
   }, [examDate]);
 
   const handleSave = async (e: React.FormEvent) => {

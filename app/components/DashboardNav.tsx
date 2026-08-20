@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ModeToggle } from "./ModeToggle";
 import { motion } from "framer-motion";
+import { differenceInCalendarDays, parseISO, startOfDay } from "date-fns";
 import { useSession, signOut } from "@/lib/auth-client";
 import { getUserTarget } from "@/lib/api";
 import type { UserTarget } from "@/types/target";
@@ -94,13 +95,16 @@ const DashboardNav = ({
 
   const daysLeft = useMemo(() => {
     if (!userTarget?.examDate) return null;
-    const exam = new Date(userTarget.examDate);
-    if (isNaN(exam.getTime())) return null;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return Math.ceil(
-      (exam.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
-    );
+    try {
+      const exam =
+        typeof userTarget.examDate === "string"
+          ? parseISO(userTarget.examDate)
+          : new Date(userTarget.examDate);
+      if (isNaN(exam.getTime())) return null;
+      return differenceInCalendarDays(startOfDay(exam), startOfDay(new Date()));
+    } catch {
+      return null;
+    }
   }, [userTarget]);
 
   return (
@@ -225,7 +229,7 @@ const DashboardNav = ({
                 onClick={() => setTargetModalOpen(true)}
                 className="p-2.5 rounded-xl bg-primary/5 hover:bg-primary/10 border border-primary/20 cursor-pointer transition-all flex items-center justify-between gap-2 shadow-2xs group"
               >
-                <div className="flex items-center gap-2 overflow-hidden">
+                <div className="flex items-center gap-2.5 overflow-hidden">
                   <div className="h-7 w-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                     <Calendar className="h-3.5 w-3.5" />
                   </div>
@@ -233,16 +237,13 @@ const DashboardNav = ({
                     <span className="text-[11px] font-bold text-zinc-900 dark:text-zinc-100 block truncate leading-tight">
                       {daysLeft !== null && daysLeft <= 0
                         ? "Exam Completed"
-                        : `${daysLeft}d to Exam`}
+                        : `${daysLeft} days to Exam`}
                     </span>
-                    <span className="text-[10px] text-muted-foreground block truncate leading-tight">
-                      Band {userTarget.targetBand?.toFixed(1) || "7.5"} Goal
+                    <span className="text-[10px] text-muted-foreground block truncate leading-tight mt-0.5">
+                      Band {userTarget.targetBand?.toFixed(1) || "7.5"} • {userTarget.examType === "general" ? "General" : "Academic"}
                     </span>
                   </div>
                 </div>
-                <Badge className="bg-primary text-white text-[9px] px-1.5 py-0 shrink-0 font-bold">
-                  {userTarget.examType === "general" ? "Gen" : "Acad"}
-                </Badge>
               </div>
             )}
 

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { format, parseISO } from "date-fns";
 import type { ActivitySummary, DailyActivity } from "@/types/analytics";
 
 interface ActivityStreakHeatmapProps {
@@ -447,15 +448,7 @@ export default function ActivityStreakHeatmap({
             {/* Header: Formatted Date */}
             <div className="flex items-center justify-between pb-1.5 border-b border-zinc-800">
               <span className="font-bold text-zinc-100">
-                {new Date(hoveredDay.dateStr + "T00:00:00").toLocaleDateString(
-                  "en-US",
-                  {
-                    weekday: "short",
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  },
-                )}
+                {format(parseISO(hoveredDay.dateStr), "EEE, MMM d, yyyy")}
               </span>
             </div>
 

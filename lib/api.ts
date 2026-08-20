@@ -3,6 +3,7 @@ import type { Question } from "@/types/question";
 import type { AnalyticsPayload, ActivitySummary } from "@/types/analytics";
 import type { AICredentialStatus, AIProvider } from "@/types/ai";
 import type { UserTarget } from "@/types/target";
+import { format, formatDistanceToNow, parseISO } from "date-fns";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -217,20 +218,21 @@ export function getActivitySummary(): Promise<ActivitySummary> {
 }
 
 export function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  });
+  if (!iso) return "";
+  try {
+    const d = typeof iso === "string" ? parseISO(iso) : iso;
+    return format(d, "MMM dd, yyyy");
+  } catch {
+    return iso;
+  }
 }
 
 export function timeAgo(iso: string): string {
-  const diffMs = Date.now() - new Date(iso).getTime();
-  const minutes = Math.floor(diffMs / 60000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes} min ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-  const days = Math.floor(hours / 24);
-  return `${days} day${days > 1 ? "s" : ""} ago`;
+  if (!iso) return "";
+  try {
+    const d = typeof iso === "string" ? parseISO(iso) : iso;
+    return formatDistanceToNow(d, { addSuffix: true });
+  } catch {
+    return iso;
+  }
 }
