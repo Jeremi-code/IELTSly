@@ -225,9 +225,9 @@ export default function ExamCountdownWidget({
         {/* Middle Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-0.5">
           {/* Main Countdown Stat Card */}
-          <div className="p-3.5 rounded-xl bg-zinc-50/80 dark:bg-zinc-850/50 border border-border/50 flex items-center justify-between gap-3">
+          <div className="p-3.5 rounded-xl bg-primary/5 dark:bg-primary/10 border border-primary/15 dark:border-primary/25 flex items-center justify-between gap-3">
             <div className="space-y-0.5">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+              <span className="text-xs font-semibold text-muted-foreground block">
                 Time Remaining
               </span>
               <h4 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100">
@@ -245,20 +245,20 @@ export default function ExamCountdownWidget({
               <span className="text-xl font-black leading-none">
                 {isPassed ? "0" : daysLeft}
               </span>
-              <span className="text-[9px] font-bold uppercase tracking-wider opacity-90 mt-0.5">
+              <span className="text-[10px] font-semibold opacity-90 mt-0.5">
                 {daysLeft === 1 ? "Day" : "Days"}
               </span>
             </div>
           </div>
 
           {/* Recommended Study Pace Card */}
-          <div className="p-3.5 rounded-xl bg-zinc-50/80 dark:bg-zinc-850/50 border border-border/50 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center shrink-0 border border-border/50">
+          <div className="p-3.5 rounded-xl bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/15 dark:border-amber-500/25 flex items-center gap-3">
+            <div className="h-10 w-10 rounded-lg bg-amber-500/15 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/25">
               <Flame className="h-4 w-4" />
             </div>
 
             <div className="space-y-0.5 overflow-hidden">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+              <span className="text-xs font-semibold text-muted-foreground block">
                 Study Pacing
               </span>
               <h4 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
