@@ -37,7 +37,7 @@ import type { UserTarget } from "@/types/target";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
+import { cn, getBandLabel } from "@/lib/utils";
 import ActivityStreakHeatmap from "../../components/ActivityStreakHeatmap";
 import ExamTargetModal from "../../components/ExamTargetModal";
 
@@ -120,42 +120,7 @@ const CRITERIA_GUIDE: Record<string, CriterionGuide> = {
   },
 };
 
-function getBandLabel(band: number): { label: string; color: string } {
-  if (band >= 8.5)
-    return {
-      label: "Expert / Near Native",
-      color:
-        "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-    };
-  if (band >= 7.5)
-    return {
-      label: "Very Good User",
-      color:
-        "text-blue-600 dark:text-blue-400 bg-blue-500/10 border-blue-500/20",
-    };
-  if (band >= 6.5)
-    return {
-      label: "Competent User",
-      color:
-        "text-purple-600 dark:text-purple-400 bg-purple-500/10 border-purple-500/20",
-    };
-  if (band >= 5.5)
-    return {
-      label: "Modest User",
-      color:
-        "text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/20",
-    };
-  if (band > 0)
-    return {
-      label: "Developing User",
-      color:
-        "text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20",
-    };
-  return {
-    label: "No Submissions Yet",
-    color: "text-muted-foreground bg-zinc-500/10 border-zinc-500/20",
-  };
-}
+
 
 const AnalyticsPage = () => {
   const [data, setData] = useState<AnalyticsPayload | null>(null);

@@ -14,7 +14,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn, formatDuration, getIntensityLevel } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
 import type { ActivitySummary, DailyActivity } from "@/types/analytics";
 
@@ -40,24 +40,7 @@ const MONTHS = [
   "Dec",
 ];
 
-function formatDuration(seconds: number): string {
-  if (!seconds || seconds <= 0) return "0 mins";
-  const mins = Math.round(seconds / 60);
-  if (mins < 60) return `${mins} min${mins === 1 ? "" : "s"}`;
-  const hours = Math.floor(mins / 60);
-  const remMins = mins % 60;
-  if (remMins === 0) return `${hours} hr${hours === 1 ? "" : "s"}`;
-  return `${hours}h ${remMins}m`;
-}
 
-function getIntensityLevel(activity?: DailyActivity): 0 | 1 | 2 | 3 | 4 {
-  if (!activity || activity.count === 0) return 0;
-  const durationMins = activity.durationSec / 60;
-  if (durationMins >= 60 || activity.count >= 3) return 4;
-  if (durationMins >= 35 || activity.count >= 2) return 3;
-  if (durationMins >= 15 || activity.count >= 1) return 2;
-  return 1;
-}
 
 export default function ActivityStreakHeatmap({
   activitySummary,
