@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Loader2,
   Calendar,
+  Award,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -32,6 +33,7 @@ const navItems = [
   { name: "Practice Essay", href: "/dashboard/practice", icon: Plus },
   { name: "Essay History", href: "/dashboard/history", icon: NotepadText },
   { name: "Analytics", href: "/dashboard/analytics", icon: ChartColumn },
+  { name: "Band Calculator", href: "/dashboard/calculator", icon: Award },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 

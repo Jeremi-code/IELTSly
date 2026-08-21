@@ -217,6 +217,40 @@ export function getActivitySummary(): Promise<ActivitySummary> {
   return api("/api/analytics/activity");
 }
 
+// ── Mock Scores API ──────────────────────────────────────────────
+import type { MockScore, MockScoreSummary } from "@/types/mock-score";
+
+export function getMockScores(module?: string): Promise<{ scores: MockScore[] }> {
+  const query = module ? `?module=${encodeURIComponent(module)}` : "";
+  return api(`/api/mock-scores${query}`);
+}
+
+export function saveMockScore(payload: {
+  id?: string;
+  module: string;
+  score?: number;
+  rawCount?: number;
+  totalQuestions?: number;
+  source: string;
+  testDate: string;
+  notes?: string;
+}): Promise<{ score: MockScore; message: string }> {
+  return api("/api/mock-scores", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function deleteMockScore(id: string): Promise<{ message: string }> {
+  return api(`/api/mock-scores/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export function getMockSummary(): Promise<MockScoreSummary> {
+  return api("/api/mock-scores/summary");
+}
+
 export function formatDate(iso: string): string {
   if (!iso) return "";
   try {
