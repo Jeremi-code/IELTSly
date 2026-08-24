@@ -130,25 +130,6 @@ export default function BandCalculatorPage() {
   const computedOverallBand =
     calculationMode === "latest" ? summary?.overallLatest : summary?.overallAverage;
 
-  const targetBand = userTarget?.targetBand ?? 7.5;
-
-  let deltaText = "";
-  let deltaColor = "text-muted-foreground";
-
-  if (computedOverallBand !== null && computedOverallBand !== undefined) {
-    const diff = computedOverallBand - targetBand;
-    if (diff === 0) {
-      deltaText = "On Target Band Goal";
-      deltaColor = "text-emerald-600 dark:text-emerald-400 font-bold";
-    } else if (diff > 0) {
-      deltaText = `+${diff.toFixed(1)} above Target Band ${targetBand.toFixed(1)}`;
-      deltaColor = "text-emerald-600 dark:text-emerald-400 font-bold";
-    } else {
-      deltaText = `${diff.toFixed(1)} away from Target Band ${targetBand.toFixed(1)}`;
-      deltaColor = "text-amber-600 dark:text-amber-400 font-bold";
-    }
-  }
-
   return (
     <DashboardShell>
       <div className="space-y-6 max-w-7xl mx-auto pb-12">
@@ -216,14 +197,9 @@ export default function BandCalculatorPage() {
                   </div>
 
                   <p className="text-xs sm:text-sm text-muted-foreground">
-                    {computedOverallBand !== null && computedOverallBand !== undefined ? (
-                      <>
-                        Based on your {calculationMode} module scores.{" "}
-                        <span className={deltaColor}>{deltaText}</span>
-                      </>
-                    ) : (
-                      "Log test scores for all 4 modules (Listening, Reading, Writing, Speaking) to compute your overall band."
-                    )}
+                    {computedOverallBand !== null && computedOverallBand !== undefined
+                      ? `Calculated based on your ${calculationMode} scores across Listening, Reading, Writing, and Speaking.`
+                      : "Log test scores for all 4 modules (Listening, Reading, Writing, Speaking) to compute your overall band."}
                   </p>
 
                   <div className="flex items-center gap-2 pt-1 text-xs">
@@ -258,16 +234,8 @@ export default function BandCalculatorPage() {
                 </div>
               </div>
 
-              {/* Right Column: Target Pill & Quick Stats */}
-              <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between border-t lg:border-t-0 border-border/50 pt-4 lg:pt-0 gap-3">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-border/60">
-                  <Target className="h-4 w-4 text-primary" />
-                  <span className="text-xs font-semibold text-muted-foreground">Target Goal:</span>
-                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                    Band {targetBand.toFixed(1)}
-                  </span>
-                </div>
-
+              {/* Right Column: Quick Stats */}
+              <div className="flex items-center lg:items-end justify-end border-t lg:border-t-0 border-border/50 pt-4 lg:pt-0">
                 <div className="text-right text-xs text-muted-foreground">
                   <span>Total Practice Logs: </span>
                   <strong className="text-zinc-900 dark:text-zinc-100">{summary?.totalLogs ?? 0}</strong>
