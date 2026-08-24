@@ -64,9 +64,12 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2">
-            <Logo className="w-16 h-16 lg:w-18 lg:h-18 transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.3)] dark:group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] cursor-pointer" />
+          {/* Logo & Brand */}
+          <Link href="/" className="group flex items-center gap-2.5">
+            <Logo className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 transition-transform duration-300 group-hover:scale-105 cursor-pointer" />
+            <span className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+              IELTS<span className="text-primary font-bold">ly</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
