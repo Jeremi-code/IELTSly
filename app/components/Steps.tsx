@@ -7,10 +7,7 @@ import {
   FileSearch,
   PenTool,
   Award,
-  ArrowRight,
-  CheckCircle2,
   Lock,
-  Sparkles,
   Zap,
   Clock,
 } from "lucide-react";
@@ -23,19 +20,18 @@ const stepsList = [
     description:
       "Enter your Gemini API key in account settings. It's stored securely in your browser session for unlimited, zero-cost practice.",
     icon: Key,
-    accent: "from-emerald-500 to-teal-500",
     badge: "Free & Private",
     preview: (
-      <div className="mt-4 p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-left font-mono text-[11px] space-y-1.5">
-        <div className="flex items-center justify-between text-zinc-400">
-          <span className="flex items-center gap-1.5 text-emerald-400 font-sans font-bold">
+      <div className="mt-4 p-3 rounded-xl bg-slate-100/90 dark:bg-zinc-950/80 border border-slate-200/90 dark:border-zinc-800 text-left font-mono text-[11px] space-y-1.5">
+        <div className="flex items-center justify-between text-slate-600 dark:text-zinc-400">
+          <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-sans font-bold">
             <Lock className="w-3 h-3" /> Gemini API Status
           </span>
-          <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
+          <span className="text-[10px] bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/20">
             Connected ✓
           </span>
         </div>
-        <div className="text-zinc-500 truncate text-[10px]">
+        <div className="text-slate-500 dark:text-zinc-500 truncate text-[10px]">
           Key: AIzaSyD9x...••••••••
         </div>
       </div>
@@ -48,17 +44,16 @@ const stepsList = [
     description:
       "Pick from our extensive prompt repository. Filter by Task 1 (Academic/General) or Task 2 essay topics including Education, Tech, and Society.",
     icon: FileSearch,
-    accent: "from-teal-500 to-emerald-500",
     badge: "100+ Prompts",
     preview: (
-      <div className="mt-4 p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-left space-y-2">
+      <div className="mt-4 p-3 rounded-xl bg-slate-100/90 dark:bg-zinc-950/80 border border-slate-200/90 dark:border-zinc-800 text-left space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] font-bold text-zinc-300">Task 2 Academic Essay</span>
-          <span className="text-[10px] px-2 py-0.5 bg-zinc-800 text-zinc-400 rounded">
+          <span className="text-[11px] font-bold text-slate-800 dark:text-zinc-300">Task 2 Academic Essay</span>
+          <span className="text-[10px] px-2 py-0.5 bg-white/80 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 border border-slate-200 dark:border-zinc-700 rounded">
             Band 7.5 Target
           </span>
         </div>
-        <p className="text-[11px] text-zinc-400 leading-tight line-clamp-2">
+        <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-tight line-clamp-2">
           "Should university education be funded by governments or students?"
         </p>
       </div>
@@ -71,17 +66,16 @@ const stepsList = [
     description:
       "Draft your essay in our exam-accurate interface. Experience real test pressures with zero autocorrect, authentic timers, and live word tracking.",
     icon: PenTool,
-    accent: "from-emerald-600 to-green-500",
     badge: "Simulative",
     preview: (
-      <div className="mt-4 p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-left space-y-2">
+      <div className="mt-4 p-3 rounded-xl bg-slate-100/90 dark:bg-zinc-950/80 border border-slate-200/90 dark:border-zinc-800 text-left space-y-2">
         <div className="flex items-center justify-between text-[11px] font-mono">
-          <span className="flex items-center gap-1 text-amber-400 font-bold">
+          <span className="flex items-center gap-1 text-amber-700 dark:text-amber-400 font-bold">
             <Clock className="w-3 h-3" /> 35:00
           </span>
-          <span className="text-zinc-300 font-bold">295 Words</span>
+          <span className="text-slate-800 dark:text-zinc-300 font-bold">295 Words</span>
         </div>
-        <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+        <div className="h-1.5 w-full bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden">
           <div className="h-full bg-emerald-500 w-3/4 rounded-full" />
         </div>
       </div>
@@ -94,21 +88,20 @@ const stepsList = [
     description:
       "Get instant score breakdowns across Task Achievement, Coherence, Lexical Resource, and Grammar with actionable inline suggestions.",
     icon: Award,
-    accent: "from-green-500 to-emerald-600",
     badge: "Official Criteria",
     preview: (
-      <div className="mt-4 p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-left space-y-1.5">
+      <div className="mt-4 p-3 rounded-xl bg-slate-100/90 dark:bg-zinc-950/80 border border-slate-200/90 dark:border-zinc-800 text-left space-y-1.5">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] font-bold text-zinc-300">Criteria Breakdown</span>
-          <span className="text-[11px] font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+          <span className="text-[11px] font-bold text-slate-800 dark:text-zinc-300">Criteria Breakdown</span>
+          <span className="text-[11px] font-black text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
             Overall 8.0
           </span>
         </div>
         <div className="flex gap-1 text-[10px] font-bold">
-          <span className="bg-zinc-900 px-1.5 py-0.5 rounded text-emerald-400 border border-zinc-800">TA: 8.0</span>
-          <span className="bg-zinc-900 px-1.5 py-0.5 rounded text-emerald-400 border border-zinc-800">CC: 8.0</span>
-          <span className="bg-zinc-900 px-1.5 py-0.5 rounded text-teal-400 border border-zinc-800">LR: 7.5</span>
-          <span className="bg-zinc-900 px-1.5 py-0.5 rounded text-emerald-400 border border-zinc-800">GRA: 8.0</span>
+          <span className="bg-white/80 dark:bg-zinc-900 px-1.5 py-0.5 rounded text-emerald-700 dark:text-emerald-400 border border-slate-200 dark:border-zinc-800">TA: 8.0</span>
+          <span className="bg-white/80 dark:bg-zinc-900 px-1.5 py-0.5 rounded text-emerald-700 dark:text-emerald-400 border border-slate-200 dark:border-zinc-800">CC: 8.0</span>
+          <span className="bg-white/80 dark:bg-zinc-900 px-1.5 py-0.5 rounded text-teal-700 dark:text-teal-400 border border-slate-200 dark:border-zinc-800">LR: 7.5</span>
+          <span className="bg-white/80 dark:bg-zinc-900 px-1.5 py-0.5 rounded text-emerald-700 dark:text-emerald-400 border border-slate-200 dark:border-zinc-800">GRA: 8.0</span>
         </div>
       </div>
     ),
@@ -133,8 +126,8 @@ const Steps = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-4"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider shadow-xs backdrop-blur-md">
-            <Zap className="w-3.5 h-3.5 text-emerald-500" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider shadow-xs backdrop-blur-md">
+            <Zap className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>Simple Workflow</span>
           </div>
 
@@ -161,13 +154,8 @@ const Steps = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: index * 0.12, ease: "easeOut" }}
-                className="group relative rounded-3xl p-6 bg-slate-50 dark:bg-zinc-950/80 border border-slate-200/80 dark:border-zinc-800/80 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md hover:-translate-y-1"
+                className="group relative rounded-3xl p-6 bg-slate-50 dark:bg-zinc-950/80 border border-slate-200/80 dark:border-zinc-800/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md hover:-translate-y-1"
               >
-                {/* Step Glow Accent Bar */}
-                <div
-                  className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${step.accent} opacity-80 group-hover:opacity-100 transition-opacity`}
-                />
-
                 <div>
                   {/* Number & Icon Header */}
                   <div className="flex items-center justify-between mb-6">
@@ -177,16 +165,16 @@ const Steps = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                         {step.badge}
                       </span>
-                      <span className="font-mono text-2xl font-black text-slate-300 dark:text-zinc-700 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
+                      <span className="font-mono text-2xl font-black text-slate-300 dark:text-zinc-700 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                         {step.number}
                       </span>
                     </div>
                   </div>
 
-                  <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase block mb-1">
+                  <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 tracking-wider uppercase block mb-1">
                     {step.subtitle}
                   </span>
 
