@@ -234,6 +234,7 @@ export function saveMockScore(payload: {
   source: string;
   testDate: string;
   notes?: string;
+  resultUrl?: string;
 }): Promise<{ score: MockScore; message: string }> {
   return api("/api/mock-scores", {
     method: "POST",

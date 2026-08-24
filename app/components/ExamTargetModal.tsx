@@ -22,6 +22,7 @@ import {
   Trash2,
   CheckCircle2,
   BookOpen,
+  PenTool,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { UserTarget, ExamType } from "@/types/target";
@@ -177,7 +178,7 @@ export default function ExamTargetModal({
                   {currentTarget?.examDate ? "Edit Exam Target & Date" : "Set Your IELTS Exam Target"}
                 </DialogTitle>
                 <DialogDescription className="text-xs text-muted-foreground mt-0.5">
-                  Set your upcoming test date and score goal to activate live countdowns and practice pacing.
+                  Set your exam date and Writing band goal to activate countdowns and practice pacing recommendations.
                 </DialogDescription>
               </div>
             </div>
@@ -271,12 +272,15 @@ export default function ExamTargetModal({
               </div>
             </div>
 
-            {/* Target Band Selector */}
+            {/* Writing Target Band Selector */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Target Band Score
-                </Label>
+                <div className="flex items-center gap-1.5">
+                  <PenTool className="h-3.5 w-3.5 text-primary" />
+                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Writing Target Band
+                  </Label>
+                </div>
                 <Badge className="bg-primary/10 text-primary border-primary/20 text-xs font-black">
                   Band {targetBand.toFixed(1)}
                 </Badge>
@@ -337,7 +341,7 @@ export default function ExamTargetModal({
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2 rounded-lg bg-white dark:bg-zinc-800/80 border border-border/40">
                     <span className="text-[10px] font-medium text-muted-foreground block">
-                      Target Goal
+                      Writing Band Goal
                     </span>
                     <span className="font-bold text-zinc-900 dark:text-zinc-100">
                       Band {targetBand.toFixed(1)} ({examType === "academic" ? "Academic" : "General"})

@@ -10,6 +10,7 @@ export interface MockScore {
   source: string;
   testDate: string;
   notes?: string;
+  resultUrl?: string;
   createdAt: string;
   updatedAt: string;
 }

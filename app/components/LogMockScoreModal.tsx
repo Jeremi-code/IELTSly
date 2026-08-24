@@ -24,6 +24,7 @@ import {
   Plus,
   Loader2,
   Trash2,
+  Link as LinkIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
@@ -74,10 +75,10 @@ export default function LogMockScoreModal({
   const [source, setSource] = useState<string>("IELTSOnlineTests");
   const [testDate, setTestDate] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
+  const [resultUrl, setResultUrl] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Sync state when modal opens
   useEffect(() => {
     if (open) {
       if (currentScore) {
@@ -93,6 +94,7 @@ export default function LogMockScoreModal({
           setTestDate(format(new Date(), "yyyy-MM-dd"));
         }
         setNotes(currentScore.notes || "");
+        setResultUrl(currentScore.resultUrl || "");
       } else {
         setModule(defaultModule);
         setScore(7.5);
@@ -101,6 +103,7 @@ export default function LogMockScoreModal({
         setSource("IELTSOnlineTests");
         setTestDate(format(new Date(), "yyyy-MM-dd"));
         setNotes("");
+        setResultUrl("");
       }
       setError(null);
     }
@@ -142,6 +145,7 @@ export default function LogMockScoreModal({
         source: source.trim() || "Practice Test",
         testDate: testDate ? `${testDate}T12:00:00.000Z` : new Date().toISOString(),
         notes: notes.trim(),
+        resultUrl: resultUrl.trim() || undefined,
       });
 
       onScoreSaved();
@@ -167,7 +171,7 @@ export default function LogMockScoreModal({
                 {currentScore ? "Edit External Test Entry" : "Log External Practice Test"}
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground mt-0.5">
-                Record your listening, reading, writing, or speaking mock score to compute your overall band.
+                Record scores from external mock tests for analysis. These do not affect your Writing band target.
               </DialogDescription>
             </div>
           </div>
@@ -367,6 +371,28 @@ export default function LogMockScoreModal({
                 placeholder="e.g. Practice Test #3, Part 2 missed 3 questions"
                 className="h-9 text-xs rounded-xl"
               />
+            </div>
+
+            {/* 6. Result URL (Optional) */}
+            <div className="space-y-1.5">
+              <Label htmlFor="result-url" className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
+                <LinkIcon className="h-3 w-3" />
+                Result Link (Optional)
+              </Label>
+              <div className="relative">
+                <Input
+                  id="result-url"
+                  type="url"
+                  value={resultUrl}
+                  onChange={(e) => setResultUrl(e.target.value)}
+                  placeholder="https://ieltsonlinetests.com/result/..."
+                  className="h-9 text-xs rounded-xl pl-8"
+                />
+                <LinkIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                Paste a link to your external test result page for your own reference.
+              </p>
             </div>
           </div>
 

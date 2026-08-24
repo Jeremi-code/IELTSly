@@ -488,6 +488,18 @@ export default function BandCalculatorPage() {
                                 • {scoreItem.notes}
                               </span>
                             )}
+                            {scoreItem.resultUrl && (
+                              <a
+                                href={scoreItem.resultUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="flex items-center gap-0.5 text-primary hover:underline font-semibold shrink-0"
+                              >
+                                <ExternalLink className="h-3 w-3" />
+                                View Result
+                              </a>
+                            )}
                           </div>
                         </div>
                       </div>
