@@ -64,12 +64,9 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo & Brand */}
-          <Link href="/" className="group flex items-center gap-2.5">
+          {/* Logo */}
+          <Link href="/" className="group flex items-center">
             <Logo className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 transition-transform duration-300 group-hover:scale-105 cursor-pointer" />
-            <span className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
-              IELTS<span className="text-primary font-bold">ly</span>
-            </span>
           </Link>
 
           {/* Desktop Navigation */}
