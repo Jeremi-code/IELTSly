@@ -11,6 +11,14 @@ const fontSans = Space_Grotesk({
 export const metadata: Metadata = {
   title: "IELTSly - Master IELTS Writing",
   description: "Practice IELTS writing in an authentic exam environment.",
+  icons: {
+    icon: [
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.png",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
