@@ -1,95 +1,212 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Key, FileSearch, PenTool } from "lucide-react";
 import { motion } from "framer-motion";
+import {
+  Key,
+  FileSearch,
+  PenTool,
+  Award,
+  ArrowRight,
+  CheckCircle2,
+  Lock,
+  Sparkles,
+  Zap,
+  Clock,
+} from "lucide-react";
 
-const stepLists = [
+const stepsList = [
   {
-    title: "Add Your API Key",
+    number: "01",
+    title: "Connect AI Engine",
+    subtitle: "Bring Your Own Key",
     description:
-      "Simply enter your Gemini API key in your account settings. It's secure, private, and gives you unlimited access.",
+      "Enter your Gemini API key in account settings. It's stored securely in your browser session for unlimited, zero-cost practice.",
     icon: Key,
-    color: "text-emerald-500",
-    bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
+    accent: "from-emerald-500 to-teal-500",
+    badge: "Free & Private",
+    preview: (
+      <div className="mt-4 p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-left font-mono text-[11px] space-y-1.5">
+        <div className="flex items-center justify-between text-zinc-400">
+          <span className="flex items-center gap-1.5 text-emerald-400 font-sans font-bold">
+            <Lock className="w-3 h-3" /> Gemini API Status
+          </span>
+          <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
+            Connected ✓
+          </span>
+        </div>
+        <div className="text-zinc-500 truncate text-[10px]">
+          Key: AIzaSyD9x...••••••••
+        </div>
+      </div>
+    ),
   },
   {
-    title: "Choose a Question",
+    number: "02",
+    title: "Select Authentic Prompt",
+    subtitle: "Task 1 & Task 2 Library",
     description:
-      "Select from our extensive bank of authentic IELTS questions. Filter by task type, topic, or difficulty level. ",
+      "Pick from our extensive prompt repository. Filter by Task 1 (Academic/General) or Task 2 essay topics including Education, Tech, and Society.",
     icon: FileSearch,
-    color: "text-teal-500",
-    bgColor: "bg-teal-100 dark:bg-teal-900/30",
+    accent: "from-teal-500 to-emerald-500",
+    badge: "100+ Prompts",
+    preview: (
+      <div className="mt-4 p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-left space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-bold text-zinc-300">Task 2 Academic Essay</span>
+          <span className="text-[10px] px-2 py-0.5 bg-zinc-800 text-zinc-400 rounded">
+            Band 7.5 Target
+          </span>
+        </div>
+        <p className="text-[11px] text-zinc-400 leading-tight line-clamp-2">
+          "Should university education be funded by governments or students?"
+        </p>
+      </div>
+    ),
   },
   {
-    title: "Write & Get Feedback",
+    number: "03",
+    title: "Write Under Exam Conditions",
+    subtitle: "Real Test Simulation",
     description:
-      "Write your essay in our distraction-free editor and receive instant, detailed AI feedback with band scores.",
+      "Draft your essay in our exam-accurate interface. Experience real test pressures with zero autocorrect, authentic timers, and live word tracking.",
     icon: PenTool,
-    color: "text-violet-500",
-    bgColor: "bg-violet-100 dark:bg-violet-900/30",
+    accent: "from-emerald-600 to-green-500",
+    badge: "Simulative",
+    preview: (
+      <div className="mt-4 p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-left space-y-2">
+        <div className="flex items-center justify-between text-[11px] font-mono">
+          <span className="flex items-center gap-1 text-amber-400 font-bold">
+            <Clock className="w-3 h-3" /> 35:00
+          </span>
+          <span className="text-zinc-300 font-bold">295 Words</span>
+        </div>
+        <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+          <div className="h-full bg-emerald-500 w-3/4 rounded-full" />
+        </div>
+      </div>
+    ),
+  },
+  {
+    number: "04",
+    title: "Instant Criterion Assessment",
+    subtitle: "Official IELTS Standards",
+    description:
+      "Get instant score breakdowns across Task Achievement, Coherence, Lexical Resource, and Grammar with actionable inline suggestions.",
+    icon: Award,
+    accent: "from-green-500 to-emerald-600",
+    badge: "Official Criteria",
+    preview: (
+      <div className="mt-4 p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-left space-y-1.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-bold text-zinc-300">Criteria Breakdown</span>
+          <span className="text-[11px] font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+            Overall 8.0
+          </span>
+        </div>
+        <div className="flex gap-1 text-[10px] font-bold">
+          <span className="bg-zinc-900 px-1.5 py-0.5 rounded text-emerald-400 border border-zinc-800">TA: 8.0</span>
+          <span className="bg-zinc-900 px-1.5 py-0.5 rounded text-emerald-400 border border-zinc-800">CC: 8.0</span>
+          <span className="bg-zinc-900 px-1.5 py-0.5 rounded text-teal-400 border border-zinc-800">LR: 7.5</span>
+          <span className="bg-zinc-900 px-1.5 py-0.5 rounded text-emerald-400 border border-zinc-800">GRA: 8.0</span>
+        </div>
+      </div>
+    ),
   },
 ];
 
 const Steps = () => {
   return (
-    <div
+    <section
       id="how-it-works"
-      className="py-24 px-6 lg:px-20 bg-white dark:bg-zinc-900 transition-colors duration-500 scroll-mt-24"
+      className="relative w-full py-24 px-6 lg:px-20 bg-white dark:bg-zinc-900 transition-colors duration-500 scroll-mt-24 overflow-hidden"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-4 mb-16"
-      >
-        <div className="px-4 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-bold rounded-full text-sm uppercase tracking-wider shadow-sm">
-          How It Works
-        </div>
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-zinc-50 tracking-tight leading-[1.1]">
-          Start Practicing in 3 Simple Steps
-        </h2>
-        <p className="text-slate-500 dark:text-zinc-400 text-lg lg:text-xl leading-relaxed max-w-2xl">
-          Get started with IELTSly in minutes and begin your journey to a higher
-          band score
-        </p>
-      </motion.div>
+      {/* Background glow spot */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-emerald-500/5 dark:bg-emerald-500/5 blur-[140px] rounded-full pointer-events-none" />
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-7xl mx-auto items-start"
-      >
-        {stepLists.map((step, index) => (
-          <div key={index} className="relative group">
-            <Card className="relative z-10 border-none shadow-none bg-transparent text-center flex flex-col items-center">
-              <div className="pb-4 px-0 flex flex-col items-center">
-                <div className="relative mb-6">
-                  <div
-                    className={`w-20 h-20 rounded-3xl ${step.bgColor} flex items-center justify-center group-hover:rotate-6 transition-transform duration-300 ring-4 ring-white dark:ring-zinc-900`}
-                  >
-                    <step.icon className={`w-10 h-10 ${step.color}`} />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-slate-900 dark:bg-zinc-50 text-white dark:text-zinc-900 flex items-center justify-center font-bold text-sm border-4 border-white dark:border-zinc-900">
-                    {index + 1}
-                  </div>
-                </div>
-                <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-zinc-50 leading-tight text-balance px-2">
-                  {step.title}
-                </h3>
-              </div>
-              <div className="px-0 pt-2 text-slate-500 dark:text-zinc-400 leading-relaxed text-lg">
-                {step.description}
-              </div>
-            </Card>
+      <div className="max-w-7xl mx-auto relative z-10 space-y-16">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-4"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider shadow-xs backdrop-blur-md">
+            <Zap className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Simple Workflow</span>
           </div>
-        ))}
-      </motion.div>
-    </div>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-zinc-50 tracking-tight leading-[1.15]">
+            Start Practicing in{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 dark:from-emerald-400 dark:via-teal-400 dark:to-green-400">
+              4 Easy Steps
+            </span>
+          </h2>
+
+          <p className="text-slate-600 dark:text-zinc-400 text-base sm:text-lg lg:text-xl leading-relaxed">
+            From setup to band score analysis in less than 2 minutes. Simple, transparent, and built for rapid improvement.
+          </p>
+        </motion.div>
+
+        {/* Steps Grid / Timeline Pipeline */}
+        <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {stepsList.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.12, ease: "easeOut" }}
+                className="group relative rounded-3xl p-6 bg-slate-50 dark:bg-zinc-950/80 border border-slate-200/80 dark:border-zinc-800/80 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md hover:-translate-y-1"
+              >
+                {/* Step Glow Accent Bar */}
+                <div
+                  className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${step.accent} opacity-80 group-hover:opacity-100 transition-opacity`}
+                />
+
+                <div>
+                  {/* Number & Icon Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform duration-300 shadow-xs">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                        {step.badge}
+                      </span>
+                      <span className="font-mono text-2xl font-black text-slate-300 dark:text-zinc-700 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
+                        {step.number}
+                      </span>
+                    </div>
+                  </div>
+
+                  <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase block mb-1">
+                    {step.subtitle}
+                  </span>
+
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-zinc-50 mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    {step.title}
+                  </h3>
+
+                  <p className="text-slate-600 dark:text-zinc-400 text-xs leading-relaxed">
+                    {step.description}
+                  </p>
+                </div>
+
+                {/* Mini Preview Widget */}
+                {step.preview}
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 };
 
