@@ -5,7 +5,7 @@ import type { AICredentialStatus, AIProvider } from "@/types/ai";
 import type { UserTarget } from "@/types/target";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
