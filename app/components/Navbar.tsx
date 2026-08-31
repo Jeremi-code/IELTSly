@@ -129,7 +129,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Trigger & Sheet */}
+          {/* Mobile Menu Trigger & Pop-up Panel */}
           <div className="flex lg:hidden items-center gap-2">
             <ThemeToggle />
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -145,17 +145,17 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-full sm:w-[380px] bg-white dark:bg-zinc-950 border-l border-zinc-200/80 dark:border-zinc-800/80 p-6 flex flex-col justify-between"
+                className="w-[290px] max-w-[85vw] bg-white/95 dark:bg-zinc-950/95 backdrop-blur-2xl border-l border-zinc-200/80 dark:border-zinc-800/80 p-5 flex flex-col justify-between shadow-2xl rounded-l-3xl"
               >
                 <div>
-                  <SheetHeader className="pb-5 border-b border-zinc-100 dark:border-zinc-850 p-0 flex flex-row items-center justify-between text-left">
+                  <SheetHeader className="pt-1 pb-4 border-b border-zinc-200/70 dark:border-zinc-800/70 p-0 flex flex-row items-center justify-between text-left">
                     <Link
                       href="/"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center gap-2.5"
+                      className="flex items-center gap-2.5 pl-1"
                     >
-                      <Logo className="h-8 w-8 shrink-0" />
-                      <span className="text-xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+                      <Logo className="h-7 w-7 shrink-0" />
+                      <span className="text-lg font-black tracking-tight text-zinc-900 dark:text-zinc-50">
                         IELTSly
                       </span>
                     </Link>
@@ -166,14 +166,14 @@ const Navbar = () => {
                   </SheetHeader>
 
                   {/* Mobile Navigation Links */}
-                  <div className="flex flex-col gap-6 mt-8">
+                  <div className="flex flex-col gap-4 mt-6 px-1">
                     {navItems.map((item) => (
                       <button
                         key={item}
                         onClick={() =>
                           scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))
                         }
-                        className="text-xl font-bold text-zinc-800 dark:text-zinc-200 hover:text-primary dark:hover:text-primary transition-colors text-left bg-transparent border-none p-0 cursor-pointer"
+                        className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-primary dark:hover:text-primary transition-colors text-left bg-transparent border-none p-0 cursor-pointer"
                       >
                         {item}
                       </button>
@@ -182,24 +182,24 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Drawer Bottom Action Buttons */}
-                <div className="pt-6 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col gap-3">
+                <div className="pt-4 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col gap-2.5">
                   {isAuthenticated ? (
                     <Button
                       variant="blue"
-                      className="w-full justify-center rounded-xl font-bold text-base shadow-lg shadow-primary/25 h-12 cursor-pointer"
+                      className="w-full justify-center rounded-xl font-semibold text-sm shadow-md shadow-primary/25 h-10 cursor-pointer"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         router.push("/dashboard");
                       }}
                     >
-                      <LayoutDashboard className="mr-2 h-5 w-5" />
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
                       Dashboard
                     </Button>
                   ) : (
                     <>
                       <Button
                         variant="ghost"
-                        className="w-full justify-center text-base font-bold h-11 rounded-xl cursor-pointer"
+                        className="w-full justify-center text-sm font-semibold h-10 rounded-xl cursor-pointer"
                         onClick={() => {
                           setIsMobileMenuOpen(false);
                           router.push("/signin");
@@ -209,7 +209,7 @@ const Navbar = () => {
                       </Button>
                       <Button
                         variant="blue"
-                        className="w-full justify-center rounded-xl font-bold text-base shadow-lg shadow-primary/25 h-12 cursor-pointer"
+                        className="w-full justify-center rounded-xl font-semibold text-sm shadow-md shadow-primary/25 h-10 cursor-pointer"
                         onClick={() => {
                           setIsMobileMenuOpen(false);
                           router.push("/signin?mode=signup");
