@@ -145,17 +145,18 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[290px] max-w-[85vw] bg-white/95 dark:bg-zinc-950/95 backdrop-blur-2xl border-l border-zinc-200/80 dark:border-zinc-800/80 p-5 flex flex-col justify-between shadow-2xl rounded-l-3xl"
+                className="w-72 sm:w-80 bg-white dark:bg-zinc-950 border-l border-zinc-200/80 dark:border-zinc-800/80 p-4 flex flex-col justify-between shadow-2xl rounded-none"
               >
                 <div>
-                  <SheetHeader className="pt-1 pb-4 border-b border-zinc-200/70 dark:border-zinc-800/70 p-0 flex flex-row items-center justify-between text-left">
+                  {/* Header matching dashboard left navbar style */}
+                  <SheetHeader className="h-12 p-0 flex flex-row items-center justify-between border-b border-zinc-100 dark:border-zinc-850 pb-3 text-left">
                     <Link
                       href="/"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center gap-2.5 pl-1"
+                      className="flex items-center gap-2.5 px-1"
                     >
-                      <Logo className="h-7 w-7 shrink-0" />
-                      <span className="text-lg font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+                      <Logo className="h-9 w-9 shrink-0" />
+                      <span className="text-xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
                         IELTSly
                       </span>
                     </Link>
@@ -166,14 +167,14 @@ const Navbar = () => {
                   </SheetHeader>
 
                   {/* Mobile Navigation Links */}
-                  <div className="flex flex-col gap-4 mt-6 px-1">
+                  <div className="flex flex-col gap-1.5 mt-4">
                     {navItems.map((item) => (
                       <button
                         key={item}
                         onClick={() =>
                           scrollToSection(item.toLowerCase().replace(/\s+/g, "-"))
                         }
-                        className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-primary dark:hover:text-primary transition-colors text-left bg-transparent border-none p-0 cursor-pointer"
+                        className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-primary dark:hover:text-primary transition-colors text-left bg-transparent border-none px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 cursor-pointer"
                       >
                         {item}
                       </button>
@@ -182,7 +183,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Drawer Bottom Action Buttons */}
-                <div className="pt-4 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col gap-2.5">
+                <div className="pt-3 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col gap-2">
                   {isAuthenticated ? (
                     <Button
                       variant="blue"
