@@ -15,8 +15,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
         <main
           className={cn(
-            "flex-1 h-full overflow-y-auto transition-all duration-300 p-6 lg:p-10",
-            isCollapsed ? "ml-20" : "ml-64",
+            "flex-1 h-full overflow-y-auto transition-all duration-300 p-3.5 sm:p-6 lg:p-10 pt-20 lg:pt-10 w-full min-w-0",
+            isCollapsed ? "lg:ml-20" : "lg:ml-64",
           )}
         >
           <div className="mx-auto w-full max-w-7xl h-full relative">
