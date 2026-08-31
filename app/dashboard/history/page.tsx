@@ -842,6 +842,7 @@ export default function HistoryPage() {
         }}
       >
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 rounded-2xl border-border/60 bg-white dark:bg-zinc-900 shadow-2xl">
+          <DialogTitle className="sr-only">Essay Inspection & Details</DialogTitle>
           {selectedEssay && (
             <div className="space-y-0">
               {/* Modal Header */}

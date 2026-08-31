@@ -7,7 +7,14 @@ import Logo from "./Logo";
 import { Menu, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useSession } from "@/lib/auth-client";
 
 const Navbar = () => {
@@ -132,6 +139,10 @@ const Navbar = () => {
                 side="right"
                 className="w-full sm:w-[400px] bg-white dark:bg-zinc-950 border-l border-zinc-200 dark:border-zinc-800"
               >
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Navigation Menu</SheetTitle>
+                  <SheetDescription>Main navigation links for IELTSly</SheetDescription>
+                </SheetHeader>
                 <div className="flex flex-col gap-8 mt-12">
                   {/* Mobile Nav */}
                   {navItems.map((item) => (
