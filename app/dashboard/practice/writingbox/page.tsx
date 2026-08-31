@@ -695,7 +695,7 @@ function WritingBoxInner() {
                     className="space-y-4"
                   >
                     {/* Question text */}
-                    <p className="text-zinc-800 dark:text-zinc-200 text-sm sm:text-base leading-relaxed font-medium">
+                    <div className="text-zinc-800 dark:text-zinc-200 text-sm sm:text-base leading-relaxed font-medium">
                       {question ? (
                         question.text
                       ) : questionLoading ? (
@@ -708,7 +708,7 @@ function WritingBoxInner() {
                       ) : (
                         "Please click 'Change Question' above to choose an essay prompt."
                       )}
-                    </p>
+                    </div>
 
                     {/* Task 1 Figure: full-size image */}
                     {question?.taskType === "task1" && question.imageUrl && (
