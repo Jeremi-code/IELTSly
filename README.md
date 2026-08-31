@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  <h1>IELTSly</h1>
+  <p>An AI-powered IELTS Writing preparation platform that helps you practice, get evaluated, and track your progress toward your target band score.</p>
 
-## Getting Started
+  <p>
+    <a href="https://ieltsly.netlify.app">Live App</a>
+    ·
+    <a href="https://github.com/Jeremi-code/IELTSly/issues/new?labels=bug">Report a Bug</a>
+    ·
+    <a href="https://github.com/Jeremi-code/IELTSly/issues/new?labels=enhancement">Request a Feature</a>
+  </p>
+</div>
 
-First, run the development server:
+---
+
+## Overview
+
+IELTSly is a full-stack IELTS Writing practice platform built for serious test-takers. It provides a realistic exam environment, AI-driven scoring using official IELTS band descriptors, and detailed analytics to identify your weak areas over time.
+
+The platform is fully **BYOK (Bring Your Own Key)** — you connect your own Gemini or OpenAI API key, which is encrypted server-side with AES-256-GCM before storage.
+
+---
+
+## Features
+
+- **Essay Simulator** — Practice Task 1 and Task 2 essays in timed exam mode or free practice mode
+- **AI Evaluation** — Instant band scores and feedback across all four IELTS criteria: Task Achievement, Coherence & Cohesion, Lexical Resource, and Grammatical Range & Accuracy
+- **Question Bank** — Browse and filter real IELTS Writing prompts by task type and category
+- **Band Calculator** — Log external mock test scores and compute your official overall IELTS band using the standard rounding formula
+- **Progress Analytics** — Track average bands, writing velocity, and performance trends over time
+- **Secure AI Key Storage** — API keys are encrypted server-side and never exposed in plain text
+
+---
+
+## Tech Stack
+
+| | |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS + Tweakcn |
+| Animations | Framer Motion |
+| Auth | Better Auth |
+| UI | shadcn/ui, Lucide React |
+| Backend | [IELTSly-API](https://github.com/Jeremi-code/IELTSly-API) |
+
+---
+
+## Local Development
+
+### Prerequisites
+
+- Node.js ≥ 20
+- pnpm
+- [IELTSly-API](https://github.com/Jeremi-code/IELTSly-API) running locally
+
+### Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Jeremi-code/IELTSly.git
+cd IELTSly
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create a `.env.local` file:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Start the development server:
 
-## Learn More
+```bash
+pnpm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+Contributions, issues, and feature requests are welcome.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Report a bug** → [Open an issue](https://github.com/Jeremi-code/IELTSly/issues/new?labels=bug) and describe the problem, steps to reproduce, and expected behavior.
+2. **Request a feature** → [Open an issue](https://github.com/Jeremi-code/IELTSly/issues/new?labels=enhancement) with a clear description of what you'd like and why.
+3. **Submit a pull request** → Fork the repo, create a branch (`git checkout -b feature/your-feature`), make your changes, and open a PR against `main`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Please ensure your code follows the existing style and passes type checks (`pnpm tsc --noEmit`) before submitting.
+
+---
+
+## Related
+
+- **[IELTSly-API](https://github.com/Jeremi-code/IELTSly-API)** — Express + MongoDB backend
+
+---
+
+## License
+
+[MIT](LICENSE)
