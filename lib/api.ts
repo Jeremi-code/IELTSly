@@ -3,6 +3,7 @@ import type { Question } from "@/types/question";
 import type { AnalyticsPayload, ActivitySummary } from "@/types/analytics";
 import type { AICredentialStatus, AIProvider } from "@/types/ai";
 import type { UserTarget } from "@/types/target";
+import type { MockScore, MockScoreSummary } from "@/types/mock-score";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 
 const API_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -49,20 +50,59 @@ export function deleteAICredentials(): Promise<{ isConnected: false }> {
   });
 }
 
-// ── Target Exam & Goal Management ───────────────────────────────────
+// ── Target Exam & Goal Management (Cached & Deduplicated) ──────────
 
-export function getUserTarget(): Promise<UserTarget> {
-  return api<UserTarget>("/api/user/target");
+let userTargetCache: { data: UserTarget; timestamp: number } | null = null;
+let userTargetPendingPromise: Promise<UserTarget> | null = null;
+const TARGET_CACHE_TTL_MS = 60000; // 60 seconds
+
+export function getUserTarget(forceRefresh = false): Promise<UserTarget> {
+  const now = Date.now();
+  if (
+    !forceRefresh &&
+    userTargetCache &&
+    now - userTargetCache.timestamp < TARGET_CACHE_TTL_MS
+  ) {
+    return Promise.resolve(userTargetCache.data);
+  }
+  if (!forceRefresh && userTargetPendingPromise) {
+    return userTargetPendingPromise;
+  }
+
+  userTargetPendingPromise = api<UserTarget>("/api/user/target")
+    .then((data) => {
+      userTargetCache = { data, timestamp: Date.now() };
+      userTargetPendingPromise = null;
+      return data;
+    })
+    .catch((err) => {
+      userTargetPendingPromise = null;
+      throw err;
+    });
+
+  return userTargetPendingPromise;
 }
 
-export function saveUserTarget(data: Partial<UserTarget>): Promise<UserTarget> {
+export function saveUserTarget(
+  data: Partial<UserTarget>,
+): Promise<UserTarget> {
+  userTargetCache = null;
+  userTargetPendingPromise = null;
   return api<UserTarget>("/api/user/target", {
     method: "PUT",
     body: JSON.stringify(data),
+  }).then((saved) => {
+    userTargetCache = { data: saved, timestamp: Date.now() };
+    return saved;
   });
 }
 
-export function deleteUserTarget(): Promise<{ success: boolean; message: string }> {
+export function deleteUserTarget(): Promise<{
+  success: boolean;
+  message: string;
+}> {
+  userTargetCache = null;
+  userTargetPendingPromise = null;
   return api<{ success: boolean; message: string }>("/api/user/target", {
     method: "DELETE",
   });
@@ -117,10 +157,12 @@ export function createEssay(body: {
   response: string;
   durationSec: number;
 }): Promise<Essay> {
+  invalidateAnalyticsCache();
   return api("/api/essays", { method: "POST", body: JSON.stringify(body) });
 }
 
 export function evaluateEssay(id: string): Promise<Essay> {
+  invalidateAnalyticsCache();
   return api(`/api/essays/${id}/evaluate`, {
     method: "POST",
   });
@@ -130,6 +172,7 @@ export function reworkEssay(
   id: string,
   body: { response: string; durationSec: number },
 ): Promise<Essay> {
+  invalidateAnalyticsCache();
   return api(`/api/essays/${id}/rework`, {
     method: "POST",
     body: JSON.stringify(body),
@@ -138,12 +181,6 @@ export function reworkEssay(
 
 // ── Question Bank Endpoints ─────────────────────────────────────────
 
-/**
- * Fetch paginated questions matching task type, category, and search query.
- *
- * @param params Filter criteria including taskType, category, search term, page number, and limit.
- * @returns Object containing the questions list, current page, limit, and total count in DB.
- */
 export function getQuestions(params?: {
   taskType?: string;
   category?: string;
@@ -167,24 +204,12 @@ export function getQuestions(params?: {
   return api(`/api/questions?${qs.toString()}`);
 }
 
-/**
- * Fetch distinct category/topic tags from the database, optionally filtered by taskType.
- *
- * @param taskType Optional task filter ('task1' or 'task2')
- * @returns Array of unique category names
- */
 export function getQuestionCategories(taskType?: string): Promise<string[]> {
   const qs = new URLSearchParams();
   if (taskType && taskType !== "all") qs.set("taskType", taskType);
   return api<string[]>(`/api/questions/categories?${qs.toString()}`);
 }
 
-/**
- * Fetch a single random question from the entire database matching current filter criteria.
- *
- * @param params Optional filters (taskType, category, search) to constrain the random pool
- * @returns A single random Question document
- */
 export function getRandomQuestion(params?: {
   taskType?: string;
   category?: string;
@@ -199,26 +224,62 @@ export function getRandomQuestion(params?: {
   return api<Question>(`/api/questions/random?${qs.toString()}`);
 }
 
-/**
- * Retrieve a specific question document by its MongoDB ObjectId.
- *
- * @param id MongoDB ObjectId string of the question
- * @returns The Question document
- */
 export function getQuestion(id: string): Promise<Question> {
   return api<Question>(`/api/questions/${id}`);
 }
 
-export function getAnalytics(): Promise<AnalyticsPayload> {
-  return api("/api/analytics");
+// ── Analytics API (Cached & Deduplicated) ──────────────────────────
+
+let analyticsCache: { data: AnalyticsPayload; timestamp: number } | null = null;
+let analyticsPendingPromise: Promise<AnalyticsPayload> | null = null;
+const ANALYTICS_CACHE_TTL_MS = 30000; // 30 seconds
+
+export function invalidateAnalyticsCache(): void {
+  analyticsCache = null;
+  analyticsPendingPromise = null;
+}
+
+export function getAnalytics(forceRefresh = false): Promise<AnalyticsPayload> {
+  const now = Date.now();
+  if (
+    !forceRefresh &&
+    analyticsCache &&
+    now - analyticsCache.timestamp < ANALYTICS_CACHE_TTL_MS
+  ) {
+    return Promise.resolve(analyticsCache.data);
+  }
+  if (!forceRefresh && analyticsPendingPromise) {
+    return analyticsPendingPromise;
+  }
+
+  analyticsPendingPromise = api<AnalyticsPayload>("/api/analytics")
+    .then((data) => {
+      analyticsCache = { data, timestamp: Date.now() };
+      analyticsPendingPromise = null;
+      return data;
+    })
+    .catch((err) => {
+      analyticsPendingPromise = null;
+      throw err;
+    });
+
+  return analyticsPendingPromise;
 }
 
 export function getActivitySummary(): Promise<ActivitySummary> {
   return api("/api/analytics/activity");
 }
 
-// ── Mock Scores API ──────────────────────────────────────────────
-import type { MockScore, MockScoreSummary } from "@/types/mock-score";
+// ── Mock Scores API (Cached & Deduplicated) ───────────────────────
+
+let mockSummaryCache: { data: MockScoreSummary; timestamp: number } | null = null;
+let mockSummaryPendingPromise: Promise<MockScoreSummary> | null = null;
+const MOCK_CACHE_TTL_MS = 30000; // 30 seconds
+
+export function invalidateMockCache(): void {
+  mockSummaryCache = null;
+  mockSummaryPendingPromise = null;
+}
 
 export function getMockScores(module?: string): Promise<{ scores: MockScore[] }> {
   const query = module ? `?module=${encodeURIComponent(module)}` : "";
@@ -236,6 +297,7 @@ export function saveMockScore(payload: {
   notes?: string;
   resultUrl?: string;
 }): Promise<{ score: MockScore; message: string }> {
+  invalidateMockCache();
   return api("/api/mock-scores", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -243,13 +305,37 @@ export function saveMockScore(payload: {
 }
 
 export function deleteMockScore(id: string): Promise<{ message: string }> {
+  invalidateMockCache();
   return api(`/api/mock-scores/${id}`, {
     method: "DELETE",
   });
 }
 
-export function getMockSummary(): Promise<MockScoreSummary> {
-  return api("/api/mock-scores/summary");
+export function getMockSummary(forceRefresh = false): Promise<MockScoreSummary> {
+  const now = Date.now();
+  if (
+    !forceRefresh &&
+    mockSummaryCache &&
+    now - mockSummaryCache.timestamp < MOCK_CACHE_TTL_MS
+  ) {
+    return Promise.resolve(mockSummaryCache.data);
+  }
+  if (!forceRefresh && mockSummaryPendingPromise) {
+    return mockSummaryPendingPromise;
+  }
+
+  mockSummaryPendingPromise = api<MockScoreSummary>("/api/mock-scores/summary")
+    .then((data) => {
+      mockSummaryCache = { data, timestamp: Date.now() };
+      mockSummaryPendingPromise = null;
+      return data;
+    })
+    .catch((err) => {
+      mockSummaryPendingPromise = null;
+      throw err;
+    });
+
+  return mockSummaryPendingPromise;
 }
 
 export function formatDate(iso: string): string {
