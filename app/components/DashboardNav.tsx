@@ -26,7 +26,7 @@ import { ModeToggle } from "./ModeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 import { differenceInCalendarDays, parseISO, startOfDay } from "date-fns";
 import { useSession, signOut } from "@/lib/auth-client";
-import { getUserTarget } from "@/lib/api";
+import { getDashboardBundle } from "@/lib/api";
 import type { UserTarget } from "@/types/target";
 import ExamTargetModal from "./ExamTargetModal";
 
@@ -56,9 +56,9 @@ const DashboardNav = ({
   const { data: session } = useSession();
 
   useEffect(() => {
-    getUserTarget()
-      .then((target) => {
-        if (target) setUserTarget(target);
+    getDashboardBundle()
+      .then((bundle) => {
+        if (bundle.userTarget) setUserTarget(bundle.userTarget);
       })
       .catch(() => {});
   }, [pathname]);

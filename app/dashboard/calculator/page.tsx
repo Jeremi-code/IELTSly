@@ -27,7 +27,11 @@ import {
 import { format, parseISO } from "date-fns";
 import type { MockScore, MockScoreSummary, IELTSModule } from "@/types/mock-score";
 import type { UserTarget } from "@/types/target";
-import { getMockScores, getMockSummary, deleteMockScore, getUserTarget } from "@/lib/api";
+import {
+  getMockScores,
+  getDashboardBundle,
+  deleteMockScore,
+} from "@/lib/api";
 import LogMockScoreModal from "../../components/LogMockScoreModal";
 
 const MODULE_CONFIG: Record<
@@ -86,14 +90,15 @@ export default function BandCalculatorPage() {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const [sumData, scoreData, targetData] = await Promise.all([
-        getMockSummary(),
-        getMockScores(selectedModuleFilter === "all" ? undefined : selectedModuleFilter),
-        getUserTarget().catch(() => null),
+      const [bundle, scoreData] = await Promise.all([
+        getDashboardBundle(),
+        getMockScores(
+          selectedModuleFilter === "all" ? undefined : selectedModuleFilter,
+        ),
       ]);
-      setSummary(sumData);
+      setSummary(bundle.mockSummary);
       setScores(scoreData.scores || []);
-      setUserTarget(targetData);
+      setUserTarget(bundle.userTarget || null);
     } catch (err) {
       console.error("Failed to load mock calculator data:", err);
     } finally {
