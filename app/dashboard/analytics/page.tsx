@@ -31,7 +31,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { getAnalytics, getUserTarget } from "@/lib/api";
+import { getDashboardBundle } from "@/lib/api";
 import type { AnalyticsPayload } from "@/types/analytics";
 import type { UserTarget } from "@/types/target";
 import Link from "next/link";
@@ -135,17 +135,10 @@ const AnalyticsPage = () => {
   const loadData = async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
     try {
-      const [payload, target] = await Promise.allSettled([
-        getAnalytics(),
-        getUserTarget(),
-      ]);
-      if (payload.status === "fulfilled") {
-        setData(payload.value);
-      } else {
-        setData(null);
-      }
-      if (target.status === "fulfilled" && target.value) {
-        setUserTarget(target.value);
+      const bundle = await getDashboardBundle(isRefresh);
+      setData(bundle.analytics);
+      if (bundle.userTarget) {
+        setUserTarget(bundle.userTarget);
       }
     } catch {
       setData(null);

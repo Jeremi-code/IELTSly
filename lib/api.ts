@@ -4,6 +4,7 @@ import type { AnalyticsPayload, ActivitySummary } from "@/types/analytics";
 import type { AICredentialStatus, AIProvider } from "@/types/ai";
 import type { UserTarget } from "@/types/target";
 import type { MockScore, MockScoreSummary } from "@/types/mock-score";
+import type { DashboardBundle } from "@/types/dashboard";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 
 const API_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -88,6 +89,8 @@ export function saveUserTarget(
 ): Promise<UserTarget> {
   userTargetCache = null;
   userTargetPendingPromise = null;
+  dashboardCache = null;
+  dashboardPendingPromise = null;
   return api<UserTarget>("/api/user/target", {
     method: "PUT",
     body: JSON.stringify(data),
@@ -103,6 +106,8 @@ export function deleteUserTarget(): Promise<{
 }> {
   userTargetCache = null;
   userTargetPendingPromise = null;
+  dashboardCache = null;
+  dashboardPendingPromise = null;
   return api<{ success: boolean; message: string }>("/api/user/target", {
     method: "DELETE",
   });
@@ -158,11 +163,15 @@ export function createEssay(body: {
   durationSec: number;
 }): Promise<Essay> {
   invalidateAnalyticsCache();
+  dashboardCache = null;
+  dashboardPendingPromise = null;
   return api("/api/essays", { method: "POST", body: JSON.stringify(body) });
 }
 
 export function evaluateEssay(id: string): Promise<Essay> {
   invalidateAnalyticsCache();
+  dashboardCache = null;
+  dashboardPendingPromise = null;
   return api(`/api/essays/${id}/evaluate`, {
     method: "POST",
   });
@@ -173,6 +182,8 @@ export function reworkEssay(
   body: { response: string; durationSec: number },
 ): Promise<Essay> {
   invalidateAnalyticsCache();
+  dashboardCache = null;
+  dashboardPendingPromise = null;
   return api(`/api/essays/${id}/rework`, {
     method: "POST",
     body: JSON.stringify(body),
@@ -298,6 +309,8 @@ export function saveMockScore(payload: {
   resultUrl?: string;
 }): Promise<{ score: MockScore; message: string }> {
   invalidateMockCache();
+  dashboardCache = null;
+  dashboardPendingPromise = null;
   return api("/api/mock-scores", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -306,6 +319,8 @@ export function saveMockScore(payload: {
 
 export function deleteMockScore(id: string): Promise<{ message: string }> {
   invalidateMockCache();
+  dashboardCache = null;
+  dashboardPendingPromise = null;
   return api(`/api/mock-scores/${id}`, {
     method: "DELETE",
   });
@@ -336,6 +351,55 @@ export function getMockSummary(forceRefresh = false): Promise<MockScoreSummary> 
     });
 
   return mockSummaryPendingPromise;
+}
+
+// ── Combined Dashboard Bundle (Single Round Trip) ────────────────
+
+let dashboardCache: { data: DashboardBundle; timestamp: number } | null = null;
+let dashboardPendingPromise: Promise<DashboardBundle> | null = null;
+const DASHBOARD_CACHE_TTL_MS = 30000; // 30 seconds
+
+export function invalidateDashboardCache(): void {
+  dashboardCache = null;
+  dashboardPendingPromise = null;
+  // Also invalidate individual caches that overlap
+  invalidateAnalyticsCache();
+  invalidateMockCache();
+  userTargetCache = null;
+  userTargetPendingPromise = null;
+}
+
+export function getDashboardBundle(
+  forceRefresh = false,
+): Promise<DashboardBundle> {
+  const now = Date.now();
+  if (
+    !forceRefresh &&
+    dashboardCache &&
+    now - dashboardCache.timestamp < DASHBOARD_CACHE_TTL_MS
+  ) {
+    return Promise.resolve(dashboardCache.data);
+  }
+  if (!forceRefresh && dashboardPendingPromise) {
+    return dashboardPendingPromise;
+  }
+
+  dashboardPendingPromise = api<DashboardBundle>("/api/dashboard")
+    .then((data) => {
+      dashboardCache = { data, timestamp: Date.now() };
+      dashboardPendingPromise = null;
+      // Populate individual caches so navigating to sub-pages is instant
+      analyticsCache = { data: data.analytics, timestamp: Date.now() };
+      userTargetCache = { data: data.userTarget, timestamp: Date.now() };
+      mockSummaryCache = { data: data.mockSummary, timestamp: Date.now() };
+      return data;
+    })
+    .catch((err) => {
+      dashboardPendingPromise = null;
+      throw err;
+    });
+
+  return dashboardPendingPromise;
 }
 
 export function formatDate(iso: string): string {

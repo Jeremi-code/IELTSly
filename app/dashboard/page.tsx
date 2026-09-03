@@ -42,10 +42,9 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
 import {
-  getAnalytics,
+  getDashboardBundle,
   getEssays,
   getAICredentials,
-  getUserTarget,
   timeAgo,
 } from "@/lib/api";
 import type { Essay } from "@/types/essay";
@@ -119,18 +118,19 @@ export default function DashboardPage() {
     setLoading(true);
 
     Promise.allSettled([
-      getAnalytics(),
+      getDashboardBundle(),
       getEssays({ limit: 6 }),
       getAICredentials(),
-      getUserTarget(),
-    ]).then(([analyticsRes, essaysRes, aiRes, targetRes]) => {
+    ]).then(([bundleRes, essaysRes, aiRes]) => {
       if (!mounted) return;
 
-      if (analyticsRes.status === "fulfilled") {
-        setStats(analyticsRes.value.stats);
-        setCriteriaAverages(analyticsRes.value.criteriaAverages);
-        setDailyComment(analyticsRes.value.dailyComment);
-        setActivitySummary(analyticsRes.value.activitySummary || null);
+      if (bundleRes.status === "fulfilled") {
+        const { analytics, userTarget: target } = bundleRes.value;
+        setStats(analytics.stats);
+        setCriteriaAverages(analytics.criteriaAverages);
+        setDailyComment(analytics.dailyComment);
+        setActivitySummary(analytics.activitySummary || null);
+        if (target) setUserTarget(target);
       }
 
       if (essaysRes.status === "fulfilled") {
@@ -139,10 +139,6 @@ export default function DashboardPage() {
 
       if (aiRes.status === "fulfilled") {
         setAiStatus(aiRes.value);
-      }
-
-      if (targetRes.status === "fulfilled" && targetRes.value) {
-        setUserTarget(targetRes.value);
       }
 
       setLoading(false);
