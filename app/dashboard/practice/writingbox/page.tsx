@@ -28,6 +28,14 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import QuestionSelectorModal from "@/app/components/QuestionSelectorModal";
@@ -302,13 +310,15 @@ function WritingBoxInner() {
     );
   };
 
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
     setEssayText(text);
     setWordCount(text.trim().split(/\s+/).filter(Boolean).length);
   };
 
-  const handleSubmit = async () => {
+  const handleRequestSubmit = () => {
     setError(null);
     setResult(null);
 
@@ -322,6 +332,13 @@ function WritingBoxInner() {
       );
       return;
     }
+
+    setConfirmModalOpen(true);
+  };
+
+  const handleConfirmSubmit = async () => {
+    setConfirmModalOpen(false);
+    if (!question) return;
 
     setSubmitting(true);
     try {
@@ -527,7 +544,7 @@ function WritingBoxInner() {
                     <Button
                       variant="blue"
                       size="sm"
-                      onClick={handleSubmit}
+                      onClick={handleRequestSubmit}
                       disabled={submitting}
                       className="rounded-xl px-5 font-bold text-xs cursor-pointer gap-1.5 shadow-md shadow-primary/20"
                     >
@@ -786,7 +803,7 @@ function WritingBoxInner() {
             <div>
               <Button
                 variant="blue"
-                onClick={handleSubmit}
+                onClick={handleRequestSubmit}
                 disabled={submitting}
                 className="w-full sm:w-auto rounded-xl px-6 h-11 font-bold text-xs shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
@@ -806,6 +823,61 @@ function WritingBoxInner() {
           </div>
         </CardContent>
       </Card>
+
+      {/* ── SUBMIT CONFIRMATION MODAL ───────────────────────────────────── */}
+      <Dialog open={confirmModalOpen} onOpenChange={setConfirmModalOpen}>
+        <DialogContent className="sm:max-w-md rounded-3xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 shadow-2xl">
+          <DialogHeader className="space-y-3 text-center sm:text-left">
+            <div className="mx-auto sm:mx-0 h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <DialogTitle className="text-xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+              Do you want to submit it?
+            </DialogTitle>
+            <DialogDescription className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Once submitted, your response will be evaluated against official IELTS criteria (Task Achievement, Coherence, Vocabulary & Grammar) by AI.
+            </DialogDescription>
+          </DialogHeader>
+
+          {/* Quick Stats Preview */}
+          <div className="my-2 p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200/60 dark:border-zinc-800 flex items-center justify-around text-center">
+            <div>
+              <span className="text-[10px] uppercase font-bold text-muted-foreground block">Word Count</span>
+              <span className="text-sm font-black text-zinc-900 dark:text-zinc-100">{wordCount} / {targetWords}</span>
+            </div>
+            <div className="h-8 w-px bg-border/60" />
+            <div>
+              <span className="text-[10px] uppercase font-bold text-muted-foreground block">Time Spent</span>
+              <span className="text-sm font-black text-zinc-900 dark:text-zinc-100">{formatTimer()}</span>
+            </div>
+            <div className="h-8 w-px bg-border/60" />
+            <div>
+              <span className="text-[10px] uppercase font-bold text-muted-foreground block">Mode</span>
+              <span className="text-sm font-black capitalize text-primary">{mode}</span>
+            </div>
+          </div>
+
+          <DialogFooter className="flex flex-col-reverse sm:flex-row gap-2.5 mt-4">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => setConfirmModalOpen(false)}
+              className="w-full sm:w-auto rounded-xl px-5 h-11 text-xs font-bold border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-900 cursor-pointer"
+            >
+              No, Keep Writing
+            </Button>
+            <Button
+              variant="blue"
+              type="button"
+              onClick={handleConfirmSubmit}
+              className="w-full sm:w-auto rounded-xl px-6 h-11 text-xs font-bold cursor-pointer shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform flex items-center justify-center gap-1.5"
+            >
+              <span>Yes, Submit Now</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Feedback & Result Panel */}
       <AnimatePresence>
