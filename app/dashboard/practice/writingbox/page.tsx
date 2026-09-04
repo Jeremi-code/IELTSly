@@ -290,11 +290,12 @@ function WritingBoxInner() {
   };
 
   useEffect(() => {
+    if (submitting || result !== null) return;
     const interval = setInterval(() => {
       setElapsedSeconds(Math.floor((Date.now() - startedAt.current) / 1000));
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [submitting, result]);
 
   const handleSelectNewQuestion = (newQuestion: Question) => {
     setQuestion(newQuestion);
