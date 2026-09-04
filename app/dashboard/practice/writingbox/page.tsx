@@ -381,7 +381,10 @@ function WritingBoxInner() {
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
-  const targetWords = question?.taskType === "task1" ? 150 : 250;
+  const isTask1 = question?.taskType === "task1";
+  const minTargetWords = isTask1 ? 160 : 260;
+  const maxTargetWords = isTask1 ? 180 : 280;
+  const minimumWords = isTask1 ? 150 : 250;
 
   return (
     <div className="min-h-full flex flex-col justify-center max-w-6xl mx-auto w-full py-4 space-y-6">
@@ -442,15 +445,21 @@ function WritingBoxInner() {
                     <div className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-border/40">
                       <span>
                         <strong
-                          className={
-                            wordCount >= targetWords
-                              ? "text-emerald-500"
-                              : "text-primary"
-                          }
+                          className={cn(
+                            mode === "practice"
+                              ? wordCount > maxTargetWords
+                                ? "text-red-500 font-black"
+                                : wordCount >= minTargetWords
+                                  ? "text-emerald-500 font-black"
+                                  : "text-amber-500 font-bold"
+                              : wordCount >= minimumWords
+                                ? "text-emerald-500"
+                                : "text-primary",
+                          )}
                         >
                           {wordCount}
                         </strong>{" "}
-                        / {targetWords}w
+                        / {mode === "practice" ? `${minTargetWords}–${maxTargetWords}w` : `${minimumWords}w`}
                       </span>
                     </div>
 
@@ -530,14 +539,29 @@ function WritingBoxInner() {
                   {/* Zen Bottom Bar */}
                   <div className="shrink-0 flex items-center justify-between pt-3 border-t border-border/40 gap-3">
                     <span className="text-xs text-muted-foreground">
-                      {wordCount >= targetWords ? (
-                        <span className="text-emerald-500 font-bold flex items-center gap-1">
-                          <CheckCircle2 className="h-3.5 w-3.5" /> Target word
-                          count achieved!
-                        </span>
+                      {mode === "practice" ? (
+                        wordCount > maxTargetWords ? (
+                          <span className="text-red-500 font-bold flex items-center gap-1">
+                            <AlertCircle className="h-3.5 w-3.5" /> Too long ({wordCount} words) — Aim for {minTargetWords}–{maxTargetWords} words
+                          </span>
+                        ) : wordCount >= minTargetWords ? (
+                          <span className="text-emerald-500 font-bold flex items-center gap-1">
+                            <CheckCircle2 className="h-3.5 w-3.5" /> Optimal length ({minTargetWords}–{maxTargetWords} words)
+                          </span>
+                        ) : (
+                          <span>
+                            {minTargetWords - wordCount} more words to reach optimal range ({minTargetWords}–{maxTargetWords})
+                          </span>
+                        )
                       ) : (
                         <span>
-                          {targetWords - wordCount} more words to reach target
+                          {wordCount >= minimumWords ? (
+                            <span className="text-emerald-500 font-bold flex items-center gap-1">
+                              <CheckCircle2 className="h-3.5 w-3.5" /> Minimum word count achieved!
+                            </span>
+                          ) : (
+                            <span>{minimumWords - wordCount} more words to reach minimum</span>
+                          )}
                         </span>
                       )}
                     </span>
@@ -739,7 +763,7 @@ function WritingBoxInner() {
               {/* Prompt Guidelines Footer */}
               <div className="pt-3 border-t border-border/30 dark:border-zinc-800/60 text-xs text-muted-foreground flex items-center justify-between">
                 <span>
-                  Target: <strong>{targetWords}+ words</strong>
+                  Target: <strong>{mode === "practice" ? `${minTargetWords}–${maxTargetWords}` : `${minimumWords}+`} words</strong>
                 </span>
                 <span>
                   Suggested Time:{" "}
@@ -766,21 +790,43 @@ function WritingBoxInner() {
                   Word Count:{" "}
                   <span
                     className={cn(
-                      "font-bold font-mono",
-                      wordCount >= targetWords
-                        ? "text-emerald-500"
-                        : "text-primary",
+                      "font-bold font-mono transition-colors",
+                      mode === "practice"
+                        ? wordCount > maxTargetWords
+                          ? "text-red-500 font-black"
+                          : wordCount >= minTargetWords
+                            ? "text-emerald-500 font-black"
+                            : "text-amber-500 font-bold"
+                        : wordCount >= minimumWords
+                          ? "text-emerald-500"
+                          : "text-primary",
                     )}
                   >
                     {wordCount}
                   </span>{" "}
-                  / {targetWords}
+                  / {mode === "practice" ? `${minTargetWords}–${maxTargetWords}` : minimumWords}
                 </span>
 
-                {wordCount >= targetWords && (
-                  <span className="text-[11px] text-emerald-500 font-bold flex items-center gap-1">
-                    <CheckCircle2 className="h-3 w-3" /> Target Met
-                  </span>
+                {mode === "practice" ? (
+                  wordCount > maxTargetWords ? (
+                    <span className="text-[11px] text-red-500 font-bold flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" /> Too Long ({wordCount} words)
+                    </span>
+                  ) : wordCount >= minTargetWords ? (
+                    <span className="text-[11px] text-emerald-500 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3" /> Optimal Range ({minTargetWords}–{maxTargetWords})
+                    </span>
+                  ) : (
+                    <span className="text-[11px] text-amber-500 font-medium">
+                      Aim for {minTargetWords}–{maxTargetWords} words
+                    </span>
+                  )
+                ) : (
+                  wordCount >= minimumWords && (
+                    <span className="text-[11px] text-emerald-500 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3" /> Target Met
+                    </span>
+                  )
                 )}
               </div>
             </div>
@@ -844,7 +890,20 @@ function WritingBoxInner() {
           <div className="my-2 p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200/60 dark:border-zinc-800 flex items-center justify-around text-center">
             <div>
               <span className="text-[10px] uppercase font-bold text-muted-foreground block">Word Count</span>
-              <span className="text-sm font-black text-zinc-900 dark:text-zinc-100">{wordCount} / {targetWords}</span>
+              <span
+                className={cn(
+                  "text-sm font-black",
+                  mode === "practice"
+                    ? wordCount > maxTargetWords
+                      ? "text-red-500"
+                      : wordCount >= minTargetWords
+                        ? "text-emerald-500"
+                        : "text-zinc-900 dark:text-zinc-100"
+                    : "text-zinc-900 dark:text-zinc-100",
+                )}
+              >
+                {wordCount} / {mode === "practice" ? `${minTargetWords}–${maxTargetWords}` : minimumWords}
+              </span>
             </div>
             <div className="h-8 w-px bg-border/60" />
             <div>
